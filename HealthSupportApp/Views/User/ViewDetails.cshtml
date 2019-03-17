@@ -1,0 +1,350 @@
+﻿@using HealthSupportApp.Models.MedicalModel
+
+@{
+    ViewBag.Title = "View Details";
+    ViewBag.GetUserName = ViewBag.GetName;
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    MedicalAccount medicalAccount = ViewBag.GetMedicalAllDetails;
+}
+
+<div class="container">
+    <header>
+        <h1 class="h3 display">View Details</h1>
+    </header>
+    <div class="row">
+        <div class="col-lg-12">
+            <!-- Income-->
+            <div class="card income">
+                <h3>@medicalAccount.MedicalName</h3>
+                <hr />
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card" style="margin-bottom: 10px">
+                            <div class="card-body">
+                                <h4>Address & Contact Info</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <p style="margin-bottom: 5px">@medicalAccount.Address, @medicalAccount.City</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p style="margin-bottom: 5px"><b>Contact No 1 :</b> @medicalAccount.MedicalContactNo1</p>
+                                        <p style="margin-bottom: 5px"><b>Contact No 2:</b> @medicalAccount.MedicalContactNo2</p>
+                                        <p style="margin-bottom: 5px"><b>Email :</b> @medicalAccount.MedicalEmail </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p style="margin-bottom: 5px"><b>Ambulance Service :</b> @medicalAccount.AmbulanceService</p>
+                                        <p style="margin-bottom: 5px"><b>Ambulance Contact :</b> @medicalAccount.AmbulanceContact</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card" style="margin-bottom: 10px">
+                            <div class="card-body">
+                                <h4>Emergency & Seat Capacity</h4>
+                                <hr />
+                                <div class="row">
+                                    @if (medicalAccount.MedicalService != null)
+                                    {
+                                        <div class="col-md-4">
+                                            <p style="margin-bottom: 5px"><b>Emergency Service :</b> @medicalAccount.MedicalService.EmergencyService</p>
+                                            <p style="margin-bottom: 5px"><b>Contact No. :</b> @medicalAccount.MedicalService.EmergencyPhoneNo, @medicalAccount.MedicalService.EmergencyPhoneNo2</p>
+                                            <p style="margin-bottom: 5px"><b>24 Hour Service :</b> @medicalAccount.MedicalService.TwentyFourService </p>
+                                            <p style="margin-bottom: 5px"><b>Seat Capcity :</b> @medicalAccount.MedicalService.SeatCapacity</p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p style="margin-bottom: 5px"><b>Ambulance Service :</b> @medicalAccount.MedicalService.AmbulanceService</p>
+                                            <p style="margin-bottom: 5px"><b>Ambulance Contact :</b> @medicalAccount.MedicalService.AmbulancePhoneNo, @medicalAccount.MedicalService.AmbulancePhoneNo2</p>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-4">
+                                            <p style="margin-bottom: 5px"><i>Emergency information not updated yet.</i></p>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card" style="margin-bottom: 10px">
+                                <h4>Doctors</h4>
+                                <hr />
+                                        @if (medicalAccount.ViewDoctors.Count > 0)
+                                        {
+                                            foreach (ViewDoctors doctor in medicalAccount.ViewDoctors)
+                                            {
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="card" style="margin-bottom: 5px">
+                                                                <div class="row">
+                                                                    <div class="col-4 col-md-2" style="padding-bottom: 5px">
+                                                                        @if (doctor.ImagePath != "")
+                                                                        {
+                                                                            <img class="img-thumbnail" src="@Url.Content(doctor.ImagePath)" width="100px" height="130px" />
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (doctor.Gender == "Male")
+                                                                            {
+                                                                                <img class="img-thumbnail" src="~/Image/maleDoctor.png" width="100px" height="130px" />
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <img class="img-thumbnail" src="~/Image/femaleDoctor.png" width="100px" height="130px" />
+                                                                            }
+                                                                        }
+                                                                    </div>
+                                                                    <div class="col-8 col-md-6">
+                                                                        <h5><a href="@Url.Action("DoctorDetails", "User", new{id = doctor.Id})">@doctor.Name</a></h5>
+                                                                        <p style="font-size: 14px; color: black">@doctor.OtherSpecification</p>
+                                                                        <p style="font-size: 14px; color: black">@doctor.Speciality</p>
+                                                                    </div>
+                                                                    <div class="col-12 col-md-4">
+                                                                        <p style="font-size: 14px; color: black">@doctor.Title</p>
+                                                                        <p style="font-size: 14px; color: black">Mobile No. : @doctor.MobileNo</p>
+                                                                        <p style="font-size: 14px; color: black">Email : @doctor.Email</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <a class="collapsed card-link pull-right" data-toggle="collapse" href="#@doctor.BmdcReg">
+                                                                            See Details <i class="fa fa-arrow-down"></i><i class="fa fa-arrow-up"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div id="@doctor.BmdcReg" class="collapse" data-parent="#accordion">
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <p>New Patient Fee : @doctor.Fee</p>
+                                                                            <p>Returning Patient Fee : @doctor.ReturningFee</p>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <h5>Doctor's Schedule</h5>
+                                                                            <div class="table-responsive">
+                                                                                <table class="table-sm table-bordered">
+                                                                                    <tr>
+                                                                                        <th>Day</th>
+                                                                                        <th>Time</th>
+                                                                                    </tr>
+                                                                                    @if (doctor.Sat)
+                                                                                    {
+                                                                                        <tr>
+                                                                                            <td>Sat</td>
+                                                                                            <td>@doctor.SatTime</td>
+                                                                                        </tr>
+                                                                                    }
+                                                                                    @if (doctor.Sun)
+                                                                                    {
+                                                                                        <tr>
+                                                                                            <td>Sun</td>
+                                                                                            <td>@doctor.SunTime</td>
+                                                                                        </tr>
+                                                                                    }
+                                                                                    @if (doctor.Mon)
+                                                                                    {
+                                                                                        <tr>
+                                                                                            <td>Mon</td>
+                                                                                            <td>@doctor.MonTime</td>
+                                                                                        </tr>
+                                                                                    }
+                                                                                    @if (doctor.Tue)
+                                                                                    {
+                                                                                        <tr>
+                                                                                            <td>Tue</td>
+                                                                                            <td>@doctor.TueTime</td>
+                                                                                        </tr>
+                                                                                    }
+                                                                                    @if (doctor.Wed)
+                                                                                    {
+                                                                                        <tr>
+                                                                                            <td>Wed</td>
+                                                                                            <td>@doctor.WedTime</td>
+                                                                                        </tr>
+                                                                                    }
+                                                                                    @if (doctor.Thu)
+                                                                                    {
+                                                                                        <tr>
+                                                                                            <td>Thu</td>
+                                                                                            <td>@doctor.ThuTime</td>
+                                                                                        </tr>
+                                                                                    }
+                                                                                    @if (doctor.Fri)
+                                                                                    {
+                                                                                        <tr>
+                                                                                            <td>Fri</td>
+                                                                                            <td>@doctor.FriTime</td>
+                                                                                        </tr>
+                                                                                    }
+                                                                                    @if (doctor.Sat == false && doctor.Sun == false && doctor.Mon == false && doctor.Tue == false && doctor.Wed == false && doctor.Thu == false && doctor.Fri == false)
+                                                                                    {
+                                                                                        <tr>
+                                                                                            <td colspan="2"><i style="color: red">Schedule not given yet.</i></td>
+                                                                                        </tr>
+                                                                                    }
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br />
+                                                                    </div>
+                                                                </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br />
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <i>@medicalAccount.MedicalName has not added any doctor yet.</i>
+                                        }
+                                </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card" style="margin-bottom: 10px">
+                            <div class="card-body">
+                                <h4>Hospital Services</h4>
+                                <hr />
+                                <div class="row">
+                                    @if (medicalAccount.HospitalSerives.Count > 0)
+                                    {
+                                        for (int i = 1; i < medicalAccount.HospitalSerives.Count; i++)
+                                        {
+                                            <div class="col-12 col-md-6">
+                                                <p>@medicalAccount.HospitalSerives[i].ServiceName</p>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-10">
+                                            <i>@medicalAccount.MedicalName has not added hospital services yet.</i>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card" style="margin-bottom: 10px">
+                            <div class="card-body">
+                                <h4>Diagnostic Services</h4>
+                                <hr />
+                                <div class="row">
+                                    @if (medicalAccount.DiagnosticServices.Count > 0)
+                                    {
+                                        for (int i = 1; i < medicalAccount.DiagnosticServices.Count; i++)
+                                        {
+                                            <div class="col-12 col-md-6">
+                                                <p>@medicalAccount.DiagnosticServices[i].ServiceName</p>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-10">
+                                            <i>@medicalAccount.MedicalName has not added diagnostic services yet.</i>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card" style="margin-bottom: 10px">
+                            <div class="card-body">
+                                <h4>Fecilities</h4>
+                                <hr />
+                                <div class="row">
+                                    @if (medicalAccount.MedicalFacilities.Count > 0)
+                                    {
+                                        for (int i = 1; i < medicalAccount.MedicalFacilities.Count; i++)
+                                        {
+                                            <div class="col-12 col-md-6">
+                                                <p>@medicalAccount.MedicalFacilities[i].FacilityName</p>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-10">
+                                            <i>@medicalAccount.MedicalName has not added facilites yet.</i>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card" style="margin-bottom: 10px">
+                            <div class="card-body">
+                                <h4>Specialists</h4>
+                                <hr />
+                                <div class="row">
+                                    @if (medicalAccount.Consultants.Count > 0)
+                                    {
+                                        for (int i = 1; i < medicalAccount.Consultants.Count; i++)
+                                        {
+                                            <div class="col-12 col-md-6">
+                                                <p>@medicalAccount.Consultants[i].ConsultantName</p>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-10">
+                                            <i>@medicalAccount.MedicalName has not added specialists yet.</i>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card" style="margin-bottom: 10px">
+                            <div class="card-body">
+                                <h4>Other Services</h4>
+                                <hr />
+                                <div class="row">
+                                    @if (medicalAccount.OtherServices.Count > 0)
+                                    {
+                                        for (int i = 1; i < medicalAccount.OtherServices.Count; i++)
+                                        {
+                                            <div class="col-6 col-md-3">
+                                                <p>@medicalAccount.OtherServices[i].ServiceName</p>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-10">
+                                            <i>@medicalAccount.MedicalName has not added other services yet.</i>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,234 @@
+﻿@using HealthSupportApp.Models.UserModel
+@model UserAccount
+@{
+    ViewBag.Title = "User Profile";
+    ViewBag.GetUserName = ViewBag.GetName;
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    UserAccount aUserAccount = ViewBag.GetUser;
+}
+@if (ViewBag.Message != null)
+{
+    <div class="container">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-success alert-dismissible" style="margin-top: 20px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Success!</strong> @ViewBag.Message
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="container">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-danger alert-dismissible" style="margin-top: 20px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Error!</strong> @ViewBag.ErrorMessage
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="container">
+    <header>
+        <h1 class="h3 display">User Profile</h1>
+    </header>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="margin-bottom: 10px">
+                    <h4>User Details Information <button style="margin-left: 10px" class="btn btn-sm btn-info" id="editBtn"><span class="fa fa-edit"></span> EDIT</button><button style="margin-left: 10px" class="btn btn-sm btn-danger" id="closeBtn"><span class="fa fa-close"></span> CLOSE</button> </h4>
+                </div>
+                <div class="row" id="showDataTable">
+                    <div class="col-md-8 col-centered">
+                        <table class="table table-responsive-lg">
+                            <tr>
+                                <th>Name :</th>
+                                <td>@aUserAccount.Name</td>
+                            </tr>
+                            <tr>
+                                <th>Email :</th>
+                                <td>@aUserAccount.Email</td>
+                            </tr>
+                            <tr>
+                                <th>Address :</th>
+                                <td>@aUserAccount.Location</td>
+                            </tr>
+                            <tr>
+                                <th>Gender :</th>
+                                <td>@aUserAccount.Gender</td>
+                            </tr>
+                            <tr>
+                                <th>Age :</th>
+                                <td>@aUserAccount.Age</td>
+                            </tr>
+                            <tr>
+                                <th>Blood Group :</th>
+                                <td>@aUserAccount.BloodGroup</td>
+                            </tr>
+                            <tr>
+                                <th>Blood Donate Satus :</th>
+                                <td>
+                                    @if (aUserAccount.WantToGiveBlood)
+                                    {
+                                        <label>Yes</label>
+                                    }
+                                    else
+                                    {
+                                        <label>No</label>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Mobile Number :</th>
+                                <td>@aUserAccount.MobileNo</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row" id="editTable">
+                    <div class="col-md-8 col-centered">
+                        @using (Html.BeginForm("UserProfile", "User", FormMethod.Post, new { id = "userForm" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <table class="table table-responsive-lg table-borderless">
+                                <tr>
+                                    <th>User's Name :</th>
+                                    <td>
+                                        <input type="text" name="Name" class="form-control border-input" placeholder="Enter your full name" value="@aUserAccount.Name">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Mobile Number :</th>
+                                    <td><input type="text" name="MobileNo" class="form-control border-input" placeholder="Company" value="@aUserAccount.MobileNo" readonly></td>
+                                </tr>
+                                <tr>
+                                    <th>Email :</th>
+                                    <td><input type="text" name="Email" class="form-control border-input" placeholder="Enter your mobile number" value="@aUserAccount.Email"></td>
+                                </tr>
+                                <tr>
+                                    <th>Address :</th>
+                                    <td><input type="text" name="Location" class="form-control border-input" placeholder="Enter your address" value="@aUserAccount.Location"></td>
+                                </tr>
+                                <tr>
+                                    <th>Gender :</th>
+                                    <td>
+                                        @if (aUserAccount.Gender != "")
+                                        {
+                                            if (aUserAccount.Gender == "Male")
+                                            {
+                                                <input class="form-control-custom radio-custom" name="Gender" value="Male" type="radio" id="Gender1" checked />
+                                                <label for="Gender1">Male </label>
+                                                <input class="form-control-custom radio-custom" name="Gender" value="Female" type="radio" id="Gender2" />
+                                                <label for="Gender2">Female </label>
+                                            }
+                                            if (aUserAccount.Gender == "Female")
+                                            {
+                                                <input class="form-control-custom radio-custom" name="Gender" value="Male" type="radio" id="Gender1" />
+                                                <label for="Gender1">Male </label>
+                                                <input class="form-control-custom radio-custom" name="Gender" value="Female" type="radio" id="Gender2" checked />
+                                                <label for="Gender2">Female </label>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <input class="form-control-custom radio-custom" name="Gender" value="Male" type="radio" id="Gender1" />
+                                            <label for="Gender1">Male </label>
+                                            <input class="form-control-custom radio-custom" name="Gender" value="Female" type="radio" id="Gender2" />
+                                            <label for="Gender2">Female </label>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Age :</th>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Age, new {@class = "form-control border-input", placeholder = "Enter your age", Value = aUserAccount.Age})
+                                        @Html.ValidationMessageFor(model => model.Age)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Blood Group :</th>
+                                    <td>
+                                        <select class="form-control border-input" name="BloodGroup">
+                                            @if (aUserAccount.BloodGroup != "")
+                                            {
+                                                <option value="@aUserAccount.BloodGroup" disabled>@aUserAccount.BloodGroup</option>
+                                            }
+                                            <option disabled>- Change option -</option>
+                                            <option value="A+">A+</option>
+                                            <option value="A-">A-</option>
+                                            <option value="B+">B+</option>
+                                            <option value="B-">B-</option>
+                                            <option value="O+">O+</option>
+                                            <option value="O-">O-</option>
+                                            <option value="AB+">AB+</option>
+                                            <option value="AB-">AB-</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Do you want to Donate blood :</th>
+                                    <td>
+                                        @if (aUserAccount.WantToGiveBlood)
+                                        {
+                                            <input class="form-control-custom radio-custom" name="WantToGiveBlood" value="false" type="radio" id="GiveBlood1"  />
+                                            <label for="GiveBlood1">No </label>
+                                            <input class="form-control-custom radio-custom" name="WantToGiveBlood" value="true" type="radio" id="GiveBlood2"checked />
+                                            <label for="GiveBlood2">Yes </label>
+                                        }
+                                        else
+                                        {
+                                            <input class="form-control-custom radio-custom" name="WantToGiveBlood" value="false" type="radio" id="GiveBlood1" checked />
+                                            <label for="GiveBlood1">No </label>
+                                            <input class="form-control-custom radio-custom" name="WantToGiveBlood" value="true" type="radio" id="GiveBlood2"/>
+                                            <label for="GiveBlood2">Yes </label>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="text-align: center"><button class="btn btn-success"><i class="fa fa-check-square"></i> SAVE</button></td>
+                                </tr>
+                            </table>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script>
+    $("#closeBtn").hide();
+    $("#editBtn").show();
+    $("#editTable").hide();
+    $("#showDataTable").show();
+    $("#editBtn").click(function () {
+        $("#closeBtn").show();
+        $("#editBtn").hide();
+        $("#editTable").show();
+        $("#showDataTable").hide();
+    });
+    $("#closeBtn").click(function () {
+        $("#closeBtn").hide();
+        $("#editBtn").show();
+        $("#editTable").hide();
+        $("#showDataTable").show();
+    });
+    $("#userForm").validate({
+        rules: {
+            Name: "required",
+            MobileNo: "required",
+            Location: "required"
+        },
+        messages: {
+            Name: "Please enter your full name",
+            MobileNo: "Please enter your mobile number.",
+            Location: "Please enter your address or location."
+        }
+    });
+</script>

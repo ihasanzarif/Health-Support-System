@@ -1,0 +1,309 @@
+﻿@using HealthSupportApp.Models.DoctorModel
+@using HealthSupportApp.Models.MedicalModel
+@{
+    ViewBag.Title = "DoctorDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Doctors doctor = ViewBag.DoctorDetailsSearchResult;
+}
+
+<div class="container" style="margin-top: 50px">
+    <div class="card" style="padding: 12px">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-4 col-md-2" style="padding-bottom: 5px">
+                        @if (doctor.ImagePath != "")
+                        {
+                            <img class="img-thumbnail" src="@Url.Content(doctor.ImagePath)" width="100px" height="130px" />
+                        }
+                        else
+                        {
+                            if (doctor.Gender == "Male")
+                            {
+                                <img class="img-thumbnail" src="~/Image/maleDoctor.png" width="100px" height="130px" />
+                            }
+                            else
+                            {
+                                <img class="img-thumbnail" src="~/Image/femaleDoctor.png" width="100px" height="130px" />
+                            }
+                        }
+                    </div>
+                    <div class="col-8 col-md-6">
+                        <h5>@doctor.Name</h5>
+                        <p style="font-size: 14px; color: black">@doctor.OtherSpecification</p>
+                        <p style="font-size: 14px; color: black">@doctor.Speciality</p>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <p style="font-size: 14px; color: black">@doctor.Title</p>
+                        <p style="font-size: 14px; color: black">Mobile No. : @doctor.MobileNo</p>
+                        <p style="font-size: 14px; color: black">Email : @doctor.Email</p>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5>Doctor's Chamber</h5>
+                        <hr />
+                        @if (doctor.ViewDoctors.Count > 0)
+                        {
+                            foreach (ViewDoctors viewDoctor in doctor.ViewDoctors)
+                            {
+                                <h5>@viewDoctor.MedicalName</h5>
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <p style="margin: 5px; font-size: 14px;">@viewDoctor.MedicalAddress, @viewDoctor.MedicalCity</p>
+                                        <p style="margin: 5px; font-size: 14px;">New Patient Fee : @viewDoctor.Fee</p>
+                                        <p style="margin: 5px; font-size: 14px;">Returning Patient Fee : @viewDoctor.ReturningFee</p>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="table-responsive">
+                                            <table class="table-sm table-bordered">
+                                                <tr>
+                                                    <th>Day</th>
+                                                    <th>Time</th>
+                                                </tr>
+                                                @if (viewDoctor.Sat)
+                                                {
+                                                    <tr>
+                                                        <td>Sat</td>
+                                                        <td>@viewDoctor.SatTime</td>
+                                                    </tr>
+                                                }
+                                                @if (viewDoctor.Sun)
+                                                {
+                                                    <tr>
+                                                        <td>Sun</td>
+                                                        <td>@viewDoctor.SunTime</td>
+                                                    </tr>
+                                                }
+                                                @if (viewDoctor.Mon)
+                                                {
+                                                    <tr>
+                                                        <td>Mon</td>
+                                                        <td>@viewDoctor.MonTime</td>
+                                                    </tr>
+                                                }
+                                                @if (viewDoctor.Tue)
+                                                {
+                                                    <tr>
+                                                        <td>Tue</td>
+                                                        <td>@viewDoctor.TueTime</td>
+                                                    </tr>
+                                                }
+                                                @if (viewDoctor.Wed)
+                                                {
+                                                    <tr>
+                                                        <td>Wed</td>
+                                                        <td>@viewDoctor.WedTime</td>
+                                                    </tr>
+                                                }
+                                                @if (viewDoctor.Thu)
+                                                {
+                                                    <tr>
+                                                        <td>Thu</td>
+                                                        <td>@viewDoctor.ThuTime</td>
+                                                    </tr>
+                                                }
+                                                @if (viewDoctor.Fri)
+                                                {
+                                                    <tr>
+                                                        <td>Fri</td>
+                                                        <td>@viewDoctor.FriTime</td>
+                                                    </tr>
+                                                }
+                                                @if (viewDoctor.Sat == false && viewDoctor.Sun == false && viewDoctor.Mon == false && viewDoctor.Tue == false && viewDoctor.Wed == false && viewDoctor.Thu == false && viewDoctor.Fri == false)
+                                                {
+                                                    <tr>
+                                                        <td colspan="2"><i style="color: red">Schedule not given yet.</i></td>
+                                                    </tr>
+                                                }
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                            }
+                            if (doctor.ViewDoctorChambers.Count > 0)
+                            {
+                                foreach (DoctorChamber viewDoctorChamber in doctor.ViewDoctorChambers)
+                                {
+                                    <h5>@viewDoctorChamber.ChamberName</h5>
+                                    <div class="row">
+                                        <div class="col-12 col-md-4">
+                                            <p style="margin: 5px; font-size: 14px;">@viewDoctorChamber.Address, @viewDoctorChamber.City</p>
+                                            <p style="margin: 5px; font-size: 14px;">Contact No. : @viewDoctorChamber.ContactNo, @viewDoctorChamber.PhoneNo</p>
+                                        </div>
+                                        <div class="col-12 col-md-3">
+                                            <p style="margin: 5px; font-size: 14px;">New Patient Fee : @viewDoctorChamber.Fee</p>
+                                            <p style="margin: 5px; font-size: 14px;">Returning Patient Fee : @viewDoctorChamber.ReturningFee</p>
+                                        </div>
+                                        <div class="col-12 col-md-5">
+                                            <div class="table-responsive">
+                                                <table class="table-sm table-bordered">
+                                                    <tr>
+                                                        <th>Day</th>
+                                                        <th>Time</th>
+                                                    </tr>
+                                                    @if (viewDoctorChamber.Sat)
+                                                    {
+                                                        <tr>
+                                                            <td>Sat</td>
+                                                            <td>@viewDoctorChamber.SatFromTime</td>
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctorChamber.Sun)
+                                                    {
+                                                        <tr>
+                                                            <td>Sun</td>
+                                                            <td>@viewDoctorChamber.SunFromTime</td>
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctorChamber.Mon)
+                                                    {
+                                                        <tr>
+                                                            <td>Mon</td>
+                                                            <td>@viewDoctorChamber.MonFromTime</td>
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctorChamber.Tue)
+                                                    {
+                                                        <tr>
+                                                            <td>Tue</td>
+                                                            <td>@viewDoctorChamber.TueFromTime</td>
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctorChamber.Wed)
+                                                    {
+                                                        <tr>
+                                                            <td>Wed</td>
+                                                            <td>@viewDoctorChamber.WedFromTime</td>
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctorChamber.Thu)
+                                                    {
+                                                        <tr>
+                                                            <td>Thu</td>
+                                                            <td>@viewDoctorChamber.ThuFromTime</td>
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctorChamber.Fri)
+                                                    {
+                                                        <tr>
+                                                            <td>Fri</td>
+                                                            <td>@viewDoctorChamber.FriFromTime</td>
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctorChamber.Sat == false && viewDoctorChamber.Sun == false && viewDoctorChamber.Mon == false && viewDoctorChamber.Tue == false && viewDoctorChamber.Wed == false && viewDoctorChamber.Thu == false && viewDoctorChamber.Fri == false)
+                                                    {
+                                                        <tr>
+                                                            <td colspan="2"><i style="color: red">Schedule not given yet.</i></td>
+                                                        </tr>
+                                                    }
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                }
+                            }
+                            else
+                            {
+                                <i></i>
+                            }
+                        }
+                        else
+                        {
+                            if (doctor.ViewDoctorChambers.Count > 0)
+                            {
+                                foreach (DoctorChamber viewDoctorChamber in doctor.ViewDoctorChambers)
+                                {
+                                    <h5>@viewDoctorChamber.ChamberName</h5>
+                                    <div class="row">
+                                        <div class="col-12 col-md-4">
+                                            <p style="margin: 5px; font-size: 14px;">@viewDoctorChamber.Address, @viewDoctorChamber.City</p>
+                                            <p style="margin: 5px; font-size: 14px;">Contact No. : @viewDoctorChamber.ContactNo, @viewDoctorChamber.PhoneNo</p>
+                                        </div>
+                                        <div class="col-12 col-md-3">
+                                            <p style="margin: 5px; font-size: 14px;">New Patient Fee : @viewDoctorChamber.Fee</p>
+                                            <p style="margin: 5px; font-size: 14px;">Returning Patient Fee : @viewDoctorChamber.ReturningFee</p>
+                                        </div>
+                                        <div class="col-12 col-md-5">
+                                            <div class="table-responsive">
+                                                <table class="table-sm table-bordered">
+                                                    <tr>
+                                                        <th>Day</th>
+                                                        <th>Time</th>
+                                                    </tr>
+                                                    @if (viewDoctorChamber.Sat)
+                                                    {
+                                                        <tr>
+                                                            <td>Sat</td>
+                                                            <td>@viewDoctorChamber.SatFromTime</td>
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctorChamber.Sun)
+                                                    {
+                                                        <tr>
+                                                            <td>Sun</td>
+                                                            <td>@viewDoctorChamber.SunFromTime</td>
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctorChamber.Mon)
+                                                    {
+                                                        <tr>
+                                                            <td>Mon</td>
+                                                            <td>@viewDoctorChamber.MonFromTime</td>
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctorChamber.Tue)
+                                                    {
+                                                        <tr>
+                                                            <td>Tue</td>
+                                                            <td>@viewDoctorChamber.TueFromTime</td>
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctorChamber.Wed)
+                                                    {
+                                                        <tr>
+                                                            <td>Wed</td>
+                                                            <td>@viewDoctorChamber.WedFromTime</td>
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctorChamber.Thu)
+                                                    {
+                                                        <tr>
+                                                            <td>Thu</td>
+                                                            <td>@viewDoctorChamber.ThuFromTime</td>
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctorChamber.Fri)
+                                                    {
+                                                        <tr>
+                                                            <td>Fri</td>
+                                                            <td>@viewDoctorChamber.FriFromTime</td>
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctorChamber.Sat == false && viewDoctorChamber.Sun == false && viewDoctorChamber.Mon == false && viewDoctorChamber.Tue == false && viewDoctorChamber.Wed == false && viewDoctorChamber.Thu == false && viewDoctorChamber.Fri == false)
+                                                    {
+                                                        <tr>
+                                                            <td colspan="2"><i style="color: red">Schedule not given yet.</i></td>
+                                                        </tr>
+                                                    }
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                }
+                            }
+                            else
+                            {
+                                <i style="color: red">This doctor not added any chamber yet.</i>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

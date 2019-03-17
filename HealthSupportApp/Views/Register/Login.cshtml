@@ -1,0 +1,97 @@
+﻿@model HealthSupportApp.Models.HomeModel.Login
+
+@{
+    ViewBag.Title = "Login";
+}
+<div class="container" style="margin-top: 40px">
+    <div class="row">
+        <div class="col-lg-8 col-centered">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3>Login to Your Profile!</h3>
+                        </div>
+                    </div>
+                    <hr />
+                    @if (ViewBag.Message != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Success!</strong> @ViewBag.Message
+                        </div>
+                    }
+                    @if (ViewBag.ErrorMessage != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Sorry!</strong> @ViewBag.ErrorMessage
+                        </div>
+                    }
+                    @if (ViewBag.WarningMessage != null)
+                    {
+                        <div class="alert alert-warning alert-dismissible fade show">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Hello Doctor!</strong> @ViewBag.WarningMessage
+                        </div>
+                    }
+                    @if (ViewBag.AccountWarningMessage != null)
+                    {
+                        <div class="alert alert-warning alert-dismissible fade show">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Sorry!</strong> @ViewBag.AccountWarningMessage
+                        </div>
+                    }
+                    @if (ViewBag.InfoMessage != null)
+                    {
+                        <div class="alert alert-info alert-dismissible fade show">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Hello!</strong> @ViewBag.InfoMessage
+                        </div>
+                    }
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true)
+                            <div class="form-group row">
+                                @Html.LabelFor(model => model.LoginId, new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(model => model.LoginId, new { @class = "form-control", @placeholder = "Enter your Login ID" })
+                                    @Html.ValidationMessageFor(model => model.LoginId)
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                @Html.LabelFor(model => model.Password, new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "Enter your password" })
+                                    @Html.ValidationMessageFor(model => model.Password)
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="offset-md-2 col-sm-10">
+                                    <div class="checkbox">
+                                        @Html.CheckBoxFor(model => model.RememberMe, new { @value = "true" })
+                                        @Html.LabelFor(model => model.RememberMe, new { @class = "control-label" })
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="offset-md-2 col-md-10">
+                                    <input type="submit" value="Login" class="btn btn-success" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div>
+                        <p>Have not an Account! Go to @Html.ActionLink("Register", "Register", "Register")</p>
+                        <p>@Html.ActionLink("Forgotten Password?", "ForgetPassword", "Register")</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

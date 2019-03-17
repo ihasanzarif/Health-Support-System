@@ -1,0 +1,110 @@
+﻿@using HealthSupportApp.Models.MedicalModel
+
+@{
+    ViewBag.Title = "Index";
+    ViewBag.GetMedicalName = ViewBag.GetName;
+    Layout = "~/Views/Shared/_MedicalLayout.cshtml";
+    MedicalAccount aMedicalAccount = ViewBag.GetMedical;
+}
+<style>
+    .card-a {
+        opacity: 1.0;
+        color: white;
+        text-decoration: none;
+    }
+        .card-a:hover {
+            opacity: 0.8;
+            color: white;
+            text-decoration: none;
+        }
+    .card-body span {
+        color: white;
+        font-size: 15px;
+    }
+</style>
+<div class="container">
+    <header>
+        <h1 class="h3 display">Home </h1>
+    </header>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="target-1" class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <a class="card-a" href="@Url.Action("MedicalProfile", "Medical")">
+                                <div class="card">
+                                    <div class="card-body bg-primary">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <i class="fa fa-plus-square" style="font-size: 100px; color: white"></i>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <h2 class="card-title">MEDICAL PROFILE</h2>
+                                                <span class="card-text">With supporting text below as a natural lead-in to additional content.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-sm-6">
+                            <a class="card-a" href="@Url.Action("Services", "Medical")">
+                                <div class="card">
+                                    <div class="card-body bg-info">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <i class="fa fa-medkit" style="font-size: 100px; color: white"></i>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <h2 class="card-title">SERVICES</h2>
+                                                <span>With supporting text below as a natural lead-in to additional content.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <a class="card-a" href="@Url.Action("DoctorAssign", "Medical")">
+                                <div class="card">
+                                    <div class="card-body bg-danger">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <i class="fa fa-user-md" style="font-size: 100px; color: white"></i>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <h2 class="card-title">ADD DOCTOR</h2>
+                                                <span>With supporting text below as a natural lead-in to additional content.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-sm-6">
+                            <a class="card-a" href="@Url.Action("ViewDoctors", "Medical")">
+                                <div class="card">
+                                    <div class="card-body bg-warning">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <i class="fa fa-address-book-o" style="font-size: 100px; color: white"></i>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <h2 class="card-title">VIEW ALL DOCTORS</h2>
+                                                <span>With supporting text below as a natural lead-in to additional content.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>

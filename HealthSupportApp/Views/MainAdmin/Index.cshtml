@@ -1,0 +1,204 @@
+﻿@using HealthSupportApp.Models.DoctorModel
+@using HealthSupportApp.Models.MainAdminModel
+@using HealthSupportApp.Models.UserModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainAdminLayout.cshtml";
+    List<BookAppointment> allAppointments = ViewBag.GetPendingAppointments;
+    List<DoctorAppointOrderVM> doctorAppointOrders = ViewBag.GetAllDoctorsAppointOrders;
+}
+<link href="~/Content/Layout/DataTables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<div class="container-fluid" style="margin-top: 18px;">
+    <header>
+        <h1 class="h3 display">Home</h1>
+    </header>
+    @if (ViewBag.Message != null)
+    {
+        <div class="container">
+            <div class="row justify-content-center align-content-center">
+                <div class="col-md-8">
+                    <div class="alert alert-success">
+                        <strong>Success!</strong> @ViewBag.Message
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="container">
+            <div class="row justify-content-center align-content-center">
+                <div class="col-md-8">
+                    <div class="alert alert-danger">
+                        <strong>Oops!</strong> @ViewBag.ErrorMessage
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="card">
+        <div class="card-header">
+            <h4>Appointments</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered" id="userDataTable">
+                    <thead>
+                        <tr>
+                            <th>SL.</th>
+                            <th>Patient Name</th>
+                            <th>Mobile No.</th>
+                            <th>Doctor & Chamber</th>
+                            <th>Schedule & Appoint Date</th>
+                            <th>Payment Method </th>
+                            <th>TrxID</th>
+                            <th>Serial No.</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ int i = 0;}
+                        @foreach (BookAppointment appointment in allAppointments)
+                        {
+                            i++;
+                            <tr>
+                                <td>@i</td>
+                                <td>@appointment.UserName</td>
+                                <td>@appointment.MobileNo</td>
+                                <td>
+                                    @appointment.DoctorName, @appointment.ChamberName
+                                </td>
+                                <td>
+                                    @appointment.Schedule
+                                    <br />
+                                    @appointment.AppointDate
+                                </td>
+                                <td>
+                                    @appointment.PaymentMethod
+                                </td>
+                                <td>
+                                    TrxID @appointment.TrxId
+                                </td>
+                                <td>@appointment.SerialNo</td>
+                                @if (appointment.Status == "Accepted")
+                                {
+                                    <td>
+                                        <label class="text-success">Accepted</label>
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Cancel", "CancelAppointment", "MainAdmin", new {id= @appointment.BookAppointId, doctorId = appointment.DoctorId, chamberId = appointment.ChamberId, userId = appointment.UserId, mobileNo = appointment.MobileNo }, htmlAttributes: new { @class = "btn btn-sm btn-danger" })
+                                    </td>
+                                }
+                                else if(appointment.Status == "Pending")
+                                {
+                                    <td>
+                                        <label class="text-danger">Pending</label>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-sm btn-secondary dropdown-toggle" href="#" role="link" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 15px; color: white">
+                                            Action
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                            @Html.ActionLink("Confirm", "ConfirmAppointment", "MainAdmin", new {id = @appointment.BookAppointId, doctorId = appointment.DoctorId, chamberId = appointment.ChamberId, userId = appointment.UserId, appointDate = appointment.AppointDate, mobileNo = appointment.MobileNo }, new { @class = "dropdown-item text-success" })
+                                            <div class="dropdown-divider"></div>
+                                            @Html.ActionLink("Cancel", "CancelAppointment", "MainAdmin", new {id= @appointment.BookAppointId, doctorId = appointment.DoctorId, chamberId = appointment.ChamberId, userId = appointment.UserId, mobileNo = appointment.MobileNo }, htmlAttributes: new { @class = "dropdown-item text-danger" })
+                                        </div>
+                                    </td>
+                                }
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h4>Doctors Orders</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered" id="doctorDataTable">
+                    <thead>
+                        <tr>
+                            <th>SL.</th>
+                            <th>Doctor Name</th>
+                            <th>Chamber Name</th>
+                            <th>Appoint Amount</th>
+                            <th>Total Price</th>
+                            <th>Payment Method</th>
+                            <th>TrxID</th>
+                            <th>Order Date</th>
+                            <th>Expire Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ int j = 0;}
+                        @foreach (DoctorAppointOrderVM docAppointOrder in doctorAppointOrders)
+                        {
+                            j++;
+                            <tr>
+                                <td>@j</td>
+                                <td>@docAppointOrder.DoctorName</td>
+                                <td>@docAppointOrder.ChamberName</td>
+                                <td>@docAppointOrder.AppointAmount</td>
+                                <td>@docAppointOrder.TotalPrice</td>
+                                <td>@docAppointOrder.PaymentMethod</td>
+                                <td>@docAppointOrder.TrnxId</td>
+                                <td>@docAppointOrder.OrderDate</td>
+                                <td>@docAppointOrder.ExpireDate</td>
+                                @if (docAppointOrder.Status == "Active")
+                                {
+                                    <td>
+                                        <label class="text-success">Active</label>
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Delete", "DeleteDoctorOrder", "MainAdmin", new{orderId = docAppointOrder.OrderId, manageAppointId = docAppointOrder.ManageAppointId, trxId = docAppointOrder.TrnxId}, new { @class = "btn btn-sm btn-danger text-white" })
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <label class="text-danger">Pending</label>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-sm btn-secondary dropdown-toggle" href="#" role="link" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 15px; color: white">
+                                            Action
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                            @Html.ActionLink("Confirm", "ConfirmDoctorOrder", "MainAdmin", new { manageAppointId = docAppointOrder.ManageAppointId, doctorId = docAppointOrder.DoctorId }, new { @class = "dropdown-item text-success" })
+                                            <div class="dropdown-divider"></div>
+                                            @Html.ActionLink("Delete", "DeleteDoctorOrder", "MainAdmin", new { orderId = docAppointOrder.OrderId, manageAppointId = docAppointOrder.ManageAppointId, trxId = docAppointOrder.TrnxId }, new { @class = "dropdown-item text-danger" })
+                                        </div>
+                                        
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/Layout/DataTables/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/Layout/DataTables/js/dataTables.bootstrap4.min.js"></script>
+    @*<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>*@
+    <script>
+        $(document).ready(function () {
+            $('#userDataTable').DataTable();
+        });
+        $(document).ready(function () {
+            $('#doctorDataTable').DataTable();
+        });
+    </script>
+}

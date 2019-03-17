@@ -1,0 +1,66 @@
+﻿@using HealthSupportApp.Models.UserModel
+
+@{
+    ViewBag.Title = "Appointments";
+    ViewBag.GetUserName = ViewBag.GetName;
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    List<BookAppointment> usersAppointments = ViewBag.GetAllAppointments;
+}
+<div class="container">
+    <header>
+        <h1 class="h3 display">Appoint History</h1>
+    </header>
+    @if (usersAppointments.Count > 0)
+    {
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>All Appointments</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-responsive-lg table-striped table-bordered">
+                                <tr>
+                                    <th>SL No.</th>
+                                    <th>Doctor Name</th>
+                                    <th>Chamber Name</th>
+                                    <th>Serial No.</th>
+                                    <th>Schedule</th>
+                                    <th>Appoint Date</th>
+                                </tr>
+                                @{int i = 0;}
+                                @foreach (BookAppointment userAppointment in usersAppointments)
+                                {
+                                    i++;
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@userAppointment.DoctorName</td>
+                                        <td>@userAppointment.ChamberName</td>
+                                        <td>@userAppointment.SerialNo</td>
+                                        <td>@userAppointment.Schedule</td>
+                                        <td>@userAppointment.AppointDate</td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+    }
+    else
+    {
+        <div class="row" style="margin-bottom: 10px">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <label><i>You have no appointments yet.</i></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

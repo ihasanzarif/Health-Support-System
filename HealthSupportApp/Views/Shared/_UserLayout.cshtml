@@ -1,0 +1,154 @@
+﻿@using Microsoft.Ajax.Utilities
+@{
+    if (User.IsInRole("Medical"))
+    {
+        Response.Redirect("~/Medical/Index");
+    }
+    if (User.Identity.IsAuthenticated == false)
+    {
+        Response.Redirect("~/Home/Index");
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>HSSMI - @ViewBag.Title</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="~/Content/Layout/vendor/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="~/Content/Layout/vendor/font-awesome/css/font-awesome.min.css">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="~/Content/Layout/css/fontastic.css">
+    <!-- Google fonts - Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <!-- jQuery Circle-->
+    <link rel="stylesheet" href="~/Content/Layout/css/grasp_mobile_progress_circle-1.0.0.min.css">
+    <!-- Custom Scrollbar-->
+    <link rel="stylesheet" href="~/Content/Layout/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="~/Content/Layout/css/style.blue.css" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="~/Content/Layout/css/custom.css">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="~/Content/Layout/img/favicon.ico">
+    <!-- Tweaks for older IEs-->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+    <style>
+        .field-validation-error {
+            color: red;
+        }
+
+        .input-validation-error {
+            border-color: red;
+        }
+
+        .table-borderless tr td {
+            border: none !important;
+        }
+
+        .table-borderless tr th {
+            border: none !important;
+        }
+
+        .col-centered {
+            margin: 0 auto;
+            float: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Side Navbar -->
+    <nav class="side-navbar">
+        <div class="side-navbar-wrapper">
+            <!-- Sidebar Header    -->
+            <div class="sidenav-header d-flex align-items-center justify-content-center">
+                <!-- User Info-->
+                <div class="sidenav-header-inner text-center">
+                    @*<img src="~/Content/Layout/img/avatar-1.jpg" alt="person" class="img-fluid rounded-circle">*@
+                    <h2 class="h5">@ViewBag.GetUserName</h2>
+                </div>
+                <!-- Small Brand information, appears on minimized sidebar-->
+                <div class="sidenav-header-logo"><a href="@Url.Action("Index", "User")" class="brand-small text-center"> <strong>HS</strong></a></div>
+            </div>
+            <hr style="background-color: white" />
+            <!-- Sidebar Navigation Menus-->
+            <div class="main-menu">
+                <ul id="side-main-menu" class="side-menu list-unstyled">
+                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "active" : "")"><a href="@Url.Action("Index", "User")"> <i class="fa fa-home"></i>Home  </a></li>
+                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "UserProfile" ? "active" : "")"><a href="@Url.Action("UserProfile", "User")"> <i class="fa fa-user"></i>Profile  </a></li>
+                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Appointments" ? "active" : "")"><a href="@Url.Action("Appointments", "User")"> <i class="fa fa-envelope"></i>Appointments</a></li>
+                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "BloodBank" ? "active" : "")"><a href="@Url.Action("BloodBank", "User")"> <i class="fa fa-tint"></i>Blood Bank</a></li>
+                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "SearchResult" ? "active" : "")"><a href="@Url.Action("SearchResult", "User")"> <i class="fa fa-search"></i>Search </a></li>
+                    <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "ChangePassword" ? "active" : "")"><a href="@Url.Action("ChangePassword", "User")"> <i class="fa fa-wrench"></i>Change Password </a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="page">
+        <!-- navbar-->
+        <header class="header">
+            <nav class="navbar">
+                <div class="container-fluid">
+                    <div class="navbar-holder d-flex align-items-center justify-content-between">
+                        <div class="navbar-header">
+                            <a id="toggle-btn" href="#" class="menu-btn"><i class="icon-bars"> </i></a>
+                            <a href="@Url.Action("Index", "User")" class="navbar-brand">
+                                <div class="brand-text d-none d-md-inline-block">HSSMI</div>
+                            </a>
+                        </div>
+                        <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+                            <li class="nav-item"><a class="nav-link text-white" style="font-size: 14px" href="@Url.Action("Forum", "User")">Forum</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" style="font-size: 14px" href="@Url.Action("BloodBank", "User")">Blood Bank</a></li>
+                            <!-- Languages dropdown    -->
+                            @if (User.IsInRole("User"))
+                            {
+                                <li class="nav-item"><a href="@Url.Action("UserLogout", "Register")" class="nav-link logout text-danger" style="font-size: 14px"><i class="fa fa-sign-out"></i> Logout</a></li>
+                            }
+                            <!-- Log out-->
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <!-- Statistics Section-->
+        <section class="statistics">
+            @RenderBody()
+        </section>
+        <br />
+        <footer class="main-footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <p>HSSMI &copy; @DateTime.Now.Year</p>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        <p>Design by <a href="#" class="external">Ihasan Zarif</a></p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!-- JavaScript files-->
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    @RenderSection("scripts", required: false)
+    <script src="~/Content/Layout/vendor/popper.js/umd/popper.min.js"></script>
+    <script src="~/Content/Layout/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/Content/Layout/js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
+    <script src="~/Content/Layout/vendor/jquery.cookie/jquery.cookie.js"></script>
+    <script src="~/Content/Layout/vendor/chart.js/Chart.min.js"></script>
+    <script src="~/Content/Layout/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="~/Content/Layout/js/charts-home.js"></script>
+    <!-- Main File-->
+    <script src="~/Content/Layout/js/front.js"></script>
+</body>
+</html>

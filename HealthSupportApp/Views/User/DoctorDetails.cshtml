@@ -1,0 +1,799 @@
+﻿@using HealthSupportApp.Models.DoctorModel
+@using HealthSupportApp.Models.MedicalModel
+
+@{
+    ViewBag.Title = "Doctor Details";
+    ViewBag.GetUserName = ViewBag.GetName;
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    Doctors doctor = ViewBag.DoctorDetailsSearchResult;
+}
+<div class="container">
+    <header>
+        <h1 class="h3 display">Doctor's Details</h1>
+    </header>
+    <div class="row">
+        <div class="col-lg-12">
+            <!-- Income-->
+            <div class="card income">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-4 col-md-2" style="padding-bottom: 5px">
+                                @if (doctor.ImagePath != "")
+                                {
+                                    <img class="img-thumbnail" src="@Url.Content(doctor.ImagePath)" width="100px" height="130px" />
+                                }
+                                else
+                                {
+                                    if (doctor.Gender == "Male")
+                                    {
+                                        <img class="img-thumbnail" src="~/Image/maleDoctor.png" width="100px" height="130px" />
+                                    }
+                                    else
+                                    {
+                                        <img class="img-thumbnail" src="~/Image/femaleDoctor.png" width="100px" height="130px" />
+                                    }
+                                }
+                            </div>
+                            <div class="col-8 col-md-6">
+                                <h5>@doctor.Name</h5>
+                                <p style="font-size: 14px; color: black">@doctor.OtherSpecification</p>
+                                <p style="font-size: 14px; color: black">@doctor.Speciality</p>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <p style="font-size: 14px; color: black">@doctor.Title</p>
+                                <p style="font-size: 14px; color: black">Mobile No. : @doctor.MobileNo</p>
+                                <p style="font-size: 14px; color: black">Email : @doctor.Email</p>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5>Doctor's Chamber</h5>
+                                <hr />
+                                @if (doctor.ViewDoctors.Count > 0)
+                                {
+                                    foreach (ViewDoctors viewDoctor in doctor.ViewDoctors)
+                                    {
+                                        <h5>@viewDoctor.MedicalName</h5>
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <p style="margin: 5px;font-size: 14px;">@viewDoctor.MedicalAddress, @viewDoctor.MedicalCity</p>
+                                                <p style="margin: 5px;font-size: 14px;">New Patient Fee : @viewDoctor.Fee</p>
+                                                <p style="margin: 5px;font-size: 14px;">Returning Patient Fee : @viewDoctor.ReturningFee</p>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <table class="table-sm table-responsive-lg table-bordered">
+                                                    <tr>
+                                                        <th>Day</th>
+                                                        <th>Time</th>
+                                                        <th>Online Appointment</th>
+                                                    </tr>
+                                                    @if (viewDoctor.Sat)
+                                                    {
+                                                        <tr>
+                                                            <td>Sat</td>
+                                                            <td>@viewDoctor.SatTime</td>
+                                                            @if (viewDoctor.ManageAppointment.OnlineAppointment)
+                                                            {
+                                                                if (viewDoctor.ManageAppointment.SatAvailableAppoint > 0)
+                                                                {
+                                                                    <td>
+                                                                        <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new {doctorId = doctor.Id, schedule = viewDoctor.SatTime, medicalId = viewDoctor.MedicalId, day = DayOfWeek.Saturday})">Book Appointment</a>
+                                                                        <p class="text-success">@viewDoctor.ManageAppointment.SatAvailableAppoint appointment available</p>
+                                                                    </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                        <p class="text-danger">No appointment available</p>
+                                                                    </td>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <td>
+                                                                    <p class="text-danger">Not available</p>
+                                                                </td>
+                                                            }
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctor.Sun)
+                                                    {
+                                                        <tr>
+                                                            <td>Sun</td>
+                                                            <td>@viewDoctor.SunTime</td>
+                                                            @if (viewDoctor.ManageAppointment.OnlineAppointment)
+                                                            {
+                                                                if (viewDoctor.ManageAppointment.SunAvailableAppoint > 0)
+                                                                {
+                                                                    <td>
+                                                                        <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new { doctorId = doctor.Id, schedule = viewDoctor.SunTime, medicalId = viewDoctor.MedicalId, day = DayOfWeek.Sunday})">Book Appointment</a>
+                                                                        <p class="text-success">@viewDoctor.ManageAppointment.SunAvailableAppoint appointment available</p>
+                                                                    </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                        <p class="text-danger">No appointment available</p>
+                                                                    </td>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <td>
+                                                                    <p class="text-danger">Not available</p>
+                                                                </td>
+                                                            }
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctor.Mon)
+                                                    {
+                                                        <tr>
+                                                            <td>Mon</td>
+                                                            <td>@viewDoctor.MonTime</td>
+                                                            @if (viewDoctor.ManageAppointment.OnlineAppointment)
+                                                            {
+                                                                if (viewDoctor.ManageAppointment.MonAvailableAppoint > 0)
+                                                                {
+                                                                    <td>
+                                                                        <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new { doctorId = doctor.Id, schedule = viewDoctor.MonTime, medicalId = viewDoctor.MedicalId, day = DayOfWeek.Monday})">Book Appointment</a>
+                                                                        <p class="text-success">@viewDoctor.ManageAppointment.MonAvailableAppoint appointment available</p>
+                                                                    </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                        <p class="text-danger">No appointment available</p>
+                                                                    </td>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <td>
+                                                                    <p class="text-danger">Not available</p>
+                                                                </td>
+                                                            }
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctor.Tue)
+                                                    {
+                                                        <tr>
+                                                            <td>Tue</td>
+                                                            <td>@viewDoctor.TueTime</td>
+                                                            @if (viewDoctor.ManageAppointment.OnlineAppointment)
+                                                            {
+                                                                if (viewDoctor.ManageAppointment.TueAvailableAppoint > 0)
+                                                                {
+                                                                    <td>
+                                                                        <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new {doctorId = doctor.Id, schedule = viewDoctor.TueTime, medicalId = viewDoctor.MedicalId, day = DayOfWeek.Tuesday})">Book Appointment</a>
+                                                                        <p class="text-success">@viewDoctor.ManageAppointment.TueAvailableAppoint appointment available</p>
+                                                                    </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                        <p class="text-danger">No appointment available</p>
+                                                                    </td>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <td>
+                                                                    <p class="text-danger">Not available</p>
+                                                                </td>
+                                                            }
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctor.Wed)
+                                                    {
+                                                        <tr>
+                                                            <td>Wed</td>
+                                                            <td>@viewDoctor.WedTime</td>
+                                                            @if (viewDoctor.ManageAppointment.OnlineAppointment)
+                                                            {
+                                                                if (viewDoctor.ManageAppointment.WedAvailableAppoint > 0)
+                                                                {
+                                                                    <td>
+                                                                        <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new { doctorId = doctor.Id, schedule = viewDoctor.WedTime, medicalId = viewDoctor.MedicalId, day = DayOfWeek.Wednesday})">Book Appointment</a>
+                                                                        <p class="text-success">@viewDoctor.ManageAppointment.WedAvailableAppoint appointment available</p>
+                                                                    </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                        <p class="text-danger">No appointment available</p>
+                                                                    </td>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <td>
+                                                                    <p class="text-danger">Not available</p>
+                                                                </td>
+                                                            }
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctor.Thu)
+                                                    {
+                                                        <tr>
+                                                            <td>Thu</td>
+                                                            <td>@viewDoctor.ThuTime</td>
+                                                            @if (viewDoctor.ManageAppointment.OnlineAppointment)
+                                                            {
+                                                                if (viewDoctor.ManageAppointment.ThuAvailableAppoint > 0)
+                                                                {
+                                                                    <td>
+                                                                        <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new { doctorId = doctor.Id, schedule = viewDoctor.ThuTime, medicalId = viewDoctor.MedicalId, day = DayOfWeek.Thursday})">Book Appointment</a>
+                                                                        <p class="text-success">@viewDoctor.ManageAppointment.ThuAvailableAppoint appointment available</p>
+                                                                    </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                        <p class="text-danger">No appointment available</p>
+                                                                    </td>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <td>
+                                                                    <p class="text-danger">Not available</p>
+                                                                </td>
+                                                            }
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctor.Fri)
+                                                    {
+                                                        <tr>
+                                                            <td>Fri</td>
+                                                            <td>@viewDoctor.FriTime</td>
+                                                            @if (viewDoctor.ManageAppointment.OnlineAppointment)
+                                                            {
+                                                                if (viewDoctor.ManageAppointment.FriAvailableAppoint > 0)
+                                                                {
+                                                                    <td>
+                                                                        <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new { doctorId = doctor.Id, schedule = viewDoctor.FriTime, medicalId = viewDoctor.MedicalId, day = DayOfWeek.Friday})">Book Appointment</a>
+                                                                        <p class="text-success">@viewDoctor.ManageAppointment.FriAvailableAppoint appointment available</p>
+                                                                    </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                        <p class="text-danger">No appointment available</p>
+                                                                    </td>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <td>
+                                                                    <p class="text-danger">Not available</p>
+                                                                </td>
+                                                            }
+                                                        </tr>
+                                                    }
+                                                    @if (viewDoctor.Sat == false && viewDoctor.Sun == false && viewDoctor.Mon == false && viewDoctor.Tue == false && viewDoctor.Wed == false && viewDoctor.Thu == false && viewDoctor.Fri == false)
+                                                    {
+                                                        <tr>
+                                                            <td colspan="3"><i style="color: red">Schedule not given yet.</i></td>
+                                                        </tr>
+                                                    }
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <br />
+                                    }
+                                    if (doctor.ViewDoctorChambers.Count > 0)
+                                    {
+                                        foreach (DoctorChamber viewDoctorChamber in doctor.ViewDoctorChambers)
+                                        {
+                                            <h5>@viewDoctorChamber.ChamberName</h5>
+                                            <div class="row">
+                                                <div class="col-12 col-md-4">
+                                                    <p style="margin: 5px; font-size: 14px;">@viewDoctorChamber.Address, @viewDoctorChamber.City</p>
+                                                    <p style="margin: 5px; font-size: 14px;">Contact No. : @viewDoctorChamber.ContactNo, @viewDoctorChamber.PhoneNo</p>
+                                                </div>
+                                                <div class="col-12 col-md-3">
+                                                    <p style="margin: 5px; font-size: 14px;">New Patient Fee : @viewDoctorChamber.Fee</p>
+                                                    <p style="margin: 5px; font-size: 14px;">Returning Patient Fee : @viewDoctorChamber.ReturningFee</p>
+                                                </div>
+                                                <div class="col-12 col-md-5">
+                                                    <table class="table-sm table-responsive-lg table-bordered">
+                                                        <tr>
+                                                            <th>Day</th>
+                                                            <th>Time</th>
+                                                            <th>Online Appointment</th>
+                                                        </tr>
+                                                        @if (viewDoctorChamber.Sat)
+                                                        {
+                                                            <tr>
+                                                                <td>Sat</td>
+                                                                <td>@viewDoctorChamber.SatFromTime</td>
+                                                                @if (viewDoctorChamber.ManageAppointment.OnlineAppointment)
+                                                                {
+                                                                    if (viewDoctorChamber.ManageAppointment.SatAvailableAppoint > 0)
+                                                                    {
+                                                                        <td>
+                                                                            <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new { doctorId = doctor.Id, schedule = viewDoctorChamber.SatFromTime, doctorChmaberId = viewDoctorChamber.Id, day = DayOfWeek.Saturday})">Book Appointment</a>
+                                                                            <p class="text-success">@viewDoctorChamber.ManageAppointment.SatAvailableAppoint appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>
+                                                                            <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                            <p class="text-danger">No appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <p class="text-danger">Not available</p>
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                        @if (viewDoctorChamber.Sun)
+                                                        {
+                                                            <tr>
+                                                                <td>Sun</td>
+                                                                <td>@viewDoctorChamber.SunFromTime</td>
+                                                                @if (viewDoctorChamber.ManageAppointment.OnlineAppointment)
+                                                                {
+                                                                    if (viewDoctorChamber.ManageAppointment.SunAvailableAppoint > 0)
+                                                                    {
+                                                                        <td>
+                                                                            <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new { doctorId = doctor.Id, schedule = viewDoctorChamber.SunFromTime, doctorChmaberId = viewDoctorChamber.Id, day = DayOfWeek.Sunday})">Book Appointment</a>
+                                                                            <p class="text-success">@viewDoctorChamber.ManageAppointment.SunAvailableAppoint appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>
+                                                                            <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                            <p class="text-danger">No appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <p class="text-danger">Not available</p>
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                        @if (viewDoctorChamber.Mon)
+                                                        {
+                                                            <tr>
+                                                                <td>Mon</td>
+                                                                <td>@viewDoctorChamber.MonFromTime</td>
+                                                                @if (viewDoctorChamber.ManageAppointment.OnlineAppointment)
+                                                                {
+                                                                    if (viewDoctorChamber.ManageAppointment.MonAvailableAppoint > 0)
+                                                                    {
+                                                                        <td>
+                                                                            <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new { doctorId = doctor.Id, schedule = viewDoctorChamber.MonFromTime, doctorChmaberId = viewDoctorChamber.Id, day = DayOfWeek.Monday})">Book Appointment</a>
+                                                                            <p class="text-success">@viewDoctorChamber.ManageAppointment.MonAvailableAppoint appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>
+                                                                            <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                            <p class="text-danger">No appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <p class="text-danger">Not available</p>
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                        @if (viewDoctorChamber.Tue)
+                                                        {
+                                                            <tr>
+                                                                <td>Tue</td>
+                                                                <td>@viewDoctorChamber.TueFromTime</td>
+                                                                @if (viewDoctorChamber.ManageAppointment.OnlineAppointment)
+                                                                {
+                                                                    if (viewDoctorChamber.ManageAppointment.TueAvailableAppoint > 0)
+                                                                    {
+                                                                        <td>
+                                                                            <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new { doctorId = doctor.Id, schedule = viewDoctorChamber.TueFromTime, doctorChmaberId = viewDoctorChamber.Id, day = DayOfWeek.Tuesday})">Book Appointment</a>
+                                                                            <p class="text-success">@viewDoctorChamber.ManageAppointment.TueAvailableAppoint appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>
+                                                                            <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                            <p class="text-danger">No appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <p class="text-danger">Not available</p>
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                        @if (viewDoctorChamber.Wed)
+                                                        {
+                                                            <tr>
+                                                                <td>Wed</td>
+                                                                <td>@viewDoctorChamber.WedFromTime</td>
+                                                                @if (viewDoctorChamber.ManageAppointment.OnlineAppointment)
+                                                                {
+                                                                    if (viewDoctorChamber.ManageAppointment.WedAvailableAppoint > 0)
+                                                                    {
+                                                                        <td>
+                                                                            <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new { doctorId = doctor.Id, schedule = viewDoctorChamber.WedFromTime, doctorChmaberId = viewDoctorChamber.Id, day = DayOfWeek.Wednesday})">Book Appointment</a>
+                                                                            <p class="text-success">@viewDoctorChamber.ManageAppointment.WedAvailableAppoint appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>
+                                                                            <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                            <p class="text-danger">No appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <p class="text-danger">Not available</p>
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                        @if (viewDoctorChamber.Thu)
+                                                        {
+                                                            <tr>
+                                                                <td>Thu</td>
+                                                                <td>@viewDoctorChamber.ThuFromTime</td>
+                                                                @if (viewDoctorChamber.ManageAppointment.OnlineAppointment)
+                                                                {
+                                                                    if (viewDoctorChamber.ManageAppointment.ThuAvailableAppoint > 0)
+                                                                    {
+                                                                        <td>
+                                                                            <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new { doctorId = doctor.Id, schedule = viewDoctorChamber.ThuFromTime, doctorChmaberId = viewDoctorChamber.Id, day = DayOfWeek.Thursday})">Book Appointment</a>
+                                                                            <p class="text-success">@viewDoctorChamber.ManageAppointment.ThuAvailableAppoint appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>
+                                                                            <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                            <p class="text-danger">No appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <p class="text-danger">Not available</p>
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                        @if (viewDoctorChamber.Fri)
+                                                        {
+                                                            <tr>
+                                                                <td>Fri</td>
+                                                                <td>@viewDoctorChamber.FriFromTime</td>
+                                                                @if (viewDoctorChamber.ManageAppointment.OnlineAppointment)
+                                                                {
+                                                                    if (viewDoctorChamber.ManageAppointment.FriAvailableAppoint > 0)
+                                                                    {
+                                                                        <td>
+                                                                            <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new { doctorId = doctor.Id, schedule = viewDoctorChamber.FriFromTime, doctorChmaberId = viewDoctorChamber.Id, day = DayOfWeek.Friday})">Book Appointment</a>
+                                                                            <p class="text-success">@viewDoctorChamber.ManageAppointment.FriAvailableAppoint appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>
+                                                                            <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                            <p class="text-danger">No appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <p class="text-danger">Not available</p>
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                        @if (viewDoctorChamber.Sat == false && viewDoctorChamber.Sun == false && viewDoctorChamber.Mon == false && viewDoctorChamber.Tue == false && viewDoctorChamber.Wed == false && viewDoctorChamber.Thu == false && viewDoctorChamber.Fri == false)
+                                                        {
+                                                            <tr>
+                                                                <td colspan="2"><i style="color: red">Schedule not given yet.</i></td>
+                                                            </tr>
+                                                        }
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <br />
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <i></i>
+                                    }
+                                }
+                                else
+                                {
+                                    if (doctor.ViewDoctorChambers.Count > 0)
+                                    {
+                                        foreach (DoctorChamber viewDoctorChamber in doctor.ViewDoctorChambers)
+                                        {
+                                            <h5>@viewDoctorChamber.ChamberName</h5>
+                                            <div class="row">
+                                                <div class="col-12 col-md-4">
+                                                    <p style="margin: 5px; font-size: 14px;">@viewDoctorChamber.Address, @viewDoctorChamber.City</p>
+                                                    <p style="margin: 5px; font-size: 14px;">Contact No. : @viewDoctorChamber.ContactNo, @viewDoctorChamber.PhoneNo</p>
+                                                </div>
+                                                <div class="col-12 col-md-3">
+                                                    <p style="margin: 5px; font-size: 14px;">New Patient Fee : @viewDoctorChamber.Fee</p>
+                                                    <p style="margin: 5px; font-size: 14px;">Returning Patient Fee : @viewDoctorChamber.ReturningFee</p>
+                                                </div>
+                                                <div class="col-12 col-md-5">
+                                                    <table class="table-sm table-responsive-lg table-bordered">
+                                                        <tr>
+                                                            <th>Day</th>
+                                                            <th>Time</th>
+                                                            <th>Online Appointment</th>
+                                                        </tr>
+                                                        @if (viewDoctorChamber.Sat)
+                                                        {
+                                                            <tr>
+                                                                <td>Sat</td>
+                                                                <td>@viewDoctorChamber.SatFromTime</td>
+                                                                @if (viewDoctorChamber.ManageAppointment.OnlineAppointment)
+                                                                {
+                                                                    if (viewDoctorChamber.ManageAppointment.SatAvailableAppoint > 0)
+                                                                    {
+                                                                        <td>
+                                                                            <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new { doctorId = doctor.Id, schedule = viewDoctorChamber.SatFromTime, doctorChmaberId = viewDoctorChamber.Id, day = DayOfWeek.Saturday})">Book Appointment</a>
+                                                                            <p class="text-success">@viewDoctorChamber.ManageAppointment.SatAvailableAppoint appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>
+                                                                            <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                            <p class="text-danger">No appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <p class="text-danger">Not available</p>
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                        @if (viewDoctorChamber.Sun)
+                                                        {
+                                                            <tr>
+                                                                <td>Sun</td>
+                                                                <td>@viewDoctorChamber.SunFromTime</td>
+                                                                @if (viewDoctorChamber.ManageAppointment.OnlineAppointment)
+                                                                {
+                                                                    if (viewDoctorChamber.ManageAppointment.SunAvailableAppoint > 0)
+                                                                    {
+                                                                        <td>
+                                                                            <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new { doctorId = doctor.Id, schedule = viewDoctorChamber.SunFromTime, doctorChmaberId = viewDoctorChamber.Id, day = DayOfWeek.Sunday})">Book Appointment</a>
+                                                                            <p class="text-success">@viewDoctorChamber.ManageAppointment.SunAvailableAppoint appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>
+                                                                            <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                            <p class="text-danger">No appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <p class="text-danger">Not available</p>
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                        @if (viewDoctorChamber.Mon)
+                                                        {
+                                                            <tr>
+                                                                <td>Mon</td>
+                                                                <td>@viewDoctorChamber.MonFromTime</td>
+                                                                @if (viewDoctorChamber.ManageAppointment.OnlineAppointment)
+                                                                {
+                                                                    if (viewDoctorChamber.ManageAppointment.MonAvailableAppoint > 0)
+                                                                    {
+                                                                        <td>
+                                                                            <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new { doctorId = doctor.Id, schedule = viewDoctorChamber.MonFromTime, doctorChmaberId = viewDoctorChamber.Id, day = DayOfWeek.Monday})">Book Appointment</a>
+                                                                            <p class="text-success">@viewDoctorChamber.ManageAppointment.MonAvailableAppoint appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>
+                                                                            <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                            <p class="text-danger">No appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <p class="text-danger">Not available</p>
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                        @if (viewDoctorChamber.Tue)
+                                                        {
+                                                            <tr>
+                                                                <td>Tue</td>
+                                                                <td>@viewDoctorChamber.TueFromTime</td>
+                                                                @if (viewDoctorChamber.ManageAppointment.OnlineAppointment)
+                                                                {
+                                                                    if (viewDoctorChamber.ManageAppointment.TueAvailableAppoint > 0)
+                                                                    {
+                                                                        <td>
+                                                                            <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new { doctorId = doctor.Id, schedule = viewDoctorChamber.TueFromTime, doctorChmaberId = viewDoctorChamber.Id, day = DayOfWeek.Tuesday})">Book Appointment</a>
+                                                                            <p class="text-success">@viewDoctorChamber.ManageAppointment.TueAvailableAppoint appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>
+                                                                            <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                            <p class="text-danger">No appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <p class="text-danger">Not available</p>
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                        @if (viewDoctorChamber.Wed)
+                                                        {
+                                                            <tr>
+                                                                <td>Wed</td>
+                                                                <td>@viewDoctorChamber.WedFromTime</td>
+                                                                @if (viewDoctorChamber.ManageAppointment.OnlineAppointment)
+                                                                {
+                                                                    if (viewDoctorChamber.ManageAppointment.WedAvailableAppoint > 0)
+                                                                    {
+                                                                        <td>
+                                                                            <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new { doctorId = doctor.Id, schedule = viewDoctorChamber.WedFromTime, doctorChmaberId = viewDoctorChamber.Id, day = DayOfWeek.Wednesday})">Book Appointment</a>
+                                                                            <p class="text-success">@viewDoctorChamber.ManageAppointment.WedAvailableAppoint appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>
+                                                                            <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                            <p class="text-danger">No appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <p class="text-danger">Not available</p>
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                        @if (viewDoctorChamber.Thu)
+                                                        {
+                                                            <tr>
+                                                                <td>Thu</td>
+                                                                <td>@viewDoctorChamber.ThuFromTime</td>
+                                                                @if (viewDoctorChamber.ManageAppointment.OnlineAppointment)
+                                                                {
+                                                                    if (viewDoctorChamber.ManageAppointment.ThuAvailableAppoint > 0)
+                                                                    {
+                                                                        <td>
+                                                                            <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new { doctorId = doctor.Id, schedule = viewDoctorChamber.ThuFromTime, doctorChmaberId = viewDoctorChamber.Id, day = DayOfWeek.Thursday})">Book Appointment</a>
+                                                                            <p class="text-success">@viewDoctorChamber.ManageAppointment.ThuAvailableAppoint appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>
+                                                                            <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                            <p class="text-danger">No appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <p class="text-danger">Not available</p>
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                        @if (viewDoctorChamber.Fri)
+                                                        {
+                                                            <tr>
+                                                                <td>Fri</td>
+                                                                <td>@viewDoctorChamber.FriFromTime</td>
+                                                                @if (viewDoctorChamber.ManageAppointment.OnlineAppointment)
+                                                                {
+                                                                    if (viewDoctorChamber.ManageAppointment.FriAvailableAppoint > 0)
+                                                                    {
+                                                                        <td>
+                                                                            <a class="btn btn-sm btn-primary text-white" href="@Url.Action("BookAppointment","User", new { doctorId = doctor.Id, schedule = viewDoctorChamber.FriFromTime, doctorChmaberId = viewDoctorChamber.Id, day = DayOfWeek.Friday})">Book Appointment</a>
+                                                                            <p class="text-success">@viewDoctorChamber.ManageAppointment.FriAvailableAppoint appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>
+                                                                            <button class="btn btn-sm btn-primary text-white" disabled>Book Appointment</button>
+                                                                            <p class="text-danger">No appointment available</p>
+                                                                        </td>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        <p class="text-danger">Not available</p>
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        }
+                                                        @if (viewDoctorChamber.Sat == false && viewDoctorChamber.Sun == false && viewDoctorChamber.Mon == false && viewDoctorChamber.Tue == false && viewDoctorChamber.Wed == false && viewDoctorChamber.Thu == false && viewDoctorChamber.Fri == false)
+                                                        {
+                                                            <tr>
+                                                                <td colspan="2"><i style="color: red">Schedule not given yet.</i></td>
+                                                            </tr>
+                                                        }
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <br />
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <i style="color: red">This doctor not added any chamber yet.</i>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,414 @@
+﻿@using HealthSupportApp.Models.DoctorModel
+@using HealthSupportApp.Models.MedicalModel
+@model ViewDoctors
+@{
+    ViewBag.GetDoctorName = ViewBag.GetName;
+    ViewBag.Title = "Manage Chamber";
+    Layout = "~/Views/Shared/_DoctorLayout.cshtml";
+    List<ViewDoctors> doctorChambers = ViewBag.DoctorChambers;
+    List<DoctorChamber> doctorOwnChambers = ViewBag.DoctorOwnChambers;
+}
+
+@if (ViewBag.Message != null)
+{
+    <div class="container">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-success alert-dismissible" style="margin-top: 20px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Success!</strong> @ViewBag.Message
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="container">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-danger alert-dismissible" style="margin-top: 20px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Error!</strong> @ViewBag.ErrorMessage
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="container">
+    <header>
+        <h1 class="h3 display">Chambers</h1>
+    </header>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="target-1" class="card">
+                <div class="card-header">
+                    <h3>Your Chambers</h3>
+                </div>
+                <div class="card-body">
+                    @if (doctorChambers.Count > 0)
+                    {
+                        foreach (ViewDoctors viewDoctor in doctorChambers)
+                        {
+                                <h5>@viewDoctor.MedicalName <a href="@Url.Action("EditChamber", "Doctor", new {id = viewDoctor.MedicalId})" class="btn btn-sm btn-info pull-right"><i class="fa fa-edit"></i> Edit</a></h5>
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <p style="font-size: 14px;">@viewDoctor.MedicalAddress, @viewDoctor.MedicalCity</p>
+                                        <p style="font-size: 14px;">New Patient Fee : @viewDoctor.Fee</p>
+                                        <p style="font-size: 14px;">Returning Patient Fee : @viewDoctor.ReturningFee</p>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="table-responsive-lg">
+                                            <table class="table-sm table-bordered">
+                                                <tr>
+                                                    <th>Day</th>
+                                                    <th>Time</th>
+                                                </tr>
+                                                @if (viewDoctor.Sat)
+                                                {
+                                                    <tr>
+                                                        <td>Sat</td>
+                                                        <td>@viewDoctor.SatTime</td>
+                                                    </tr>
+                                                }
+                                                @if (viewDoctor.Sun)
+                                                {
+                                                    <tr>
+                                                        <td>Sun</td>
+                                                        <td>@viewDoctor.SunTime</td>
+                                                    </tr>
+                                                }
+                                                @if (viewDoctor.Mon)
+                                                {
+                                                    <tr>
+                                                        <td>Mon</td>
+                                                        <td>@viewDoctor.MonTime</td>
+                                                    </tr>
+                                                }
+                                                @if (viewDoctor.Tue)
+                                                {
+                                                    <tr>
+                                                        <td>Tue</td>
+                                                        <td>@viewDoctor.TueTime</td>
+                                                    </tr>
+                                                }
+                                                @if (viewDoctor.Wed)
+                                                {
+                                                    <tr>
+                                                        <td>Wed</td>
+                                                        <td>@viewDoctor.WedTime</td>
+                                                    </tr>
+                                                }
+                                                @if (viewDoctor.Thu)
+                                                {
+                                                    <tr>
+                                                        <td>Thu</td>
+                                                        <td>@viewDoctor.ThuTime</td>
+                                                    </tr>
+                                                }
+                                                @if (viewDoctor.Fri)
+                                                {
+                                                    <tr>
+                                                        <td>Fri</td>
+                                                        <td>@viewDoctor.FriTime</td>
+                                                    </tr>
+                                                }
+                                                @if (viewDoctor.Sat == false && viewDoctor.Sun == false && viewDoctor.Mon == false && viewDoctor.Tue == false && viewDoctor.Wed == false && viewDoctor.Thu == false && viewDoctor.Fri == false)
+                                                {
+                                                    <tr>
+                                                        <td colspan="2"><i style="color: red">Schedule not given yet.</i></td>
+                                                    </tr>
+                                                }
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            <hr/>
+                        }
+                        if (doctorOwnChambers.Count > 0)
+                        {
+                            foreach (DoctorChamber aChamber in doctorOwnChambers)
+                            {
+                                    <h5>@aChamber.ChamberName <a href="@Url.Action("EditDoctorChamber", "Doctor", new {id = aChamber.Id})" class="btn btn-sm btn-info pull-right"><i class="fa fa-edit"></i> Edit</a></h5>
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <p style="font-size: 14px;">@aChamber.Address, @aChamber.City</p>
+                                            <p style="font-size: 14px;">Contact No. : @aChamber.ContactNo, @aChamber.PhoneNo</p>
+                                            <p style="font-size: 14px;">New Patient Fee : @aChamber.Fee</p>
+                                            <p style="font-size: 14px;">Returning Patient Fee : @aChamber.ReturningFee</p>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <table class="table-sm table-responsive-lg table-bordered">
+                                                <tr>
+                                                    <th>Day</th>
+                                                    <th>Time</th>
+                                                </tr>
+                                                @if (aChamber.Sat)
+                                                {
+                                                    <tr>
+                                                        <td>Sat</td>
+                                                        <td>@aChamber.SatFromTime</td>
+                                                    </tr>
+                                                }
+                                                @if (aChamber.Sun)
+                                                {
+                                                    <tr>
+                                                        <td>Sun</td>
+                                                        <td>@aChamber.SunFromTime</td>
+                                                    </tr>
+                                                }
+                                                @if (aChamber.Mon)
+                                                {
+                                                    <tr>
+                                                        <td>Mon</td>
+                                                        <td>@aChamber.MonFromTime</td>
+                                                    </tr>
+                                                }
+                                                @if (aChamber.Tue)
+                                                {
+                                                    <tr>
+                                                        <td>Tue</td>
+                                                        <td>@aChamber.TueFromTime</td>
+                                                    </tr>
+                                                }
+                                                @if (aChamber.Wed)
+                                                {
+                                                    <tr>
+                                                        <td>Wed</td>
+                                                        <td>@aChamber.WedFromTime</td>
+                                                    </tr>
+                                                }
+                                                @if (aChamber.Thu)
+                                                {
+                                                    <tr>
+                                                        <td>Thu</td>
+                                                        <td>@aChamber.ThuFromTime</td>
+                                                    </tr>
+                                                }
+                                                @if (aChamber.Fri)
+                                                {
+                                                    <tr>
+                                                        <td>Fri</td>
+                                                        <td>@aChamber.FriFromTime</td>
+                                                    </tr>
+                                                }
+                                                @if (aChamber.Sat == false && aChamber.Sun == false && aChamber.Mon == false && aChamber.Tue == false && aChamber.Wed == false && aChamber.Thu == false && aChamber.Fri == false)
+                                                {
+                                                    <tr>
+                                                        <td colspan="2"><i style="color: red">Schedule not given yet.</i></td>
+                                                    </tr>
+                                                }
+                                            </table>
+                                        </div>
+                                    </div>
+                                <hr />
+                            }
+                        }
+                        else
+                        {
+                            <i></i>
+                        }
+                    }
+                    else
+                    {
+                        if (doctorOwnChambers.Count > 0)
+                        {
+                            foreach (DoctorChamber aChamber in doctorOwnChambers)
+                            {
+                                <div class="card">
+                                    <h5>@aChamber.ChamberName <a href="@Url.Action("EditDoctorChamber", "Doctor", new {id = aChamber.Id})" class="btn btn-sm btn-info pull-right"><i class="fa fa-edit"></i> Edit</a></h5>
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <p style="font-size: 14px;">@aChamber.Address, @aChamber.City</p>
+                                            <p style="font-size: 14px;">Contact No. : @aChamber.ContactNo, @aChamber.PhoneNo</p>
+                                            <p style="font-size: 14px;">New Patient Fee : @aChamber.Fee</p>
+                                            <p style="font-size: 14px;">Returning Patient Fee : @aChamber.ReturningFee</p>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <table class="table-sm table-responsive-lg table-bordered">
+                                                <tr>
+                                                    <th>Day</th>
+                                                    <th>Time</th>
+                                                </tr>
+                                                @if (aChamber.Sat)
+                                                {
+                                                    <tr>
+                                                        <td>Sat</td>
+                                                        <td>@aChamber.SatFromTime</td>
+                                                    </tr>
+                                                }
+                                                @if (aChamber.Sun)
+                                                {
+                                                    <tr>
+                                                        <td>Sun</td>
+                                                        <td>@aChamber.SunFromTime</td>
+                                                    </tr>
+                                                }
+                                                @if (aChamber.Mon)
+                                                {
+                                                    <tr>
+                                                        <td>Mon</td>
+                                                        <td>@aChamber.MonFromTime</td>
+                                                    </tr>
+                                                }
+                                                @if (aChamber.Tue)
+                                                {
+                                                    <tr>
+                                                        <td>Tue</td>
+                                                        <td>@aChamber.TueFromTime</td>
+                                                    </tr>
+                                                }
+                                                @if (aChamber.Wed)
+                                                {
+                                                    <tr>
+                                                        <td>Wed</td>
+                                                        <td>@aChamber.WedFromTime</td>
+                                                    </tr>
+                                                }
+                                                @if (aChamber.Thu)
+                                                {
+                                                    <tr>
+                                                        <td>Thu</td>
+                                                        <td>@aChamber.ThuFromTime</td>
+                                                    </tr>
+                                                }
+                                                @if (aChamber.Fri)
+                                                {
+                                                    <tr>
+                                                        <td>Fri</td>
+                                                        <td>@aChamber.FriFromTime</td>
+                                                    </tr>
+                                                }
+                                                @if (aChamber.Sat == false && aChamber.Sun == false && aChamber.Mon == false && aChamber.Tue == false && aChamber.Wed == false && aChamber.Thu == false && aChamber.Fri == false)
+                                                {
+                                                    <tr>
+                                                        <td colspan="2"><i style="color: red">Schedule not given yet.</i></td>
+                                                    </tr>
+                                                }
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                            }
+                        }
+                        else
+                        {
+                            <i style="color: red">You have not chamber yet.</i>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            var selectFromTime1 = document.getElementById('selectFromTime1');
+            var selectFromTime2 = document.getElementById('selectFromTime2');
+            var selectFromTime3 = document.getElementById('selectFromTime3');
+            var selectFromTime4 = document.getElementById('selectFromTime4');
+            var selectFromTime5 = document.getElementById('selectFromTime5');
+            var selectFromTime6 = document.getElementById('selectFromTime6');
+            var selectFromTime7 = document.getElementById('selectFromTime7');
+            var selectToTime1 = document.getElementById('selectToTime1');
+            var selectToTime2 = document.getElementById('selectToTime2');
+            var selectToTime3 = document.getElementById('selectToTime3');
+            var selectToTime4 = document.getElementById('selectToTime4');
+            var selectToTime5 = document.getElementById('selectToTime5');
+            var selectToTime6 = document.getElementById('selectToTime6');
+            var selectToTime7 = document.getElementById('selectToTime7');
+
+            selectFromTime1.disabled = 'disabled';
+            selectFromTime2.disabled = 'disabled';
+            selectFromTime3.disabled = 'disabled';
+            selectFromTime4.disabled = 'disabled';
+            selectFromTime5.disabled = 'disabled';
+            selectFromTime6.disabled = 'disabled';
+            selectFromTime7.disabled = 'disabled';
+            selectToTime1.disabled = 'disabled';
+            selectToTime2.disabled = 'disabled';
+            selectToTime3.disabled = 'disabled';
+            selectToTime4.disabled = 'disabled';
+            selectToTime5.disabled = 'disabled';
+            selectToTime6.disabled = 'disabled';
+            selectToTime7.disabled = 'disabled';
+        });
+
+        function disableSelect() {
+            var chkSat = document.getElementById('chkSat');
+            var chkSun = document.getElementById('chkSun');
+            var chkMon = document.getElementById('chkMon');
+            var chkTue = document.getElementById('chkTue');
+            var chkWed = document.getElementById('chkWed');
+            var chkThu = document.getElementById('chkThu');
+            var chkFri = document.getElementById('chkFri');
+            var selectFromTime1 = document.getElementById('selectFromTime1');
+            var selectFromTime2 = document.getElementById('selectFromTime2');
+            var selectFromTime3 = document.getElementById('selectFromTime3');
+            var selectFromTime4 = document.getElementById('selectFromTime4');
+            var selectFromTime5 = document.getElementById('selectFromTime5');
+            var selectFromTime6 = document.getElementById('selectFromTime6');
+            var selectFromTime7 = document.getElementById('selectFromTime7');
+            var selectToTime1 = document.getElementById('selectToTime1');
+            var selectToTime2 = document.getElementById('selectToTime2');
+            var selectToTime3 = document.getElementById('selectToTime3');
+            var selectToTime4 = document.getElementById('selectToTime4');
+            var selectToTime5 = document.getElementById('selectToTime5');
+            var selectToTime6 = document.getElementById('selectToTime6');
+            var selectToTime7 = document.getElementById('selectToTime7');
+            if (chkSat.checked) {
+                selectFromTime1.disabled = false;
+                selectToTime1.disabled = false;
+            } else {
+                selectFromTime1.disabled = 'disabled';
+                selectToTime1.disabled = 'disabled';
+            }
+            if (chkSun.checked) {
+                selectFromTime2.disabled = false;
+                selectToTime2.disabled = false;
+            } else {
+                selectFromTime2.disabled = 'disabled';
+                selectToTime2.disabled = 'disabled';
+            }
+            if (chkMon.checked) {
+                selectFromTime3.disabled = false;
+                selectToTime3.disabled = false;
+            } else {
+                selectFromTime3.disabled = 'disabled';
+                selectToTime3.disabled = 'disabled';
+            }
+            if (chkTue.checked) {
+                selectFromTime4.disabled = false;
+                selectToTime4.disabled = false;
+            } else {
+                selectFromTime4.disabled = 'disabled';
+                selectToTime4.disabled = 'disabled';
+            }
+            if (chkWed.checked) {
+                selectFromTime5.disabled = false;
+                selectToTime5.disabled = false;
+            } else {
+                selectFromTime5.disabled = 'disabled';
+                selectToTime5.disabled = 'disabled';
+            }
+            if (chkThu.checked) {
+                selectFromTime6.disabled = false;
+                selectToTime6.disabled = false;
+            } else {
+                selectFromTime6.disabled = 'disabled';
+                selectToTime6.disabled = 'disabled';
+            }
+            if (chkFri.checked) {
+                selectFromTime7.disabled = false;
+                selectToTime7.disabled = false;
+            } else {
+                selectFromTime7.disabled = 'disabled';
+                selectToTime7.disabled = 'disabled';
+            }
+        }
+    </script>
+}
+

@@ -1,0 +1,295 @@
+﻿@using System.Web.UI.WebControls
+@using HealthSupportApp.Models
+@using HealthSupportApp.Models.MedicalModel
+@model MedicalAccount
+@{
+    ViewBag.Title = "Index";
+    ViewBag.GetMedicalName = ViewBag.GetName;
+    Layout = "~/Views/Shared/_MedicalLayout.cshtml";
+    MedicalAccount aMedicalAccount = ViewBag.GetMedical;
+    var medicalTypes = new List<ListItem>
+    {
+        new ListItem {Text = "General Hospital/Medical"},
+        new ListItem {Text = "Diagnostic Center"},
+        new ListItem {Text = "Dental Clinic"},
+        new ListItem {Text = "Eye Hospital/Clinic"},
+        new ListItem {Text = "Hospital & Diagnostic Center"}
+    };
+    var areaList = new List<ListItem>
+    {
+        new ListItem{Value="Agrabad"},
+        new ListItem{Value="A K Khan"},
+        new ListItem{Value="Anawara"},
+        new ListItem{Value="Andarkilla"},
+        new ListItem{Value="Bahaddarhat"},
+        new ListItem{Value="Bakolia"},
+        new ListItem{Value="Bhatiari"},
+        new ListItem{Value="Chawkbazar"},
+        new ListItem{Value="Fatikchari"},
+        new ListItem{Value="Halishahar"},
+        new ListItem{Value="Hathazari"},
+        new ListItem{Value="Jamal Khan"},
+        new ListItem{Value="Khulshi"},
+        new ListItem{Value="Lalkhan Bazar"},
+        new ListItem{Value="Mehedi Bag"},
+        new ListItem{Value="Muradpur"},
+        new ListItem{Value="Nasirabad"},
+        new ListItem{Value="New Market"},
+        new ListItem{Value="O R Nizam Road"},
+        new ListItem{Value="Pahartali"},
+        new ListItem{Value="Panchlaish"},
+        new ListItem{Value="Sholoshahar"},
+        new ListItem{Value="Sitakunda"},
+    };
+}
+<style>
+    .table-borderless tr td {
+        border: none !important;
+    }
+
+    .table-borderless tr th {
+        border: none !important;
+    }
+
+    .col-centered {
+        margin: 0 auto;
+        float: none;
+    }
+</style>
+@if (ViewBag.Message != null)
+{
+    <div class="container">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-success alert-dismissible" style="margin-top: 20px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Success!</strong> @ViewBag.Message
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="container">
+    <header>
+        <h1 class="h3 display">Medical Info </h1>
+    </header>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="target-1" class="card">
+                <div class="card-header">
+                    <h3>Medical's details information <button style="margin-left: 10px" class="btn btn-sm btn-info pull-right" id="editBtn"><span class="fa fa-edit"></span> EDIT</button><button style="margin-left: 10px" class="btn btn-sm btn-danger pull-right" id="closeBtn"><span class="fa fa-close"></span> CLOSE</button></h3>
+                </div>
+                <div class="card-body" id="showDataTable">
+                    <div class="row">
+                        <div class="col-md-10 col-centered">
+                            <table class="table table-responsive-lg table-borderless">
+                                <tr>
+                                    <th>Hospital Type :</th>
+                                    <td>@aMedicalAccount.MedicalType</td>
+                                </tr>
+                                <tr>
+                                    <th>Hospital Name :</th>
+                                    <td>@aMedicalAccount.MedicalName</td>
+                                </tr>
+                                <tr>
+                                    <th>Contact Person Name :</th>
+                                    <td>@aMedicalAccount.ContactPersonName</td>
+                                </tr>
+                                <tr>
+                                    <th>Contact Person's Position :</th>
+                                    <td>@aMedicalAccount.ContactPersonPosition</td>
+                                </tr>
+                                <tr>
+                                    <th>Contact Person Phone No. :</th>
+                                    <td>@aMedicalAccount.ContactPersonPhoneNo</td>
+                                </tr>
+                                <tr>
+                                    <th>Hospital Email :</th>
+                                    <td>@aMedicalAccount.MedicalEmail</td>
+                                </tr>
+                                <tr>
+                                    <th>Hospital Contact No. 1 :</th>
+                                    <td>@aMedicalAccount.MedicalContactNo1</td>
+                                </tr>
+                                <tr>
+                                    <th>Hospital Contact No. 2 :</th>
+                                    <td>@aMedicalAccount.MedicalContactNo2</td>
+                                </tr>
+                                <tr>
+                                    <th>Address :</th>
+                                    <td>@aMedicalAccount.Address</td>
+                                </tr>
+                                <tr>
+                                    <th>Area :</th>
+                                    <td>@aMedicalAccount.Area</td>
+                                </tr>
+                                <tr>
+                                    <th>City :</th>
+                                    <td>@aMedicalAccount.City</td>
+                                </tr>
+                                <tr>
+                                    <th>Ambulance Service :</th>
+                                    <td>@aMedicalAccount.AmbulanceService</td>
+                                </tr>
+                                <tr>
+                                    <th>Ambulance Contact :</th>
+                                    <td>@aMedicalAccount.AmbulanceContact</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div> <!-- /view-content -->
+                <div class="card-body" id="editTable">
+                    @using (Html.BeginForm("MedicalProfile", "Medical", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        <div class="row">
+                            <div class="col-md-10 col-centered">
+                                <table class="table table-responsive-lg table-borderless">
+                                    <tr>
+                                        <th>Hospital Type :</th>
+                                        <td>
+                                            <select class="form-control border-input" name="MedicalType" id="MedicalType" required>
+                                                @if (aMedicalAccount.MedicalType != null)
+                                                {
+                                                    <option selected>@aMedicalAccount.MedicalType</option>
+                                                }
+                                                <option disabled>- Change option -</option>
+                                                @foreach (ListItem item in medicalTypes)
+                                                {
+                                                    <option value="@item.Text">@item.Text</option>
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Hospital Name :</th>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.MedicalName, new { @class = "form-control", placeholder = "Enter your full name", Value = aMedicalAccount.MedicalName })
+                                            @Html.ValidationMessageFor(model => model.MedicalName)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Contact Person Name :</th>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.ContactPersonName, new { @class = "form-control", placeholder = "Enter your mobile number", Value = aMedicalAccount.ContactPersonName })
+                                            @Html.ValidationMessageFor(model => model.ContactPersonName)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Contact Person's Position :</th>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.ContactPersonPosition, new { @class = "form-control", placeholder = "Enter your mobile number", Value = aMedicalAccount.ContactPersonPosition })
+                                            @Html.ValidationMessageFor(model => model.ContactPersonPosition)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Contact Person Phone No. :</th>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.ContactPersonPhoneNo, new { @class = "form-control", placeholder = "Enter your mobile number", Value = aMedicalAccount.ContactPersonPhoneNo })
+                                            @Html.ValidationMessageFor(model => model.ContactPersonPhoneNo)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Medical Email :</th>
+                                        <td><input type="text" name="MedicalEmail" class="form-control border-input" placeholder="Enter your mobile number" value="@aMedicalAccount.MedicalEmail" readonly></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Medical Contact No 1 :</th>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.MedicalContactNo1, new { @class = "form-control", placeholder = "Enter your mobile number", Value = aMedicalAccount.MedicalContactNo1 })
+                                            @Html.ValidationMessageFor(model => model.MedicalContactNo1)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Medical Contact No 2 :</th>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.MedicalContactNo2, new { @class = "form-control", placeholder = "Enter your mobile number", Value = aMedicalAccount.MedicalContactNo2 })
+                                            @Html.ValidationMessageFor(model => model.MedicalContactNo2)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Address :</th>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.Address, new { @class = "form-control", placeholder = "Enter your address", Value = aMedicalAccount.Address })
+                                            @Html.ValidationMessageFor(model => model.Address)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Area :</th>
+                                        <td>
+                                            @Html.DropDownListFor(model => model.Area, new SelectList(areaList), aMedicalAccount.Area, new {@class = "form-control border-input", placeholder = "Enter your area" })
+                                            @Html.ValidationMessageFor(model => model.Area)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>City :</th>
+                                        <td>
+                                            @Html.TextBoxFor(model => model.City, new { @Value = aMedicalAccount.City, @class = "form-control border-input", placeholder = "Enter your city" })
+                                            @Html.ValidationMessageFor(model => model.City)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Ambulance Service :</th>
+                                        <td>
+                                            <select class="form-control border-input" name="AmbulanceService" id="AmbulanceService" required>
+                                                @if (aMedicalAccount.AmbulanceService != "")
+                                                {
+                                                    <option selected>@aMedicalAccount.AmbulanceService</option>
+                                                }
+                                                <option disabled>- Change option -</option>
+                                                <option value="Available">Available</option>
+                                                <option value="Not Available">Not Available</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Ambulance Contact :</th>
+                                        <td>
+                                            <input type="number" name="AmbulanceContact" class="form-control border-input" placeholder="Enter ambulance contact number" value="@aMedicalAccount.AmbulanceContact">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="text-align: center"><button class="btn btn-success"><i class="fa fa-check-square"></i> SAVE</button></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div> <!-- /edit-content -->
+        </div>
+    </div>
+</div>
+@section scripts{
+<script>
+    $("#closeBtn").hide();
+    $("#editBtn").show();
+    $("#editTable").hide();
+    $("#showDataTable").show();
+    $("#editBtn").click(function () {
+        $("#closeBtn").show();
+        $("#editBtn").hide();
+        $("#editTable").show();
+        $("#showDataTable").hide();
+    });
+    $("#closeBtn").click(function () {
+        $("#closeBtn").hide();
+        $("#editBtn").show();
+        $("#editTable").hide();
+        $("#showDataTable").show();
+    });
+    $("#LogoFile").change(function () {
+        var ImgFile = document.getElementById('LogoFile');
+        var file = ImgFile.files[0];
+        var count = file.size;
+        count = Math.round((count / (1024)));
+        if (count > 2048) {
+            document.getElementById('ImageFile').value = "";
+            alert("File size is too large (" + count + "KB). Your file size must be below 2MB.");
+        }
+    });
+</script>
+}

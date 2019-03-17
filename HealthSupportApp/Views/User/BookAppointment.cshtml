@@ -1,0 +1,130 @@
+﻿@using System.Web.UI.WebControls
+@using HealthSupportApp.Models.UserModel
+@model HealthSupportApp.Models.UserModel.BookAppointment
+@{
+    ViewBag.Title = "Book Appointment";
+    ViewBag.GetUserName = ViewBag.GetName;
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    var paymentMethods = new List<ListItem>
+    {
+        new ListItem{Value = "BKash", Text = "BKash"},
+        new ListItem{Value = "Rocket", Text = "Rocket"},
+    };
+    BookAppointment bookAppointment = ViewBag.GetDoctorDataForAppoint;
+}
+
+@if (ViewBag.Message != null)
+{
+    <div class="container">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-success" style="margin-top: 20px">
+                    <strong>Success!</strong> @ViewBag.Message
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="container">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-danger" style="margin-top: 20px">
+                    <strong>Oops!</strong> @ViewBag.ErrorMessage
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="container">
+    <header>
+        <h1 class="h3 display">Book Appointment</h1>
+    </header>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4>About Payment</h4>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <h5>BKash</h5>
+                            <label>* Go to Payment </label>
+                            <label>* Our Bkash Marchent number 01880909090</label>
+                            <label>* Send given Appoint Price</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 col-centered">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Confirm Your Appointment</h3>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("BookAppointment", "User", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        <div class="form-group row">
+                            <h5 class="col-md-4">Doctor Name :</h5>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(model => model.DoctorName, new {@class = "form-control", @readonly = "readonly", @Value = bookAppointment.DoctorName})
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <h5 class="col-md-4">Chamber Name :</h5>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(model => model.ChamberName, new {@class = "form-control", @readonly = "readonly", @Value = bookAppointment.ChamberName})
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <h5 class="col-md-4">Schedule :</h5>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(model => model.Schedule, new {@class = "form-control", @readonly = "readonly", @Value = bookAppointment.Schedule})
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <h5 class="col-md-4">Appoint Date :</h5>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(model => model.AppointDate, new {@class = "form-control", @readonly = "readonly", @Value = bookAppointment.AppointDate})
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <h5 class="col-md-4">Appoint Price :</h5>
+                            <div class="col-md-2">
+                                @Html.TextBoxFor(model => model.AppointPrice, new {@class = "form-control", @readonly = "readonly", @Value = bookAppointment.AppointPrice})
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Tk.</h5>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <h5 class="col-md-4">Select Payment Method :</h5>
+                            <div class="col-md-8">
+                                @Html.DropDownListFor(model => model.PaymentMethod, new SelectList(paymentMethods), "- Select Payment Method -", new {@class = "form-control"})
+                                @Html.ValidationMessageFor(model => model.PaymentMethod)
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <h5 class="col-md-4">TrxID :</h5>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(model => model.TrxId, new {@class = "form-control"})
+                                @Html.ValidationMessageFor(model => model.TrxId)
+                            </div>
+                        </div>
+                        <p class="text-center">
+                            <input type="hidden" name="DoctorId" value="@bookAppointment.DoctorId"/>
+                            <input type="hidden" name="ChamberId" value="@bookAppointment.ChamberId"/>
+                            <button class="btn btn-success">Book Confirm</button>
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

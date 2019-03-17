@@ -1,0 +1,82 @@
+﻿@{
+    if (User.IsInRole("User"))
+    {
+        Response.Redirect("~/Views/User/Index");
+    }
+    if (User.IsInRole("Medical"))
+    {
+        Response.Redirect("~/Views/Medical/Index");
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSSMI - @ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/bootstrap.css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600"
+          rel="stylesheet">
+    <link href="~/Content/Layout/vendor/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <style>
+        .col-centered {
+            margin: 0 auto;
+            float: none;
+        }
+    </style>
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-sm navbar-light bg-dark fixed-top">
+    <div class="container">
+        @Html.ActionLink("HSSMI", "Index", "Home", null, new { @class = "navbar-brand", style = "font-size: 28px; color: white" })
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link text-white" style="font-size: 16px" href="@Url.Action("Forum","Home")">Forum</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" style="font-size: 16px" href="@Url.Action("BloodBank","Home")">Blood Bank</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav navbar-right">
+                <li class="nav-item">
+                    <a class="btn btn-sm btn-outline-primary" href="@Url.Action("Register", "Register")" style="font-size: 16px;">Register</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" style="font-size: 18px;"></a></li>
+                <li class="nav-item">
+                    <a class="btn btn-sm btn-outline-success" href="@Url.Action("Login", "Register")" style="font-size: 16px;">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+    @RenderBody()
+ 
+<hr />
+<div class="container-fluid">
+    <footer>
+        <p>&copy; @DateTime.Now.Year - <a href="@Url.Action("Index", "Home", new { @style = "text-decoration: none" })">HSSMI</a> Application</p>
+    </footer>
+</div>
+
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        $(function () {
+            $("#submit").click(function () {
+                document.forms[0].submit();
+                return false;
+            });
+        });
+    </script>
+</body>
+</html>

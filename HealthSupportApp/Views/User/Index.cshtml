@@ -1,0 +1,235 @@
+﻿@using HealthSupportApp.Models
+@using HealthSupportApp.Models.UserModel
+@model HealthSupportApp.Models.HomeModel.SearchModel
+@{
+    ViewBag.Title = "User Home";
+    ViewBag.GetUserName = ViewBag.GetName;
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    List<BookAppointment> userAppointments = ViewBag.GetUserAppointments;
+}
+<style>
+    .field-validation-error {
+        content: "*";
+        color: orangered;
+        text-align: left;
+    }
+
+    .input-validation-error {
+        border-color: red;
+    }
+</style>
+
+<div class="container">
+    <header>
+        <h1 class="h3 display">Home</h1>
+    </header>
+    @if (ViewBag.Message != null)
+    {
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-success alert-dismissible" style="margin-top: 10px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Success!</strong> @ViewBag.Message
+                </div>
+            </div>
+        </div>
+    }
+    <div class="row">
+        <div class="col-lg-12">
+            <!-- Income-->
+            <div class="card income">
+                <div class="row justify-content-center">
+                    <div class="col-md-12 text-center">
+                        <br />
+                        <h3>Find Medicals, Doctors, Blood Donors</h3>
+                        <br />
+                        <ul class="nav nav-pills justify-content-center" role="tablist">
+                            <li class="nav-item" style="margin-right: 4px">
+                                <a class="btn btn-outline-primary active" data-toggle="pill" href="#doctorSearch">Doctors</a>
+                            </li>
+                            <li class="nav-item" style="margin-right: 4px">
+                                <a class="btn btn-outline-primary" data-toggle="pill" href="#hospitalSearch">Hospitals</a>
+                            </li>
+                            <li class="nav-item" style="margin-right: 4px">
+                                <a class="btn btn-outline-primary" href="@Url.Action("BloodBank", "User")">Blood Donors</a>
+                            </li>
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div id="doctorSearch" class="container tab-pane active">
+                                <br>
+                                @using (Html.BeginForm("Index", "User", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.ValidationSummary(true)
+                                    <div class="form-inline justify-content-center">
+                                        <div class="input-group mb-6">
+                                            @Html.TextBoxFor(model => model.Location, new { @class = "form-control", @size = "50", @name = "Location", @placeholder = "Location", @aria_label = "Loaction", @aria_describedby = "basic-addon2" })
+                                            @Html.TextBoxFor(model => model.SearchString, new { @class = "form-control", @size = "50", @name = "SearchString", @placeholder = "Search Doctor", @aria_label = "Search Doctor", @aria_describedby = "basic-addon2" })
+                                        </div>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.Location, null, new { style = "font-size: 16px" })
+                                    <br />
+                                    @Html.ValidationMessageFor(model => model.SearchString, null, new { style = "font-size: 16px" })
+                                    <input type="hidden" name="SearchDoctor" value="true" />
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i> Search</button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div id="hospitalSearch" class="container tab-pane fade">
+                                <br>
+                                @using (Html.BeginForm("Index", "User", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.ValidationSummary(true)
+                                    <div class="form-inline justify-content-center">
+                                        <div class="input-group mb-6">
+                                            @Html.TextBoxFor(model => model.Location, new { @class = "form-control", @size = "50", @name = "Location", @placeholder = "Location", @aria_label = "Loaction", @aria_describedby = "basic-addon2" })
+                                            @Html.TextBoxFor(model => model.SearchString, new { @class = "form-control", @size = "50", @name = "SearchString", @placeholder = "Search Hospital", @aria_label = "Search Hospital", @aria_describedby = "basic-addon2" })
+                                        </div>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.Location, null, new { style = "font-size: 16px" })
+                                    <br />
+                                    @Html.ValidationMessageFor(model => model.SearchString, null, new { style = "font-size: 16px" })
+                                    <input type="hidden" name="SearchHospital" value="true" />
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i> Search</button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div id="bloodSearch" class="container tab-pane fade">
+                                <br>
+                                @using (Html.BeginForm("Index", "User", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.ValidationSummary(true)
+
+                                    <div class="form-inline justify-content-center">
+                                        <div class="input-group mb-6">
+                                            @Html.TextBoxFor(model => model.Location, new { @class = "form-control", @size = "50", @name = "Location", @placeholder = "Location", @aria_label = "Loaction", @aria_describedby = "basic-addon2" })
+                                            @Html.TextBoxFor(model => model.SearchString, new { @class = "form-control", @size = "50", @name = "SearchString", @placeholder = "Search Blood Donors", @aria_label = "Search Blood Donors", @aria_describedby = "basic-addon2" })
+                                        </div>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.Location, null, new { style = "font-size: 16px" })
+                                    <br />
+                                    @Html.ValidationMessageFor(model => model.SearchString, null, new { style = "font-size: 16px" })
+                                    <input type="hidden" name="SearchBloodDonor" value="true" />
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i> Search</button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Your Appointments</h4>
+                </div>
+                <div class="card-body" style="padding: 10px">
+                    @if (userAppointments.Count > 0)
+                    {
+                        foreach (BookAppointment userAppoint in userAppointments)
+                        {
+                            if (userAppoint.Status != "Canceled")
+                            {
+                                if (userAppoint.Expired == false)
+                                {
+                                    <div class="card">
+                                        <div class="row" style="margin-bottom: 10px">
+                                            <div class="col-lg-12">
+                                                <h5>@userAppoint.DoctorName <a href="@Url.Action("CancelAppointment", "User", new{id = userAppoint.BookAppointId, doctorId = userAppoint.DoctorId})" class="btn btn-sm btn-danger pull-right">Cancel</a></h5>
+                                            </div>
+                                        </div>
+                                        <label class="col-form-label pull-right"><b>Book Appointment</b> : <span class="text-success">@userAppoint.Status</span></label>
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label class="col-form-label"><b>Chamber </b> : @userAppoint.ChamberName</label>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label class="col-form-label"><b>Serial No.</b> : @userAppoint.SerialNo</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <label class="col-form-label"><b>Schedule</b> : @userAppoint.Schedule</label>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <label class="col-form-label"><b>Appoint Date</b> : @userAppoint.AppointDate</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                }
+                            }
+                            else
+                            {
+                                <div class="card">
+                                    <div class="row" style="margin-bottom: 10px">
+                                        <div class="col-lg-12">
+                                            <h5>@userAppoint.DoctorName</h5>
+                                        </div>
+                                    </div>
+                                    <label class="col-form-label"><b>Book Appointment</b> : <span class="text-danger">@userAppoint.Status</span></label>
+                                    <label class="col-form-label"><b>Chamber </b> : @userAppoint.ChamberName</label>
+                                    <label class="col-form-label">Your appointment has been canceled. You will get back your payment.</label>
+                                </div>
+                                <br />
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <div class="card">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label><i>You have no appointments</i></label>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#hospitalSearch").hide(-1000);
+            $("#bloodSearch").hide(-1000);
+            $("#hospitalBtn").click(function () {
+                $("#doctorSearch").hide(-1000);
+                $("#hospitalSearch").show();
+                $("#bloodSearch").hide(-1000);
+            });
+            $("#bloodDonorBtn").click(function () {
+                $("#bloodSearch").show();
+                $("#doctorSearch").hide(-1000);
+                $("#hospitalSearch").hide(-1000);
+            });
+            $("#doctorBtn").click(function () {
+                $("#doctorSearch").show();
+                $("#bloodSearch").hide(-1000);
+                $("#hospitalSearch").hide(-1000);
+            });
+            //$('#configReset').click(function () {
+            //    location.reload();
+            //});
+        });
+    </script>
+}

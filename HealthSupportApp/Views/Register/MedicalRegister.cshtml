@@ -1,0 +1,215 @@
+﻿@using System.Web.UI.WebControls
+@model HealthSupportApp.Models.MedicalModel.MedicalAccount
+@{
+    ViewBag.Title = "Medical Register";
+    var listItems = new List<ListItem>
+{
+new ListItem { Text = "Available", Value="Available" },
+new ListItem { Text = "Not available", Value="Not available" }
+};
+    var medicalTypes = new List<ListItem>
+{
+new ListItem {Text = "General Hospital/Medical", Value = "1"},
+new ListItem {Text = "Diagnostic Center", Value = "2"},
+new ListItem {Text = "Dental Clinic", Value = "3"},
+new ListItem {Text = "Eye Hospital/Clinic", Value = "4"},
+new ListItem {Text = "Hospital & Diagnostic Center", Value = "5"}
+};
+    var areaList = new List<ListItem>
+    {
+        new ListItem{Value="Agrabad"},
+        new ListItem{Value="A K Khan"},
+        new ListItem{Value="Anawara"},
+        new ListItem{Value="Andarkilla"},
+        new ListItem{Value="Bahaddarhat"},
+        new ListItem{Value="Bakolia"},
+        new ListItem{Value="Bhatiari"},
+        new ListItem{Value="Chawkbazar"},
+        new ListItem{Value="Fatikchari"},
+        new ListItem{Value="Halishahar"},
+        new ListItem{Value="Hathazari"},
+        new ListItem{Value="Jamal Khan"},
+        new ListItem{Value="Khulshi"},
+        new ListItem{Value="Lalkhan Bazar"},
+        new ListItem{Value="Mehedi Bag"},
+        new ListItem{Value="Muradpur"},
+        new ListItem{Value="Nasirabad"},
+        new ListItem{Value="New Market"},
+        new ListItem{Value="O R Nizam Road"},
+        new ListItem{Value="Pahartali"},
+        new ListItem{Value="Panchlaish"},
+        new ListItem{Value="Sholoshahar"},
+        new ListItem{Value="Sitakunda"},
+    };
+}
+<div class="container" style="margin-top: 40px">
+    @if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
+    {
+        if (ViewBag.Message != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Success!</strong> @ViewBag.Message
+            </div>
+        }
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-lg-8 col-centered">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <h3>Create Medical Account</h3>
+                            </div>
+                            <div class="col-lg-5">
+                                @Html.ActionLink("Back to home", "Index", "Home", null, new { @class = "btn btn-sm btn-primary pull-right" })
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-lg-12">
+                                @using (Html.BeginForm())
+                                {
+                                    @Html.AntiForgeryToken()
+
+                                    <div class="form-horizontal">
+
+                                        @if (ViewBag.Message != null)
+                                        {
+                                            <div class="alert alert-danger alert-dismissible fade show">
+                                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                                <strong>Sorry!</strong> @ViewBag.Message
+                                            </div>
+                                        }
+                                        @Html.ValidationSummary(true)
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.MedicalType, new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.DropDownListFor(model => model.MedicalType, new SelectList(medicalTypes), "- Select your option -", new { @class = "form-control col-md-10" })
+                                                @Html.ValidationMessageFor(model => model.MedicalType)
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.MedicalName, new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.TextBoxFor(model => model.MedicalName, new { @class = "form-control col-md-10", @placeholder = "Enter Medical/Hospital's name" })
+                                                @Html.ValidationMessageFor(model => model.MedicalName)
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.ContactPersonName, new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.TextBoxFor(model => model.ContactPersonName, new { @class = "form-control col-md-10", @placeholder = "Enter Contact person's name" })
+                                                @Html.ValidationMessageFor(model => model.ContactPersonName)
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.ContactPersonPosition, new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.TextBoxFor(model => model.ContactPersonPosition, new { @class = "form-control col-md-10", @placeholder = "Enter Contact person's position" })
+                                                @Html.ValidationMessageFor(model => model.ContactPersonPosition)
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.ContactPersonPhoneNo, new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.TextBoxFor(model => model.ContactPersonPhoneNo, new { @class = "form-control col-md-10", @placeholder = "Enter Contact person's phone number" })
+                                                @Html.ValidationMessageFor(model => model.ContactPersonPhoneNo)
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-md-4">
+                                                (*Login ID) @Html.LabelFor(model => model.MedicalEmail, new { @class = "control-label" })
+                                            </div>
+                                            <div class="col-md-8">
+                                                @Html.TextBoxFor(model => model.MedicalEmail, new { @class = "form-control col-md-10", @placeholder = "Enter Medical Email Address" })
+                                                @Html.ValidationMessageFor(model => model.MedicalEmail)
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.MedicalContactNo1, new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.TextBoxFor(model => model.MedicalContactNo1, new { @class = "form-control col-md-10", @placeholder = "Enter Medical Contact number" })
+                                                @Html.ValidationMessageFor(model => model.MedicalContactNo1)
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.MedicalContactNo2, new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.TextBoxFor(model => model.MedicalContactNo2, new { @class = "form-control col-md-10", @placeholder = "Enter Medical Contact number (If any)" })
+                                                @Html.ValidationMessageFor(model => model.MedicalContactNo2)
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.Address, new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.TextBoxFor(model => model.Address, new { @class = "form-control col-md-10", @placeholder = "Enter Medical's address. e.g. Road No/Name, House No/Name" })
+                                                @Html.ValidationMessageFor(model => model.Address)
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.Area, new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.DropDownListFor(model => model.Area, new SelectList(areaList, "Value"), "- Select Area -", new { @class = "form-control col-md-10", @placeholder = "Enter area of the Medical." })
+                                                @Html.ValidationMessageFor(model => model.Area)
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.City, new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.TextBoxFor(model => model.City, new { @class = "form-control col-md-10", @placeholder = "Enter city of the Medical." })
+                                                @Html.ValidationMessageFor(model => model.City)
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.AmbulanceService, new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.DropDownListFor(model => model.AmbulanceService, new SelectList(listItems), "-- Select an option --", new { @class = "form-control col-md-10" })
+                                                @Html.ValidationMessageFor(model => model.AmbulanceService)
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.AmbulanceContact, new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.TextBoxFor(model => model.AmbulanceContact, new { @class = "form-control col-md-10", @placeholder = "Enter Ambulance Contact Number" })
+                                                @Html.ValidationMessageFor(model => model.AmbulanceContact)
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.Password, new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.PasswordFor(model => model.Password, new { @class = "form-control col-md-10", @placeholder = "Enter Password" })
+                                                @Html.ValidationMessageFor(model => model.Password)
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.ConfirmPassword, new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "form-control col-md-10", @placeholder = "Enter Password Again" })
+                                                @Html.ValidationMessageFor(model => model.ConfirmPassword)
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="offset-md-4 col-md-8">
+                                                <input type="submit" value="Send Request" class="btn btn-success" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div>
+                            <p>Already have an account! Go to @Html.ActionLink("Login", "Login", "Register")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    }
+</div>

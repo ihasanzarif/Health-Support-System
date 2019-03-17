@@ -1,0 +1,217 @@
+﻿@model HealthSupportApp.Models.UserModel.UserAccount
+@using System.Web.UI.WebControls
+@using HealthSupportApp.Models.UserModel
+@{
+    ViewBag.Title = "Blood Bank";
+    ViewBag.GetUserName = ViewBag.GetName;
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    List<UserAccount> userAccounts = ViewBag.GetBloodDonors;
+    UserAccount aUserAccount = ViewBag.GetBloodDonateStatus;
+    var bloodGroups = new List<ListItem>
+    {
+        new ListItem { Text = "A+", Value="A+" },
+        new ListItem { Text = "A-", Value="A-" },
+        new ListItem { Text = "B+", Value="B+" },
+        new ListItem { Text = "B-", Value="B-" },
+        new ListItem { Text = "O+", Value="O+" },
+        new ListItem { Text = "O-", Value="O-" },
+        new ListItem { Text = "AB+", Value="AB+" },
+        new ListItem { Text = "AB-", Value="AB-" }
+    };
+}
+<link href="~/Content/Layout/DataTables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+
+<div class="container">
+    <header>
+        <h1 class="h3 display">Blood Bank</h1>
+    </header>
+    <div class="row justify-content-center align-content-center" style="margin-bottom: 20px">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="@Url.Action("Be_a_donor", "User")" class="btn btn-primary text-white" style="margin: 5px">Be a Donor</a>
+                        <a href="@Url.Action("Blood_fact", "User")" class="btn btn-primary text-white" style="margin: 5px">Blood facts</a>
+                        <a href="@Url.Action("Eligibility", "User")" class="btn btn-primary text-white" style="margin: 5px">Eligibility</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (ViewBag.Message != null)
+    {
+            <div class="row justify-content-center align-content-center">
+                <div class="col-md-8">
+                    <div class="alert alert-success alert-dismissible fade show">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>Success!</strong> @ViewBag.Message
+                    </div>
+                </div>
+            </div>
+    }
+    @if (ViewBag.ErrorMessage != null)
+    {
+            <div class="row justify-content-center align-content-center">
+                <div class="col-md-8">
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>Oops!</strong> @ViewBag.ErrorMessage
+                    </div>
+                </div>
+            </div>
+    }
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-warning">
+                <div class="card">
+                    <div class="row">
+                        <div class="col-md-12">
+                            @using (Html.BeginForm("BloodBank", "User", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true)
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.WantToGiveBlood, new { @class = "col-form-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @if (aUserAccount.WantToGiveBlood)
+                                        {
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    @Html.RadioButtonFor(model => model.WantToGiveBlood, "false", new { @class = "form-check-input giveBlood", @id = "giveBlood1", Value = "false" }) No
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    @Html.RadioButtonFor(model => model.WantToGiveBlood, "true", new { @class = "form-check-input giveBlood", @id = "giveBlood2", @checked = "checked", Value = "true" }) Yes
+                                                </label>
+                                            </div>
+                                            @Html.ValidationMessageFor(model => model.WantToGiveBlood)
+                                        }
+                                        else
+                                        {
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    @Html.RadioButtonFor(model => model.WantToGiveBlood, "false", new { @class = "form-check-input giveBlood", @id = "giveBlood1", @checked = "checked", Value = "false" }) No
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    @Html.RadioButtonFor(model => model.WantToGiveBlood, "true", new { @class = "form-check-input giveBlood", @id = "giveBlood2", Value = "true" }) Yes
+                                                </label>
+                                            </div>
+                                            @Html.ValidationMessageFor(model => model.WantToGiveBlood)
+                                        }
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="bloodGroup">
+                                    @Html.LabelFor(model => model.BloodGroup, new { @class = "col-form-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @if (aUserAccount.BloodGroup != "")
+                                        {
+                                            <select class="form-control" name="BloodGroup">
+                                                <option value="@aUserAccount.BloodGroup">@aUserAccount.BloodGroup</option>
+                                                @foreach (var item in bloodGroups)
+                                                {
+                                                <option value="@item.Value">@item.Value</option>
+                                                }
+                                            </select>
+                                        }
+                                        else
+                                        {
+                                            @Html.DropDownListFor(model => model.BloodGroup, new SelectList(bloodGroups), "-- Select Your Blood Group --", new { @class = "form-control" })
+                                        }
+                                        @Html.ValidationMessageFor(model => model.BloodGroup)
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="location">
+                                    @Html.LabelFor(model => model.Location, new { @class = "col-form-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.TextBoxFor(model => model.Location, new { @class = "form-control", @placeholder = "Enter Your Address - Area, City", Value = aUserAccount.Location })
+                                        @Html.ValidationMessageFor(model => model.Location)
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="offset-md-4 col-md-8">
+                                        <input type="submit" value="SAVE" class="btn btn-sm btn-success" />
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row bg-white" style="padding: 20px 10px 25px 10px">
+        <div class="col-md-12">
+            <h4>List of Blood donors</h4>
+            <hr />
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped" id="bloodBankTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Blood Group</th>
+                            <th>Location</th>
+                            <th>Mobile No.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (userAccounts.Count > 0)
+                        {
+                            foreach (UserAccount aUser in userAccounts)
+                            {
+                                <tr>
+                                    <td>@aUser.Name</td>
+                                    <td>@aUser.BloodGroup</td>
+                                    <td>@aUser.Location</td>
+                                    <td>@aUser.MobileNo</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4">There is no data found.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Content/Layout/DataTables/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/Layout/DataTables/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#location").hide();
+            $("#bloodGroup").hide();
+            $(".giveBlood").change(function () {
+                if ($(this).val() === "true") {
+                    $("#location").show();
+                    $("#bloodGroup").show();
+                } else {
+                    $("#location").hide();
+                    $("#bloodGroup").hide();
+                }
+            });
+            //$('#configReset').click(function () {
+            //    location.reload();
+            //});
+        });
+        $(document).ready(function () {
+            $('#bloodBankTable').DataTable();
+        });
+    </script>
+}
+
+
+

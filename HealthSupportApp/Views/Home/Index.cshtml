@@ -1,0 +1,182 @@
+﻿@model HealthSupportApp.Models.HomeModel.SearchModel
+@{
+    ViewBag.Title = "Home - Medical Support";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    .header-content {
+        color: #222;
+        padding: 60px 15px;
+        background-image: url("../../Image/cruise-ship-doctor.jpg");
+        background-repeat: no-repeat, repeat;
+        background-size: cover;
+        font-family: Montserrat, sans-serif;
+        margin-bottom: 40px
+    }
+
+    .field-validation-error {
+        content: "*";
+        color: orangered;
+        text-shadow: 2px 2px 2px;
+        text-align: left;
+    }
+
+    .input-validation-error {
+        border-color: red;
+    }
+</style>
+<div class="container-fluid header-content text-center" style="margin-top: 18px;">
+    <h2>Get Medical Info By HSSMI</h2>
+    <p>Find Medicals, Doctors, Blood Donors</p>
+    <ul class="nav nav-pills justify-content-center" role="tablist">
+        <li class="nav-item" style="margin-right: 4px">
+            <a class="btn btn-outline-primary active" data-toggle="pill" href="#doctorSearch">Doctors</a>
+        </li>
+        <li class="nav-item" style="margin-right: 4px">
+            <a class="btn btn-outline-primary" data-toggle="pill" href="#hospitalSearch">Hospitals</a>
+        </li>
+        <li class="nav-item">
+            @*<a class="btn btn-outline-primary" data-toggle="pill" href="#bloodSearch">Blood Donors</a>*@
+            <a class="btn btn-outline-primary" href="@Url.Action("BloodBank", "Home")">Blood Donors</a>
+        </li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div id="doctorSearch" class="container tab-pane active">
+            <br>
+            @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                <div class="form-inline justify-content-center">
+                    <div class="input-group mb-6">
+                        @Html.TextBoxFor(model => model.Location, new { @class = "form-control", @size = "50", @name = "Location", @placeholder = "Location", @aria_label = "Loaction", @aria_describedby = "basic-addon2" })
+                        @Html.TextBoxFor(model => model.SearchString, new { @class = "form-control", @size = "50", @name = "SearchString", @placeholder = "Search Doctor", @aria_label = "Search Doctor", @aria_describedby = "basic-addon2" })
+                    </div>
+                </div>
+                @Html.ValidationMessageFor(model => model.Location, null, new { style = "font-size: 16px" })
+                <br />
+                @Html.ValidationMessageFor(model => model.SearchString, null, new { style = "font-size: 16px" })
+                <input type="hidden" name="SearchDoctor" value="true"/>
+                <div class="form-group row">
+                    <div class="col-md-12">
+                        <button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i> Search</button>
+                    </div>
+                </div>
+            }
+        </div>
+        <div id="hospitalSearch" class="container tab-pane fade">
+            <br>
+            @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                <div class="form-inline justify-content-center">
+                    <div class="input-group mb-6">
+                        @Html.TextBoxFor(model => model.Location, new { @class = "form-control", @size = "50", @name = "Location", @placeholder = "Location", @aria_label = "Loaction", @aria_describedby = "basic-addon2" })
+                        @Html.TextBoxFor(model => model.SearchString, new { @class = "form-control", @size = "50", @name = "SearchString", @placeholder = "Search Hospital", @aria_label = "Search Hospital", @aria_describedby = "basic-addon2" })
+                    </div>
+                </div>
+                @Html.ValidationMessageFor(model => model.Location, null, new { style = "font-size: 16px" })
+                <br />
+                @Html.ValidationMessageFor(model => model.SearchString, null, new { style = "font-size: 16px" })
+                <input type="hidden" name="SearchHospital" value="true"/>
+                <div class="form-group row">
+                    <div class="col-md-12">
+                        <button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i> Search</button>
+                    </div>
+                </div>
+            }
+        </div>
+        <div id="bloodSearch" class="container tab-pane fade">
+            <br>
+            @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+
+                <div class="form-inline justify-content-center">
+                    <div class="input-group mb-6">
+                        @Html.TextBoxFor(model => model.Location, new { @class = "form-control", @size = "50", @name = "Location", @placeholder = "Location", @aria_label = "Loaction", @aria_describedby = "basic-addon2" })
+                        @Html.TextBoxFor(model => model.SearchString, new { @class = "form-control", @size = "50", @name = "SearchString", @placeholder = "Search Blood Donors", @aria_label = "Search Blood Donors", @aria_describedby = "basic-addon2" })
+                    </div>
+                </div>
+                @Html.ValidationMessageFor(model => model.Location, null, new { style = "font-size: 16px" })
+                <br />
+                @Html.ValidationMessageFor(model => model.SearchString, null, new { style = "font-size: 16px" })
+                <input type="hidden" name="SearchBloodDonor" value="true"/>
+                <div class="form-group row">
+                    <div class="col-md-12">
+                        <button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i> Search</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div id="services" class="container text-center">
+    <h3>SERVICES</h3>
+    <h5>What we give</h5>
+    <br>
+    <div class="row" style="margin-top: 30px">
+        <div class="col-sm-12" style="padding: 10px;">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <span><i class="fa fa-stethoscope" style="font-size: 50px; color: #ffffff"></i></span>
+                    <h5>Doctor Information & Appointment</h5>
+                    <p class="card-text">See all the information of doctors. Choose your doctor and get appointment.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12" style="padding: 10px">
+            <div class="card  bg-secondary text-white">
+                <div class="card-body">
+                    <span><i class="fa fa-ambulance" style="font-size: 50px; color: #ffffff"></i></span>
+                    <h5>Medical Information</h5>
+                    <p class="card-text">See all the information about medicals and know their services and doctors.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12" style="padding: 10px;">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <span><i class="fa fa-heartbeat" style="font-size: 50px; color: #ffffff"></i></span>
+                    <h5>Blood Bank</h5>
+                    <p class="card-text">You can get blood from blood donators and also donate blood to other.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br><br>
+</div>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#hospitalSearch").hide(-1000);
+            $("#bloodSearch").hide(-1000);
+            $("#hospitalBtn").click(function () {
+                $("#doctorSearch").hide(-1000);
+                $("#hospitalSearch").show();
+                $("#bloodSearch").hide(-1000);
+            });
+            $("#bloodDonorBtn").click(function () {
+                $("#bloodSearch").show();
+                $("#doctorSearch").hide(-1000);
+                $("#hospitalSearch").hide(-1000);
+            });
+            $("#doctorBtn").click(function () {
+                $("#doctorSearch").show();
+                $("#bloodSearch").hide(-1000);
+                $("#hospitalSearch").hide(-1000);
+            });
+            //$('#configReset').click(function () {
+            //    location.reload();
+            //});
+        });
+    </script>
+}

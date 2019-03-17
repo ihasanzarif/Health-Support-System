@@ -1,0 +1,83 @@
+﻿@using HealthSupportApp.Models.UserModel
+@{
+    ViewBag.Title = "BloodBank";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<UserAccount> userAccounts = ViewBag.GetBloodDonors;
+}
+<link href="~/Content/Layout/DataTables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<div class="container" style="margin-top: 40px">
+    <header>
+        <h1 class="h3 display">Blood Bank</h1>
+    </header>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-warning">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5>
+                                    If you want to donate blood, please <a href="@Url.Action("Login","Register")">Login</a> or <a href="@Url.Action("Register","Register")">Register</a>
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row bg-white" style="padding: 20px 10px 25px 10px">
+        <div class="col-md-12">
+            <h4>List of Blood donors</h4>
+            <hr />
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped" id="bloodBankTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Blood Group</th>
+                            <th>Location</th>
+                            <th>Mobile No.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (userAccounts.Count > 0)
+                        {
+                            foreach (UserAccount aUser in userAccounts)
+                            {
+                                <tr>
+                                    <td>@aUser.Name</td>
+                                    <td>@aUser.BloodGroup</td>
+                                    <td>@aUser.Location</td>
+                                    <td>@aUser.MobileNo</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4">There is no data found.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+
+    <script src="~/Content/Layout/DataTables/js/jquery.dataTables.min.js"></script>
+    <script src="~/Content/Layout/DataTables/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#bloodBankTable').DataTable();
+        });
+    </script>
+}
+

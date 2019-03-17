@@ -1,0 +1,501 @@
+﻿@model Doctors
+@using System.Web.UI.WebControls
+@using HealthSupportApp.Models.MedicalModel
+@{
+    ViewBag.Title = "Edit Doctor";
+    ViewBag.GetMedicalName = ViewBag.GetName;
+    Layout = "~/Views/Shared/_MedicalLayout.cshtml";
+    ViewDoctors doctor = ViewBag.GetDoctor;
+    List<DoctorsSpecialities> doctorsSpecialities = ViewBag.GetSpecialities;
+    var timeList = new List<ListItem>
+{
+new ListItem{Value="8.00 a.m."},
+new ListItem{Value="9.00 a.m."},
+new ListItem{Value="10.00 a.m."},
+new ListItem{Value="11.00 a.m."},
+new ListItem{Value="12.00 p.m."},
+new ListItem{Value="1.00 p.m."},
+new ListItem{Value="2.00 p.m."},
+new ListItem{Value="3.00 p.m."},
+new ListItem{Value="4.00 p.m."},
+new ListItem{Value="5.00 p.m."},
+new ListItem{Value="6.00 p.m."},
+new ListItem{Value="7.00 p.m."},
+new ListItem{Value="8.00 p.m."},
+new ListItem{Value="9.00 p.m."},
+new ListItem{Value="10.00 p.m."},
+new ListItem{Value="11.00 p.m."}
+};
+}
+<style>
+    .table-borderless tr td {
+        border: none !important;
+    }
+
+    .table-borderless tr th {
+        border: none !important;
+    }
+
+    .col-centered {
+        margin: 0 auto;
+        float: none;
+    }
+</style>
+@if (ViewBag.Message != null)
+{
+    <div class="container">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-success alert-dismissible" style="margin-top: 20px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Success!</strong> @ViewBag.Message
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="container">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-danger alert-dismissible" style="margin-top: 20px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Error!</strong> @ViewBag.ErrorMessage
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="container">
+    <header>
+        <h1 class="h3 display">Edit Doctor Info</h1>
+    </header>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="target-1" class="card">
+                <div class="card-header">
+                    <h3>@doctor.Name <a href="@Url.Action("DeleteDoctor", "Medical", new { id= doctor.Id, })" class="btn btn-sm btn-danger pull-right">Delete</a></h3>
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link text-bold active" style="color: dodgerblue" data-toggle="pill" href="#editDoctor">Edit Doctor Info</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-bold" style="color: dodgerblue" data-toggle="pill" href="#editSchedule">Edit Doctor Schedule</a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div id="editDoctor" class="container tab-pane active">
+                            <br>
+                            @using (Html.BeginForm("EditDoctor", "Medical", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true)
+                                <div class="row">
+                                    <div class="col-md-10 col-centered">
+                                        <table class="table table-responsive-md table-borderless">
+                                            <tr>
+                                                <th>* Name :</th>
+                                                <td>
+                                                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control", placeholder = "Enter your full name", Value = doctor.Name })
+                                                    @Html.ValidationMessageFor(model => model.Name)
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>* BMDC Reg. :</th>
+                                                <td>
+                                                    @Html.TextBoxFor(model => model.BmdcReg, new { @class = "form-control", placeholder = "Enter BMDC Registration No.", Value = doctor.BmdcReg, @readonly = "readonly" })
+                                                    @Html.ValidationMessageFor(model => model.BmdcReg)
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>* Gender :</th>
+                                                <td>
+                                                    @if (doctor.Gender == "Male")
+                                                    {
+                                                        @Html.RadioButtonFor(model => model.Gender, "Male", new { @class = "form-control-custom radio-custom", id = "Gender1", @checked = "checked" })
+                                                        <label for="Gender1">Male </label>
+                                                        @Html.RadioButtonFor(model => model.Gender, "Female", new { @class = "form-control-custom radio-custom", id = "Gender2" })<label for="Gender2">Female</label>
+                                                    }
+                                                    @if (doctor.Gender == "Female")
+                                                    {
+                                                        @Html.RadioButtonFor(model => model.Gender, "Male", new { @class = "form-control-custom radio-custom", id = "Gender3" })
+                                                        <label for="Gender3">Male </label>
+                                                        @Html.RadioButtonFor(model => model.Gender, "Female", new { @class = "form-control-custom radio-custom", id = "Gender4", @checked = "checked" })<label for="Gender4">Female</label>
+                                                    }
+                                                    @Html.ValidationMessageFor(model => model.Gender)
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>* Title/Designation :</th>
+                                                <td>
+                                                    @Html.TextBoxFor(model => model.Title, new { @class = "form-control", placeholder = "e.g. Professor/ Consultant with medical name", Value = doctor.Title })
+                                                    @Html.ValidationMessageFor(model => model.Title)
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>* Speciality :</th>
+                                                <td>
+                                                    <select class="form-control" name="Speciality">
+                                                        @if (doctor.Speciality != null)
+                                                        {
+                                                            <option>@doctor.Speciality</option>
+                                                        }
+                                                        <option disabled>- Choose option -</option>
+                                                        @foreach (DoctorsSpecialities specialty in doctorsSpecialities)
+                                                        {
+                                                            <option value="@specialty.Speciality">@specialty.Speciality</option>
+                                                        }
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>* Email :</th>
+                                                <td>
+                                                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Enter Doctor's work email", Value = doctor.Email })
+                                                    @Html.ValidationMessageFor(model => model.Email)
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>* Mobile No :</th>
+                                                <td>
+                                                    @Html.TextBoxFor(model => model.MobileNo, new { @class = "form-control", type = "number", placeholder = "Mobile number will be Doctor's login username", Value = doctor.MobileNo, @readonly = "readonly" })
+                                                    @Html.ValidationMessageFor(model => model.MobileNo)
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Phone No :</th>
+                                                <td>
+                                                    @Html.TextBoxFor(model => model.PhoneNo, new { @class = "form-control", type = "number", placeholder = "Enter Doctor's work phone number", Value = doctor.PhoneNo })
+                                                    @Html.ValidationMessageFor(model => model.PhoneNo)
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>* Degree & other Specification :</th>
+                                                <td>
+                                                    @Html.TextBoxFor(model => model.OtherSpecification, new { @class = "form-control", placeholder = "Enter detail of the degree, institution and other specification", Value = doctor.OtherSpecification })
+                                                    @Html.ValidationMessageFor(model => model.OtherSpecification)
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Upload Profile Image</th>
+                                                <td>
+                                                    <label>*Edit your profile photo by uploading another photo</label>
+                                                    @Html.TextBoxFor(model => model.ImageFile, new { @class = "form-control", type = "file", id = "ImageFile", onclick = "return checkImage()", accept = "image/*" })
+                                                    @Html.ValidationMessageFor(model => model.ImageFile)
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>* New Patient Fee (Tk.) :</th>
+                                                <td>
+                                                    @Html.TextBoxFor(model => model.AssignedDoctors.DoctorFee, new { @class = "form-control", placeholder = "Enter Doctor's fee.", Value = doctor.Fee })
+                                                    @Html.ValidationMessageFor(model => model.AssignedDoctors.DoctorFee)
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>* Returning Patient Fee (Tk.) :</th>
+                                                <td>
+                                                    @Html.TextBoxFor(model => model.AssignedDoctors.DoctorReturningFee, new { @class = "form-control", placeholder = "Enter Doctor's fee.", Value = doctor.ReturningFee })
+                                                    @Html.ValidationMessageFor(model => model.AssignedDoctors.DoctorReturningFee)
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" class="text-center"><button class="btn btn-primary" type="submit"><i class="fa fa-check-square"></i> SAVE</button></td>
+                                            </tr>
+                                        </table>
+                                        <input type="hidden" name="Id" value="@doctor.Id" />
+                                    </div>
+                                </div>
+                            }
+                            <br />
+                        </div>
+                        <div id="editSchedule" class="container tab-pane fade">
+                            <br>
+                            <table class="table table-responsive-sm table-bordered">
+                                <tr>
+                                    <th>Day</th>
+                                    <th>Time</th>
+                                </tr>
+                                @if (doctor.Sat)
+                                {
+                                    <tr>
+                                        <td>SAT</td>
+                                        <td>@doctor.SatTime</td>
+                                    </tr>
+                                }
+                                @if (doctor.Sun)
+                                {
+                                    <tr>
+                                        <td>SUN</td>
+                                        <td>@doctor.SunTime</td>
+                                    </tr>
+                                }
+                                @if (doctor.Mon)
+                                {
+                                    <tr>
+                                        <td>MON</td>
+                                        <td>@doctor.MonTime</td>
+                                    </tr>
+                                }
+                                @if (doctor.Tue)
+                                {
+                                    <tr>
+                                        <td>TUE</td>
+                                        <td>@doctor.TueTime</td>
+                                    </tr>
+                                }
+                                @if (doctor.Wed)
+                                {
+                                    <tr>
+                                        <td>WED</td>
+                                        <td>@doctor.WedTime</td>
+                                    </tr>
+                                }
+                                @if (doctor.Thu)
+                                {
+                                    <tr>
+                                        <td>THU</td>
+                                        <td>@doctor.ThuTime</td>
+                                    </tr>
+                                }
+                                @if (doctor.Fri)
+                                {
+                                    <tr>
+                                        <td>FRI</td>
+                                        <td>@doctor.FriTime</td>
+                                    </tr>
+                                }
+                                @if (doctor.Sat == false && doctor.Sun == false && doctor.Mon == false && doctor.Tue == false && doctor.Wed == false && doctor.Thu == false && doctor.Fri == false)
+                                {
+                                    <tr>
+                                        <td colspan="2"><i style="color: red">Doctor's schedule not given yet.</i></td>
+                                    </tr>
+                                }
+                            </table>
+                            <h3>Give Doctor's Schedule</h3>
+                            <br />
+                            @using (Html.BeginForm("EditDoctorSchedule", "Medical", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true)
+                                <table class="table table-responsive-lg table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Tick</th>
+                                            <th>Day</th>
+                                            <th></th>
+                                            <th>Time</th>
+                                            <th></th>
+                                            <th>Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>@Html.CheckBoxFor(model => model.AssignedDoctors.Sat, new { @class = "form-control", id = "chkSat", onclick = "disableSelect()" })</td>
+                                            <td>SAT</td>
+                                            <td>From</td>
+                                            <td>@Html.DropDownListFor(model => model.AssignedDoctors.SatFromTime, new SelectList(timeList), "Choose time", new { @class = "form-control", id = "selectFromTime1" })</td>
+                                            <td>To</td>
+                                            <td>@Html.DropDownListFor(model => model.AssignedDoctors.SatToTime, new SelectList(timeList), "Choose time", new { @class = "form-control", id = "selectToTime1" })</td>
+                                        </tr>
+                                        <tr>
+                                            <td>@Html.CheckBoxFor(model => model.AssignedDoctors.Sun, new { @class = "form-control", id = "chkSun", onclick = "disableSelect()" })</td>
+                                            <td>SUN</td>
+                                            <td>From</td>
+                                            <td>@Html.DropDownListFor(model => model.AssignedDoctors.SunFromTime, new SelectList(timeList), "Choose time", new { @class = "form-control", id = "selectFromTime2" })</td>
+                                            <td>To</td>
+                                            <td>@Html.DropDownListFor(model => model.AssignedDoctors.SunToTime, new SelectList(timeList), "Choose time", new { @class = "form-control", id = "selectToTime2" })</td>
+                                        </tr>
+                                        <tr>
+                                            <td>@Html.CheckBoxFor(model => model.AssignedDoctors.Mon, new { @class = "form-control", id = "chkMon", onclick = "disableSelect()" })</td>
+                                            <td>MON</td>
+                                            <td>From</td>
+                                            <td>@Html.DropDownListFor(model => model.AssignedDoctors.MonFromTime, new SelectList(timeList), "Choose time", new { @class = "form-control", id = "selectFromTime3" })</td>
+                                            <td>To</td>
+                                            <td>@Html.DropDownListFor(model => model.AssignedDoctors.MonToTime, new SelectList(timeList), "Choose time", new { @class = "form-control", id = "selectToTime3" })</td>
+                                        </tr>
+                                        <tr>
+                                            <td>@Html.CheckBoxFor(model => model.AssignedDoctors.Tue, new { @class = "form-control", id = "chkTue", onclick = "disableSelect()" })</td>
+                                            <td>TUE</td>
+                                            <td>From</td>
+                                            <td>@Html.DropDownListFor(model => model.AssignedDoctors.TueFromTime, new SelectList(timeList), "Choose time", new { @class = "form-control", id = "selectFromTime4" })</td>
+                                            <td>To</td>
+                                            <td>@Html.DropDownListFor(model => model.AssignedDoctors.TueToTime, new SelectList(timeList), "Choose time", new { @class = "form-control", id = "selectToTime4" })</td>
+                                        </tr>
+                                        <tr>
+                                            <td>@Html.CheckBoxFor(model => model.AssignedDoctors.Wed, new { @class = "form-control", id = "chkWed", onclick = "disableSelect()" })</td>
+                                            <td>WED</td>
+                                            <td>From</td>
+                                            <td>@Html.DropDownListFor(model => model.AssignedDoctors.WedFromTime, new SelectList(timeList), "Choose time", new { @class = "form-control", id = "selectFromTime5" })</td>
+                                            <td>To</td>
+                                            <td>@Html.DropDownListFor(model => model.AssignedDoctors.WedToTime, new SelectList(timeList), "Choose time", new { @class = "form-control", id = "selectToTime5" })</td>
+                                        </tr>
+                                        <tr>
+                                            <td>@Html.CheckBoxFor(model => model.AssignedDoctors.Thu, new { @class = "form-control", id = "chkThu", onclick = "disableSelect()" })</td>
+                                            <td>THU</td>
+                                            <td>From</td>
+                                            <td>@Html.DropDownListFor(model => model.AssignedDoctors.ThuFromTime, new SelectList(timeList), "Choose time", new { @class = "form-control", id = "selectFromTime6" })</td>
+                                            <td>To</td>
+                                            <td>@Html.DropDownListFor(model => model.AssignedDoctors.ThuToTime, new SelectList(timeList), "Choose time", new { @class = "form-control", id = "selectToTime6" })</td>
+                                        </tr>
+                                        <tr>
+                                            <td>@Html.CheckBoxFor(model => model.AssignedDoctors.Fri, new { @class = "form-control", id = "chkFri", onclick = "disableSelect()" })</td>
+                                            <td>FRI</td>
+                                            <td>From</td>
+                                            <td>@Html.DropDownListFor(model => model.AssignedDoctors.FriFromTime, new SelectList(timeList), "Choose time", new { @class = "form-control", id = "selectFromTime7" })</td>
+                                            <td>To</td>
+                                            <td>@Html.DropDownListFor(model => model.AssignedDoctors.FriToTime, new SelectList(timeList), "Choose time", new { @class = "form-control", id = "selectToTime7" })</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="6">
+                                                @Html.ValidationMessageFor(model => model.AssignedDoctors.SatFromTime)
+                                                @Html.ValidationMessageFor(model => model.AssignedDoctors.SatToTime)
+                                                @Html.ValidationMessageFor(model => model.AssignedDoctors.SunFromTime)
+                                                @Html.ValidationMessageFor(model => model.AssignedDoctors.SunToTime)
+                                                @Html.ValidationMessageFor(model => model.AssignedDoctors.MonFromTime)
+                                                @Html.ValidationMessageFor(model => model.AssignedDoctors.MonToTime)
+                                                @Html.ValidationMessageFor(model => model.AssignedDoctors.TueFromTime)
+                                                @Html.ValidationMessageFor(model => model.AssignedDoctors.TueToTime)
+                                                @Html.ValidationMessageFor(model => model.AssignedDoctors.WedFromTime)
+                                                @Html.ValidationMessageFor(model => model.AssignedDoctors.WedToTime)
+                                                @Html.ValidationMessageFor(model => model.AssignedDoctors.ThuFromTime)
+                                                @Html.ValidationMessageFor(model => model.AssignedDoctors.ThuToTime)
+                                                @Html.ValidationMessageFor(model => model.AssignedDoctors.FriFromTime)
+                                                @Html.ValidationMessageFor(model => model.AssignedDoctors.FriToTime)
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                @Html.TextBoxFor(model => model.AssignedDoctors.DoctorId, new { Value = doctor.Id, type = "hidden" })
+                                <p class="text-center"><button class="btn btn-success"><i class="fa fa-check-square"></i> SAVE</button></p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            var selectFromTime1 = document.getElementById('selectFromTime1');
+            var selectFromTime2 = document.getElementById('selectFromTime2');
+            var selectFromTime3 = document.getElementById('selectFromTime3');
+            var selectFromTime4 = document.getElementById('selectFromTime4');
+            var selectFromTime5 = document.getElementById('selectFromTime5');
+            var selectFromTime6 = document.getElementById('selectFromTime6');
+            var selectFromTime7 = document.getElementById('selectFromTime7');
+            var selectToTime1 = document.getElementById('selectToTime1');
+            var selectToTime2 = document.getElementById('selectToTime2');
+            var selectToTime3 = document.getElementById('selectToTime3');
+            var selectToTime4 = document.getElementById('selectToTime4');
+            var selectToTime5 = document.getElementById('selectToTime5');
+            var selectToTime6 = document.getElementById('selectToTime6');
+            var selectToTime7 = document.getElementById('selectToTime7');
+
+            selectFromTime1.disabled = 'disabled';
+            selectFromTime2.disabled = 'disabled';
+            selectFromTime3.disabled = 'disabled';
+            selectFromTime4.disabled = 'disabled';
+            selectFromTime5.disabled = 'disabled';
+            selectFromTime6.disabled = 'disabled';
+            selectFromTime7.disabled = 'disabled';
+            selectToTime1.disabled = 'disabled';
+            selectToTime2.disabled = 'disabled';
+            selectToTime3.disabled = 'disabled';
+            selectToTime4.disabled = 'disabled';
+            selectToTime5.disabled = 'disabled';
+            selectToTime6.disabled = 'disabled';
+            selectToTime7.disabled = 'disabled';
+        });
+
+        function disableSelect() {
+            var chkSat = document.getElementById('chkSat');
+            var chkSun = document.getElementById('chkSun');
+            var chkMon = document.getElementById('chkMon');
+            var chkTue = document.getElementById('chkTue');
+            var chkWed = document.getElementById('chkWed');
+            var chkThu = document.getElementById('chkThu');
+            var chkFri = document.getElementById('chkFri');
+            var selectFromTime1 = document.getElementById('selectFromTime1');
+            var selectFromTime2 = document.getElementById('selectFromTime2');
+            var selectFromTime3 = document.getElementById('selectFromTime3');
+            var selectFromTime4 = document.getElementById('selectFromTime4');
+            var selectFromTime5 = document.getElementById('selectFromTime5');
+            var selectFromTime6 = document.getElementById('selectFromTime6');
+            var selectFromTime7 = document.getElementById('selectFromTime7');
+            var selectToTime1 = document.getElementById('selectToTime1');
+            var selectToTime2 = document.getElementById('selectToTime2');
+            var selectToTime3 = document.getElementById('selectToTime3');
+            var selectToTime4 = document.getElementById('selectToTime4');
+            var selectToTime5 = document.getElementById('selectToTime5');
+            var selectToTime6 = document.getElementById('selectToTime6');
+            var selectToTime7 = document.getElementById('selectToTime7');
+            if (chkSat.checked) {
+                selectFromTime1.disabled = false;
+                selectToTime1.disabled = false;
+            } else {
+                selectFromTime1.disabled = 'disabled';
+                selectToTime1.disabled = 'disabled';
+            }
+            if (chkSun.checked) {
+                selectFromTime2.disabled = false;
+                selectToTime2.disabled = false;
+            } else {
+                selectFromTime2.disabled = 'disabled';
+                selectToTime2.disabled = 'disabled';
+            }
+            if (chkMon.checked) {
+                selectFromTime3.disabled = false;
+                selectToTime3.disabled = false;
+            } else {
+                selectFromTime3.disabled = 'disabled';
+                selectToTime3.disabled = 'disabled';
+            }
+            if (chkTue.checked) {
+                selectFromTime4.disabled = false;
+                selectToTime4.disabled = false;
+            } else {
+                selectFromTime4.disabled = 'disabled';
+                selectToTime4.disabled = 'disabled';
+            }
+            if (chkWed.checked) {
+                selectFromTime5.disabled = false;
+                selectToTime5.disabled = false;
+            } else {
+                selectFromTime5.disabled = 'disabled';
+                selectToTime5.disabled = 'disabled';
+            }
+            if (chkThu.checked) {
+                selectFromTime6.disabled = false;
+                selectToTime6.disabled = false;
+            } else {
+                selectFromTime6.disabled = 'disabled';
+                selectToTime6.disabled = 'disabled';
+            }
+            if (chkFri.checked) {
+                selectFromTime7.disabled = false;
+                selectToTime7.disabled = false;
+            } else {
+                selectFromTime7.disabled = 'disabled';
+                selectToTime7.disabled = 'disabled';
+            }
+        }
+        $("#ImageFile").change(function () {
+            var ImgFile = document.getElementById('ImageFile');
+            var file = ImgFile.files[0];
+            var count = file.size;
+            count = Math.round((count / (1024)));
+            if (count > 2048) {
+                document.getElementById('ImageFile').value = "";
+                alert("File size is too large (" + count + "KB). Your file size must be below 2MB.");
+            }
+        });
+    </script>
+}

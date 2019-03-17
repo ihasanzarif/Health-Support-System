@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "Blood Fact";
+    ViewBag.GetUserName = ViewBag.GetName;
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="container">
+    <header>
+        <h1 class="h3 display">Blood Fact</h1>
+    </header>
+    <div class="row justify-content-center align-content-center" style="margin-bottom: 20px">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="@Url.Action("Be_a_donor", "User")" class="btn btn-primary text-white" style="margin: 5px">Be a Donor</a>
+                        <a href="@Url.Action("Blood_fact", "User")" class="btn btn-primary text-white active" style="margin: 5px">Blood facts</a>
+                        <a href="@Url.Action("Eligibility", "User")" class="btn btn-primary text-white" style="margin: 5px">Eligibility</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>Blood Fact</h2>
+                        <hr/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">How often can one give blood?</p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            Regulations in the United States allow people to donate whole blood once every 56 days.
+                        </p>
+                        <h4>
+                            Is Donating blood safe?
+                        </h4>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            Donating blood is a safe process.
+                        </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            Needles and bags used to collect blood are used only once and men discarded, making spread of infection to me donor not possible. Before giving blood you'll want a good night’s sleep the night before, and a good breakfast or lunch before your donation. Drink fluids like juice, milk, or soda ahead of time.
+                        </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">•	The average adult has about 10 pints of blood in his body. Roughly 1 pint is given during a donation. </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">•	A healthy donor may donate red blood cells every 56 days, or double red cells every 112 days.</p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">•	O- donors are universal donors and their blood can be given to all blood types. </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">•	Type O-negative blood is needed in emergencies before the patient's blood type is known and with newborns. </p>
+                    </div>
+                    <div class="col-md-4">
+                        <img src="~/Image/bloodBank2.jpg" class="img-thumbnail" width="580px" height="500px"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

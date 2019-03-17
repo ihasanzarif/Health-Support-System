@@ -1,0 +1,710 @@
+﻿@using HealthSupportApp.Models.DoctorModel
+@using HealthSupportApp.Models.MedicalModel
+@using HealthSupportApp.Models.UserModel
+@{
+    ViewBag.GetDoctorName = ViewBag.GetName;
+    ViewBag.Title = "Doctor Index";
+    Layout = "~/Views/Shared/_DoctorLayout.cshtml";
+    List<ViewDoctors> doctorsChambers = ViewBag.DoctorChambers;
+    List<DoctorChamber> doctorOwnChambers = ViewBag.DoctorOwnChambers;
+    List<OrderStatus> orderStatuses = ViewBag.OrderStatus;
+    List<Appointments> appointments = ViewBag.GetUserAppointments;
+}
+@if (ViewBag.ChangeTempPassMsg != null)
+{
+    <div class="row justify-content-center align-content-center">
+        <div class="col-md-8">
+            <div class="alert alert-success alert-dismissible" style="margin-top: 20px">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Success!</strong> @ViewBag.ChangeTempPassMsg
+            </div>
+        </div>
+    </div>
+}
+<div class="container">
+    <header>
+        <h1 class="h3 display">Home</h1>
+    </header>
+    @if (ViewBag.Message != null)
+    {
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-success alert-dismissible" style="margin-top: 10px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Success!</strong> @ViewBag.Message
+                </div>
+            </div>
+        </div>
+    }
+    @if (orderStatuses.Count > 0)
+    {
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Order Status</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class=" table-responsive ">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th>Chamber Name</th>
+                                        <th>Appoint Amount</th>
+                                        <th>Total Price</th>
+                                        <th>TrxID</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    @foreach (OrderStatus order in orderStatuses)
+                                    {
+                                        <tr>
+                                            <td>@order.ChamberName</td>
+                                            <td>@order.AppointAmount</td>
+                                            <td>@order.TotalPrice</td>
+                                            <td>@order.TrxId</td>
+                                            @if (order.Status == "Active")
+                                            {
+                                                <td class="text-success">@order.Status</td>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-danger">@order.Status</td>
+                                            }
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+    }
+    @if (appointments.Count > 0)
+    {
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>New Appointment List</h4>
+                    </div>
+                    <br />
+                    @foreach (Appointments usersAppointment in appointments)
+                    {
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5>@usersAppointment.ChamberName</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th>Patient Name</th>
+                                            <th>Serial No.</th>
+                                            <th>Mobile No.</th>
+                                            <th>Appointment Date</th>
+                                            <th>Cancel</th>
+                                        </tr>
+                                        @foreach (BookAppointment bookAppointment in usersAppointment.BookAppointments)
+                                        {
+                                            <tr>
+                                                <td>@bookAppointment.UserName</td>
+                                                <td>@bookAppointment.SerialNo</td>
+                                                <td>@bookAppointment.MobileNo</td>
+                                                <td>@bookAppointment.AppointDate</td>
+                                                <td><a href="@Url.Action("CancelUserAppointment", "Doctor", new{id=@bookAppointment.BookAppointId, chmaberId= bookAppointment.ChamberId, userId = bookAppointment.UserId, mobileNo = bookAppointment.MobileNo})" class="btn btn-sm btn-danger">Cancel</a></td>
+                                            </tr>
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                <div class="card-header">
+                    <h4>Manage Schedule</h4>
+                </div>
+                <br />
+                    @if (doctorsChambers.Count > 0)
+                    {
+                        foreach (ViewDoctors doctorChamber in doctorsChambers)
+                        {
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="row" style="margin-bottom: 10px">
+                                            <div class="col-lg-12">
+                                                <h5>@doctorChamber.MedicalName</h5>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                @if (doctorChamber.ManageAppointment == null || doctorChamber.ManageAppointment.OnlineAppointment == false)
+                                                {
+                                                    using (Html.BeginForm("ManageAppointment", "Doctor", FormMethod.Post))
+                                                    {
+                                                        @Html.AntiForgeryToken()
+                                                        <div class="row">
+                                                            <div class="col-md-5">
+                                                                <label class="col-form-label">Online Appointment :</label>
+                                                            </div>
+                                                            <div class="col-md-7">
+                                                                <p>
+                                                                    <input id="chkAvailability3+@doctorChamber.MedicalId" name="onlineAvailability" type="checkbox" value="true" class="form-control-custom chkAvailability"><label for="chkAvailability3+@doctorChamber.MedicalId">Available</label>
+                                                                    <input id="chkAvailability4+@doctorChamber.MedicalId" name="onlineAvailability" type="checkbox" value="false" checked class="form-control-custom chkAvailability"><label for="chkAvailability4+@doctorChamber.MedicalId">Not Available</label>
+                                                                </p>
+                                                            </div>
+                                                            <input type="hidden" name="medicalId" value="@doctorChamber.MedicalId" />
+                                                        </div>
+                                                        <p class="text-center"><button type="submit" class="btn btn-sm btn-primary">Update</button></p>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (doctorChamber.ManageAppointment.Status == "Active")
+                                                    {
+                                                        using (Html.BeginForm("UpdateManageAppointment", "Doctor", FormMethod.Post))
+                                                        {
+                                                            <div class="row">
+                                                                <div class="col-md-5">
+                                                                    <label class="col-form-label">Online Availability :</label>
+                                                                </div>
+                                                                <div class="col-md-7">
+                                                                    <p>
+                                                                        <input type="radio" class="form-control-custom radio-custom" id="availability1+@doctorChamber.MedicalId" name="OnlineAppointment" value="true" checked><label for="availability1+@doctorChamber.MedicalId">Available </label>
+                                                                        <input type="radio" class="form-control-custom radio-custom" id="availability2+@doctorChamber.MedicalId" name="OnlineAppointment" value="false"><label for="availability2+@doctorChamber.MedicalId">Not Available</label>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-5">
+                                                                    <label class="col-form-label">Last Ordered Appointment :</label>
+                                                                </div>
+                                                                <div class="col-md-7">
+                                                                    <p>
+                                                                        <input type="number" class="form-control" id="OrderedAppoint+@doctorChamber.MedicalId" name="OrderedAppoint" value="@doctorChamber.ManageAppointment.OrderedAppoint" readonly>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-5">
+                                                                    <label class="col-form-label">Total Remaining Appointment :</label>
+                                                                </div>
+                                                                <div class="col-md-7">
+                                                                    <p>
+                                                                        <input type="number" class="form-control" id="RemainingAppoint+@doctorChamber.MedicalId" name="RemainingAppoint" value="@doctorChamber.ManageAppointment.RemainingAppoint" readonly>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-5">
+                                                                    <label class="col-form-label">Used Appointment :</label>
+                                                                </div>
+                                                                <div class="col-md-7">
+                                                                    <p>
+                                                                        <input type="number" class="form-control" id="UsedAppoint+@doctorChamber.MedicalId" name="UsedAppoint" value="@doctorChamber.ManageAppointment.UsedAppoint" readonly>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <table class="table table-responsive table-borderless">
+                                                                <tr>
+                                                                    <th>Day</th>
+                                                                    <th>Set Appointment Capacity</th>
+                                                                    <th>Available Appointment</th>
+                                                                </tr>
+                                                                @if (doctorChamber.Sat)
+                                                                {
+                                                                    <tr>
+                                                                        <td>SAT</td>
+                                                                        <td><input type="number" name="SatCapacity" id="SatCapacity" class="form-control" value="@doctorChamber.ManageAppointment.SatCapacity" /></td>
+                                                                        <td>@doctorChamber.ManageAppointment.SatAvailableAppoint</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (doctorChamber.Sun)
+                                                                {
+                                                                    <tr>
+                                                                        <td>SUN</td>
+                                                                        <td><input type="number" name="SunCapacity" id="SunCapacity" class="form-control" value="@doctorChamber.ManageAppointment.SunCapacity" /></td>
+                                                                        <td>@doctorChamber.ManageAppointment.SunAvailableAppoint</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (doctorChamber.Mon)
+                                                                {
+                                                                    <tr>
+                                                                        <td>MON</td>
+                                                                        <td><input type="number" name="MonCapacity" id="MonCapacity" class="form-control" value="@doctorChamber.ManageAppointment.MonCapacity" /></td>
+                                                                        <td>@doctorChamber.ManageAppointment.MonAvailableAppoint</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (doctorChamber.Tue)
+                                                                {
+                                                                    <tr>
+                                                                        <td>TUE</td>
+                                                                        <td><input type="number" name="TueCapacity" id="TueCapacity" class="form-control" value="@doctorChamber.ManageAppointment.TueCapacity" /></td>
+                                                                        <td>@doctorChamber.ManageAppointment.TueAvailableAppoint</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (doctorChamber.Wed)
+                                                                {
+                                                                    <tr>
+                                                                        <td>WED</td>
+                                                                        <td><input type="number" name="WedCapacity" id="WedCapacity" class="form-control" value="@doctorChamber.ManageAppointment.WedCapacity" /></td>
+                                                                        <td>@doctorChamber.ManageAppointment.WedAvailableAppoint</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (doctorChamber.Thu)
+                                                                {
+                                                                    <tr>
+                                                                        <td>THU</td>
+                                                                        <td><input type="number" name="ThuCapacity" id="ThuCapacity" class="form-control" value="@doctorChamber.ManageAppointment.ThuCapacity" /></td>
+                                                                        <td>@doctorChamber.ManageAppointment.ThuAvailableAppoint</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (doctorChamber.Fri)
+                                                                {
+                                                                    <tr>
+                                                                        <td>FRI</td>
+                                                                        <td><input type="number" name="FriCapacity" id="FriCapacity" class="form-control" value="@doctorChamber.ManageAppointment.FriCapacity" /></td>
+                                                                        <td>@doctorChamber.ManageAppointment.FriAvailableAppoint</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (doctorChamber.Sat == false && doctorChamber.Sun == false && doctorChamber.Mon == false && doctorChamber.Tue == false && doctorChamber.Wed == false && doctorChamber.Thu == false && doctorChamber.Fri == false)
+                                                                {
+                                                                    <tr>
+                                                                        <td colspan="3"><i style="color: red">Doctor's schedule not given yet.</i></td>
+                                                                    </tr>
+                                                                }
+                                                            </table>
+                                                            if (doctorChamber.ManageAppointment.OrderedAppoint > 0)
+                                                            {
+                                                                <input type="hidden" name="MedicalId" value="@doctorChamber.MedicalId" />
+                                                                <input type="hidden" name="OrderExpireDate" value="@doctorChamber.ManageAppointment.OrderExpireDate" />
+                                                                <input type="hidden" name="TotalAvailableAppoint" value="@doctorChamber.ManageAppointment.TotalAvailableAppoint" />
+                                                                <p class="text-center"><button type="submit" class="btn btn-sm btn-primary">Update</button></p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p class="text-center"><button type="submit" class="btn btn-sm btn-primary" disabled>Update</button> <a href="@Url.Action("BuyAppointment","Doctor")" class="btn btn-sm btn-success">Buy Appointment</a></p>
+                                                                <p class="text-center"><i style="color:red">You have no appointment available to give appointments. Please buy appointment!</i></p>
+                                                            }
+
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="alert alert-warning alert-dismissible" style="margin-top: 20px">
+                                                                    <strong>Hello!</strong> Your request has been pending.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                        }
+                        if (doctorOwnChambers.Count > 0)
+                        {
+                            foreach (DoctorChamber doctorOwnChamber in doctorOwnChambers)
+                            {
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="row" style="margin-bottom: 10px">
+                                                <div class="col-lg-12">
+                                                    <h5>@doctorOwnChamber.ChamberName</h5>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    @if (doctorOwnChamber.ManageAppointment == null || doctorOwnChamber.ManageAppointment.OnlineAppointment == false)
+                                                    {
+                                                        using (Html.BeginForm("ManageAppointment", "Doctor", FormMethod.Post))
+                                                        {
+                                                            @Html.AntiForgeryToken()
+                                                            <div class="row">
+                                                                <div class="col-md-5">
+                                                                    <label class="col-form-label">Online Appointment :</label>
+                                                                </div>
+                                                                <div class="col-md-7">
+                                                                    <p>
+                                                                        <input id="chkAvailability3+@doctorOwnChamber.Id" name="onlineAvailability" type="checkbox" value="true" class="form-control-custom chkAvailability"><label for="chkAvailability3+@doctorOwnChamber.Id">Available</label>
+                                                                        <input id="chkAvailability4+@doctorOwnChamber.Id" name="onlineAvailability" type="checkbox" value="false" checked class="form-control-custom chkAvailability"><label for="chkAvailability4+@doctorOwnChamber.Id">Not Available</label>
+                                                                    </p>
+                                                                </div>
+                                                                <input type="hidden" name="doctorChamberId" value="@doctorOwnChamber.Id" />
+                                                            </div>
+                                                            <p class="text-center"><button type="submit" class="btn btn-sm btn-primary">Update</button></p>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if (doctorOwnChamber.ManageAppointment.Status == "Active")
+                                                        {
+                                                            using (Html.BeginForm("UpdateManageAppointment", "Doctor", FormMethod.Post))
+                                                            {
+                                                                <div class="row">
+                                                                    <div class="col-md-5">
+                                                                        <label class="col-form-label">Online Availability :</label>
+                                                                    </div>
+                                                                    <div class="col-md-7">
+                                                                        <p>
+                                                                            <input type="radio" class="form-control-custom radio-custom" id="availability1+@doctorOwnChamber.Id" name="OnlineAppointment" value="true" checked><label for="availability1+@doctorOwnChamber.Id">Available </label>
+                                                                            <input type="radio" class="form-control-custom radio-custom" id="availability2+@doctorOwnChamber.Id" name="OnlineAppointment" value="false"><label for="availability2+@doctorOwnChamber.Id">Not Available</label>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-5">
+                                                                        <label class="col-form-label">Last Ordered Appointment :</label>
+                                                                    </div>
+                                                                    <div class="col-md-7">
+                                                                        <p>
+                                                                            <input type="number" class="form-control" id="OrderedAppoint+@doctorOwnChamber.Id" name="OrderedAppoint" value="@doctorOwnChamber.ManageAppointment.OrderedAppoint" readonly>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-5">
+                                                                        <label class="col-form-label">Total Remaining Appointment :</label>
+                                                                    </div>
+                                                                    <div class="col-md-7">
+                                                                        <p>
+                                                                            <input type="number" class="form-control" id="RemainingAppoint+@doctorOwnChamber.Id" name="RemainingAppoint" value="@doctorOwnChamber.ManageAppointment.RemainingAppoint" readonly>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-5">
+                                                                        <label class="col-form-label">Used Appointment :</label>
+                                                                    </div>
+                                                                    <div class="col-md-7">
+                                                                        <p>
+                                                                            <input type="number" class="form-control" id="UsedAppoint+@doctorOwnChamber.Id" name="UsedAppoint" value="@doctorOwnChamber.ManageAppointment.UsedAppoint" readonly>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <table class="table table-responsive table-borderless">
+                                                                    <tr>
+                                                                        <th>Day</th>
+                                                                        <th>Set Appointment Capacity</th>
+                                                                        <th>Available Appointment</th>
+                                                                    </tr>
+                                                                    @if (doctorOwnChamber.Sat)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>SAT</td>
+                                                                            <td><input type="number" name="SatCapacity" class="form-control" value="@doctorOwnChamber.ManageAppointment.SatCapacity" /></td>
+                                                                            <td>@doctorOwnChamber.ManageAppointment.SatAvailableAppoint</td>
+                                                                        </tr>
+                                                                    }
+                                                                    @if (doctorOwnChamber.Sun)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>SUN</td>
+                                                                            <td><input type="number" name="SunCapacity" class="form-control" value="@doctorOwnChamber.ManageAppointment.SunCapacity" /></td>
+                                                                            <td>@doctorOwnChamber.ManageAppointment.SunAvailableAppoint</td>
+                                                                        </tr>
+                                                                    }
+                                                                    @if (doctorOwnChamber.Mon)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>MON</td>
+                                                                            <td><input type="number" name="MonCapacity" class="form-control" value="@doctorOwnChamber.ManageAppointment.MonCapacity" /></td>
+                                                                            <td>@doctorOwnChamber.ManageAppointment.MonAvailableAppoint</td>
+                                                                        </tr>
+                                                                    }
+                                                                    @if (doctorOwnChamber.Tue)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>TUE</td>
+                                                                            <td><input type="number" name="TueCapacity" class="form-control" value="@doctorOwnChamber.ManageAppointment.TueCapacity" /></td>
+                                                                            <td>@doctorOwnChamber.ManageAppointment.TueAvailableAppoint</td>
+                                                                        </tr>
+                                                                    }
+                                                                    @if (doctorOwnChamber.Wed)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>WED</td>
+                                                                            <td><input type="number" name="WedCapacity" class="form-control" value="@doctorOwnChamber.ManageAppointment.WedCapacity" /></td>
+                                                                            <td>@doctorOwnChamber.ManageAppointment.WedAvailableAppoint</td>
+                                                                        </tr>
+                                                                    }
+                                                                    @if (doctorOwnChamber.Thu)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>THU</td>
+                                                                            <td><input type="number" name="ThuCapacity" class="form-control" value="@doctorOwnChamber.ManageAppointment.ThuCapacity" /></td>
+                                                                            <td>@doctorOwnChamber.ManageAppointment.ThuAvailableAppoint</td>
+                                                                        </tr>
+                                                                    }
+                                                                    @if (doctorOwnChamber.Fri)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>FRI</td>
+                                                                            <td><input type="number" name="FriCapacity" class="form-control" value="@doctorOwnChamber.ManageAppointment.FriCapacity" /></td>
+                                                                            <td>@doctorOwnChamber.ManageAppointment.FriAvailableAppoint</td>
+                                                                        </tr>
+                                                                    }
+                                                                    @if (doctorOwnChamber.Sat == false && doctorOwnChamber.Sun == false && doctorOwnChamber.Mon == false && doctorOwnChamber.Tue == false && doctorOwnChamber.Wed == false && doctorOwnChamber.Thu == false && doctorOwnChamber.Fri == false)
+                                                                    {
+                                                                        <tr>
+                                                                            <td colspan="3"><i style="color: red">Doctor's schedule not given yet.</i></td>
+                                                                        </tr>
+                                                                    }
+                                                                </table>
+                                                                if (doctorOwnChamber.ManageAppointment.OrderedAppoint > 0)
+                                                                {
+                                                                    <input type="hidden" name="DoctorChamberId" value="@doctorOwnChamber.Id" />
+                                                                    <input type="hidden" name="OrderExpireDate" value="@doctorOwnChamber.ManageAppointment.OrderExpireDate" />
+                                                                    <input type="hidden" name="TotalAvailableAppoint" value="@doctorOwnChamber.ManageAppointment.TotalAvailableAppoint" />
+                                                                    <p class="text-center"><button type="submit" class="btn btn-sm btn-primary">Update</button></p>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <p class="text-center"><button type="submit" class="btn btn-sm btn-primary" disabled>Update</button> <a href="@Url.Action("BuyAppointment","Doctor")" class="btn btn-sm btn-success">Buy Appointment</a></p>
+                                                                    <p class="text-center"><i style="color:red">You have no appointment available to give appointments. Please buy appointment!</i></p>
+                                                                }
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="alert alert-warning alert-dismissible" style="margin-top: 20px">
+                                                                        <strong>Hello!</strong> Your request has been pending.
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                            }
+                        }
+                        else
+                        {
+                            <i></i>
+                        }
+                    }
+                    else
+                    {
+                        if (doctorOwnChambers.Count > 0)
+                        {
+                            foreach (DoctorChamber doctorOwnChamber in doctorOwnChambers)
+                            {
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="row" style="margin-bottom: 10px">
+                                                <div class="col-lg-12">
+                                                    <h5>@doctorOwnChamber.ChamberName</h5>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    @if (doctorOwnChamber.ManageAppointment == null || doctorOwnChamber.ManageAppointment.OnlineAppointment == false)
+                                                    {
+                                                        using (Html.BeginForm("ManageAppointment", "Doctor", FormMethod.Post))
+                                                        {
+                                                            @Html.AntiForgeryToken()
+                                                            <div class="row">
+                                                                <div class="col-md-5">
+                                                                    <label class="col-form-label">Online Appointment :</label>
+                                                                </div>
+                                                                <div class="col-md-7">
+                                                                    <p>
+                                                                        <input id="chkAvailability3+@doctorOwnChamber.Id" name="onlineAvailability" type="checkbox" value="true" class="form-control-custom chkAvailability"><label for="chkAvailability3+@doctorOwnChamber.Id">Available</label>
+                                                                        <input id="chkAvailability4+@doctorOwnChamber.Id" name="onlineAvailability" type="checkbox" value="false" checked class="form-control-custom chkAvailability"><label for="chkAvailability4+@doctorOwnChamber.Id">Not Available</label>
+                                                                    </p>
+                                                                </div>
+                                                                <input type="hidden" name="doctorChamberId" value="@doctorOwnChamber.Id" />
+                                                            </div>
+                                                            <p class="text-center"><button type="submit" class="btn btn-sm btn-primary">Update</button></p>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if (doctorOwnChamber.ManageAppointment.Status == "Active")
+                                                        {
+                                                            using (Html.BeginForm("UpdateManageAppointment", "Doctor", FormMethod.Post))
+                                                            {
+                                                                <div class="row">
+                                                                    <div class="col-md-5">
+                                                                        <label class="col-form-label">Online Availability :</label>
+                                                                    </div>
+                                                                    <div class="col-md-7">
+                                                                        <p>
+                                                                            <input type="radio" class="form-control-custom radio-custom" id="availability1+@doctorOwnChamber.Id" name="OnlineAppointment" value="true" checked><label for="availability1+@doctorOwnChamber.Id">Available </label>
+                                                                            <input type="radio" class="form-control-custom radio-custom" id="availability2+@doctorOwnChamber.Id" name="OnlineAppointment" value="false"><label for="availability2+@doctorOwnChamber.Id">Not Available</label>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-5">
+                                                                        <label class="col-form-label">Last Ordered Appointment :</label>
+                                                                    </div>
+                                                                    <div class="col-md-7">
+                                                                        <p>
+                                                                            <input type="number" class="form-control" id="OrderedAppoint+@doctorOwnChamber.Id" name="OrderedAppoint" value="@doctorOwnChamber.ManageAppointment.OrderedAppoint" readonly>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-5">
+                                                                        <label class="col-form-label">Total Remaining Appointment :</label>
+                                                                    </div>
+                                                                    <div class="col-md-7">
+                                                                        <p>
+                                                                            <input type="number" class="form-control" id="RemainingAppoint+@doctorOwnChamber.Id" name="RemainingAppoint" value="@doctorOwnChamber.ManageAppointment.RemainingAppoint" readonly>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-5">
+                                                                        <label class="col-form-label">Used Appointment :</label>
+                                                                    </div>
+                                                                    <div class="col-md-7">
+                                                                        <p>
+                                                                            <input type="number" class="form-control" id="UsedAppoint+@doctorOwnChamber.Id" name="UsedAppoint" value="@doctorOwnChamber.ManageAppointment.UsedAppoint" readonly>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <table class="table table-responsive table-borderless">
+                                                                    <tr>
+                                                                        <th>Day</th>
+                                                                        <th>Set Appointment Capacity</th>
+                                                                        <th>Available Appointment</th>
+                                                                    </tr>
+                                                                    @if (doctorOwnChamber.Sat)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>SAT</td>
+                                                                            <td><input type="number" name="SatCapacity" class="form-control" value="@doctorOwnChamber.ManageAppointment.SatCapacity" /></td>
+                                                                            <td>@doctorOwnChamber.ManageAppointment.SatAvailableAppoint</td>
+                                                                        </tr>
+                                                                    }
+                                                                    @if (doctorOwnChamber.Sun)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>SUN</td>
+                                                                            <td><input type="number" name="SunCapacity" class="form-control" value="@doctorOwnChamber.ManageAppointment.SunCapacity" /></td>
+                                                                            <td>@doctorOwnChamber.ManageAppointment.SunAvailableAppoint</td>
+                                                                        </tr>
+                                                                    }
+                                                                    @if (doctorOwnChamber.Mon)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>MON</td>
+                                                                            <td><input type="number" name="MonCapacity" class="form-control" value="@doctorOwnChamber.ManageAppointment.MonCapacity" /></td>
+                                                                            <td>@doctorOwnChamber.ManageAppointment.MonAvailableAppoint</td>
+                                                                        </tr>
+                                                                    }
+                                                                    @if (doctorOwnChamber.Tue)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>TUE</td>
+                                                                            <td><input type="number" name="TueCapacity" class="form-control" value="@doctorOwnChamber.ManageAppointment.TueCapacity" /></td>
+                                                                            <td>@doctorOwnChamber.ManageAppointment.TueAvailableAppoint</td>
+                                                                        </tr>
+                                                                    }
+                                                                    @if (doctorOwnChamber.Wed)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>WED</td>
+                                                                            <td><input type="number" name="WedCapacity" class="form-control" value="@doctorOwnChamber.ManageAppointment.WedCapacity" /></td>
+                                                                            <td>@doctorOwnChamber.ManageAppointment.WedAvailableAppoint</td>
+                                                                        </tr>
+                                                                    }
+                                                                    @if (doctorOwnChamber.Thu)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>THU</td>
+                                                                            <td><input type="number" name="ThuCapacity" class="form-control" value="@doctorOwnChamber.ManageAppointment.ThuCapacity" /></td>
+                                                                            <td>@doctorOwnChamber.ManageAppointment.ThuAvailableAppoint</td>
+                                                                        </tr>
+                                                                    }
+                                                                    @if (doctorOwnChamber.Fri)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>FRI</td>
+                                                                            <td><input type="number" name="FriCapacity" class="form-control" value="@doctorOwnChamber.ManageAppointment.FriCapacity" /></td>
+                                                                            <td>@doctorOwnChamber.ManageAppointment.FriAvailableAppoint</td>
+                                                                        </tr>
+                                                                    }
+                                                                    @if (doctorOwnChamber.Sat == false && doctorOwnChamber.Sun == false && doctorOwnChamber.Mon == false && doctorOwnChamber.Tue == false && doctorOwnChamber.Wed == false && doctorOwnChamber.Thu == false && doctorOwnChamber.Fri == false)
+                                                                    {
+                                                                        <tr>
+                                                                            <td colspan="3"><i style="color: red">Doctor's schedule not given yet.</i></td>
+                                                                        </tr>
+                                                                    }
+                                                                </table>
+                                                                if (doctorOwnChamber.ManageAppointment.OrderedAppoint > 0)
+                                                                {
+                                                                    <input type="hidden" name="DoctorChamberId" value="@doctorOwnChamber.Id" />
+                                                                    <input type="hidden" name="OrderExpireDate" value="@doctorOwnChamber.ManageAppointment.OrderExpireDate" />
+                                                                    <input type="hidden" name="TotalAvailableAppoint" value="@doctorOwnChamber.ManageAppointment.TotalAvailableAppoint" />
+                                                                    <p class="text-center"><button type="submit" class="btn btn-sm btn-primary">Update</button></p>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <p class="text-center"><button type="submit" class="btn btn-sm btn-primary" disabled>Update</button> <a href="@Url.Action("BuyAppointment","Doctor")" class="btn btn-sm btn-success">Buy Appointment</a></p>
+                                                                    <p class="text-center"><i style="color:red">You have no appointment available to give appointments. Please buy appointment!</i></p>
+                                                                }
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="alert alert-warning alert-dismissible" style="margin-top: 20px">
+                                                                        <strong>Hello!</strong> Your request has been pending.
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                            }
+                        }
+                        else
+                        {
+                            <i style="color: red">You have no chamber yet. Please, add a chamber.</i>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+@section scripts{
+    <script>
+        $(".chkAvailability").change(function () {
+            $(".chkAvailability").prop('checked', false);
+            $(this).prop('checked', true);
+        });
+    </script>
+}

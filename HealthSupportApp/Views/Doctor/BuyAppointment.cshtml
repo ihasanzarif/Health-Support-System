@@ -1,0 +1,111 @@
+﻿@using System.Web.UI.WebControls
+@using HealthSupportApp.Models.DoctorModel
+@using HealthSupportApp.Models.MedicalModel
+@model HealthSupportApp.Models.DoctorModel.DoctorAppointOrder
+@{
+    ViewBag.Title = "Buy Appointment";
+    ViewBag.GetDoctorName = ViewBag.GetName;
+    Layout = "~/Views/Shared/_DoctorLayout.cshtml";
+    List<ChambersForOrder> chambersForOrders = ViewBag.GetChambersForOrder;
+    var paymentMethods = new List<ListItem>
+    {
+        new ListItem{Value = "BKash", Text = "BKash"},
+        new ListItem{Value = "Rocket", Text = "Rocket"},
+    };
+}
+
+@if (ViewBag.Message != null)
+{
+    <div class="container">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-success alert-dismissible" style="margin-top: 20px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Success!</strong> @ViewBag.Message
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="container">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-danger alert-dismissible" style="margin-top: 20px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Oops!</strong> @ViewBag.ErrorMessage
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="container">
+    <header>
+        <h1 class="h3 display">Buy Appointment</h1>
+    </header>
+    <div class="row">
+        <div class="col-lg-8 col-centered">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Order Your Appointment</h3>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("BuyAppointment", "Doctor", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        <div class="form-group row">
+                            <h5 class="col-md-4">Select Chamber :</h5>
+                            <div class="col-md-8">
+                                @Html.DropDownListFor(model => model.ManageAppointId, new SelectList(chambersForOrders, "ManageId", "ChamberName"), "- Select Your Chamber -", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ManageAppointId)
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <h5 class="col-md-4">Appoint Amount:</h5>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(model => model.AppointAmount, new { @class = "form-control", type = "number", id = "AppointAmount", onkeyup= "sumTotalPrice()" })
+                                @Html.ValidationMessageFor(model => model.AppointAmount)
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <h5 class="col-md-4">Total Price:</h5>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(model => model.TotalPrice, new { @class = "form-control", @readonly="readonly", id = "TotalPrice" })
+                                <p>* Appointment Per Price - @ViewBag.AppointPrice Tk. <input type="hidden" id="AppointPrice" value="@ViewBag.AppointPrice" readonly /></p> 
+                                @Html.ValidationMessageFor(model => model.TotalPrice)
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <h5 class="col-md-4">Select Payment Method :</h5>
+                            <div class="col-md-8">
+                                @Html.DropDownListFor(model => model.PaymentMethod, new SelectList(paymentMethods), "- Select Payment Method -", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.PaymentMethod)
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <h5 class="col-md-4">TrxID :</h5>
+                            <div class="col-md-8">
+                                @Html.TextBoxFor(model => model.TrnxId, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.TrnxId)
+                            </div>
+                        </div>
+                        <p class="text-center"><button class="btn btn-success">Order</button></p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        function sumTotalPrice() {
+            var appointAmount = document.getElementById('AppointAmount').value;
+            var appointPrice = document.getElementById('AppointPrice').value;
+            var total = (parseInt(appointAmount) * parseInt(appointPrice));
+            document.getElementById('TotalPrice').value = total;
+        }
+    </script>
+}

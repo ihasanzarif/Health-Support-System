@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "VerifyAccount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container" style="margin-top: 40px">
+
+</div>
+<h2>Verify Account</h2>
+<hr />
+@if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
+{
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            <strong>Success!</strong> @ViewBag.Message
+        </div>
+    }
+}
+else
+{
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            <strong>Error!</strong> @ViewBag.Message
+        </div>
+    }
+}

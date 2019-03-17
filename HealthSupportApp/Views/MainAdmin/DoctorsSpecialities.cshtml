@@ -1,0 +1,98 @@
+﻿@using HealthSupportApp.Models.MedicalModel
+@model HealthSupportApp.Models.MedicalModel.DoctorsSpecialities
+@{
+    ViewBag.Title = "DoctorsSpecialities";
+    Layout = "~/Views/Shared/_MainAdminLayout.cshtml";
+    List<DoctorsSpecialities> doctorsSpecialities = ViewBag.GetSpecialities;
+}
+@if (ViewBag.Message != null)
+{
+    <div class="container">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-success alert-dismissible" style="margin-top: 20px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Success!</strong> @ViewBag.Message
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="container">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-danger alert-dismissible" style="margin-top: 20px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Error!</strong> @ViewBag.ErrorMessage
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="container">
+    <header>
+        <h1 class="h3 display">Home</h1>
+    </header>
+    <div class="row">
+        <div class="col-lg-12">
+            <!-- Income-->
+            <div class="card income">
+                <h4>Add Specaility</h4>
+                <hr />
+                @using (Html.BeginForm("DoctorsSpecialities", "MainAdmin", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    <div class="form-group row">
+                        <label class="col-form-label col-md-2">Speciality Name</label>
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(model => model.Speciality, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Speciality)
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="submit" class="btn btn-success"><i class="fa fa-plus"></i> ADD</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-lg-12">
+            <!-- Income-->
+            <div class="card income">
+                <h4>Specailities</h4>
+                <hr />
+                <div class="row">
+                    <div class="col-md-8 col-centered">
+                        <table class="table table-responsive-lg table-bordered">
+                            <tr>
+                                <th>ID</th>
+                                <th>Speciality Name</th>
+                            </tr>
+                            @if (doctorsSpecialities.Count > 0)
+                            {
+                                foreach (DoctorsSpecialities doctorSpeciality in doctorsSpecialities)
+                                {
+                                    <tr>
+                                        <td>@doctorSpeciality.Id</td>
+                                        <td>@doctorSpeciality.Speciality</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="2"><i style="color: red">Add Doctor Speciality</i></td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

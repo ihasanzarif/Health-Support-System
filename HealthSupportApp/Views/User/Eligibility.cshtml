@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewBag.Title = "Eligibility";
+    ViewBag.GetUserName = ViewBag.GetName;
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="container">
+    <header>
+        <h1 class="h3 display">Eligibility</h1>
+    </header>
+    <div class="row justify-content-center align-content-center" style="margin-bottom: 20px">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="@Url.Action("Be_a_donor", "User")" class="btn btn-primary text-white" style="margin: 5px">Be a Donor</a>
+                        <a href="@Url.Action("Blood_fact", "User")" class="btn btn-primary text-white" style="margin: 5px">Blood facts</a>
+                        <a href="@Url.Action("Eligibility", "User")" class="btn btn-primary text-white active" style="margin: 5px">Eligibility</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>Eligibility of Donation</h2>
+                        <hr />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000"> Specially trained members of the technical staff are available at each blood collection center, and details of each donor's health and activities are discussed in a confidential setting prior to blood donation. To ensure the safety of blood donation from donors and recipients, all voluntary blood donors must be evaluated to determine their eligibility to donate blood. The final determination of eligibility is made at the time of donation. </p>
+                        <br/>
+                        <h3>
+                            Types of Blood
+                        </h3>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            Although all blood is made from the same basic elements, not all blood is the same. In fact, there are eight different types of common blood, which are determined by the presence or absence of certain antigens-substances that can trigger an immune response if they are foreign to the body.
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <img src="~/Image/bloodBank3.jpg" class="img-thumbnail" width="580px" height="500px"/>
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            Because some antigens can trigger the patient's immune response to attack the transfused blood, safe blood transfusions depend on the type of blood care and cross-testing. There are four major blood groups that determine the presence or absence of two antigens A and B. These are:
+                        </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">• Group A- only has the A antigen in the red blood cells (and the B antibody in the plasma) </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">• Group B- only has the B antigen in the red blood cells (and one antibody in the plasma) </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">• Group AB- has both antigens A and B in red blood cells (but neither A nor B antibodies in the plasma) </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">• Group O- does not have antigens A or B in red blood cells (but A and B are antibodies in the plasma) </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

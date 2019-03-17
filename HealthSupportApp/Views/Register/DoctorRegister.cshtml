@@ -1,0 +1,160 @@
+﻿@using HealthSupportApp.Models.MedicalModel
+@model HealthSupportApp.Models.MedicalModel.Doctors
+@{
+    ViewBag.Title = "Doctor Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<DoctorsSpecialities> doctorsSpecialities = ViewBag.GetSpecialities;
+}
+
+<div class="container" style="margin-top: 40px">
+    <div class="row">
+        <div class="col-lg-8 col-centered">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <h3>Create Doctor Account</h3>
+                        </div>
+                        <div class="col-lg-5">
+                            @Html.ActionLink("Back to home", "Index", "Home", null, new { @class = "btn btn-sm btn-primary pull-right" })
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-lg-12">
+                            @if (ViewBag.ErrorMessage != null)
+                            {
+                                <div class="alert alert-danger alert-dismissible fade show">
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    <strong>Sorry!</strong> @ViewBag.ErrorMessage
+                                </div>
+                            }
+                            @using (Html.BeginForm("DoctorRegister", "Register", FormMethod.Post, new { id = "configForm" }))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <div class="form-horizontal">
+                                    @Html.ValidationSummary(true)
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-4" })
+                                        <div class="col-md-8">
+                                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control col-md-8", @placeholder = "Enter your full name" })
+                                            @Html.ValidationMessageFor(model => model.Name)
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            @Html.LabelFor(model => model.BmdcReg, new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-md-8">
+                                            @Html.TextBoxFor(model => model.BmdcReg, new { @class = "form-control col-md-8", @placeholder = "Your BMDC registration no." })
+                                            @Html.ValidationMessageFor(model => model.BmdcReg)
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            @Html.LabelFor(model => model.MobileNo, new { @class = "control-label" }) (*Login ID)
+                                        </div>
+                                        <div class="col-md-8">
+                                            @Html.TextBoxFor(model => model.MobileNo, new { @class = "form-control col-md-8", @placeholder = "Mobile No 01XXXXXXXXX" })
+                                            @Html.ValidationMessageFor(model => model.MobileNo)
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            @Html.LabelFor(model => model.PhoneNo, new { @class = "control-label" })
+                                        </div>
+                                        <div class="col-md-8">
+                                            @Html.TextBoxFor(model => model.PhoneNo, new { @class = "form-control col-md-8", @placeholder = "Enter your work phone no.(if any)" })
+                                            @Html.ValidationMessageFor(model => model.PhoneNo)
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.Email, new { @class = "control-label col-md-4" })
+                                        <div class="col-md-8">
+                                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control col-md-8", @placeholder = "Enter Your Valid Email" })
+                                            @Html.ValidationMessageFor(model => model.Email)
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.Speciality, new { @class = "control-label col-md-4" })
+                                        <div class="col-md-8">
+                                            @Html.DropDownListFor(model => model.Speciality, new SelectList(doctorsSpecialities, "Speciality", "Speciality"), "-- Select Your Speciality --", new { @class = "form-control col-md-8" })
+                                            @Html.ValidationMessageFor(model => model.Speciality)
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" id="location">
+                                        @Html.LabelFor(model => model.Title, new { @class = "control-label col-md-4" })
+                                        <div class="col-md-8">
+                                            @Html.TextBoxFor(model => model.Title, new { @class = "form-control col-md-8", @placeholder = "Enter your Title/Designation" })
+                                            @Html.ValidationMessageFor(model => model.Title)
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        @Html.LabelFor(model => model.Gender, new { @class = "control-label col-md-4" })
+                                        <div class="col-md-8">
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    @Html.RadioButtonFor(model => model.Gender, "Male", new { @class = "form-check-input", @id = "male" }) Male
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    @Html.RadioButtonFor(model => model.Gender, "Female", new { @class = "form-check-input", @id = "female" }) Female
+                                                </label>
+                                            </div>
+                                            @Html.ValidationMessageFor(model => model.Gender)
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" id="location">
+                                        @Html.LabelFor(model => model.OtherSpecification, new { @class = "control-label col-md-4" })
+                                        <div class="col-md-8">
+                                            @Html.TextBoxFor(model => model.OtherSpecification, new { @class = "form-control col-md-8", @placeholder = "Enter your degree & other specifications" })
+                                            @Html.ValidationMessageFor(model => model.OtherSpecification)
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" id="location">
+                                        @Html.LabelFor(model => model.ImageFile, new { @class = "control-label col-md-4" })
+                                        <div class="col-md-8">
+                                            @Html.TextBoxFor(model => model.ImageFile, new { @class = "form-control col-md-8", type = "file", id = "ImageFile", onclick = "return checkImage()", accept = "image/*" })
+                                            @Html.ValidationMessageFor(model => model.ImageFile)
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" id="location">
+                                        <div class="col-md-10">
+                                            <i>* Your password will send to your Mobile no.</i>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="offset-md-2 col-md-10">
+                                            <input type="submit" value="Create" class="btn btn-success" />
+                                            @*<input type="submit" value="Reset" id="configReset" class="btn btn-info" />*@
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        <p>Already have account! Go to @Html.ActionLink("Login", "Login", "Register")</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $("#ImageFile").change(function () {
+            var ImgFile = document.getElementById('ImageFile');
+            var file = ImgFile.files[0];
+            var count = file.size;
+            count = Math.round((count / (1024)));
+            if (count > 2048) {
+                document.getElementById('ImageFile').value = "";
+                alert("File size is too large (" + count + "KB). Your file size must be below 2MB.");
+            }
+        });
+    </script>
+}

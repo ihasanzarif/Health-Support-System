@@ -1,0 +1,125 @@
+﻿@using HealthSupportApp.Models.HomeModel
+
+@{
+    ViewBag.Title = "Forum Topic Post";
+    ViewBag.GetMedicalName = ViewBag.GetName;
+    Layout = "~/Views/Shared/_MedicalLayout.cshtml";
+    List<ForumPost> forumPosts = ViewBag.GetFormTopicPost;
+}
+
+<div class="container">
+    <header>
+        <h1 class="h3 display">Forum</h1>
+    </header>
+    @if (ViewBag.Message != null)
+    {
+        <div class="container">
+            <div class="row justify-content-center align-content-center">
+                <div class="col-md-8">
+                    <div class="alert alert-success">
+                        <strong>Success!</strong> @ViewBag.Message
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="container">
+            <div class="row justify-content-center align-content-center">
+                <div class="col-md-8">
+                    <div class="alert alert-danger">
+                        <strong>Oops!</strong> @ViewBag.ErrorMessage
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="row bg-white" style="padding: 20px 10px 25px 10px">
+        <div class="col-md-12">
+            <h4>Topic Related Posts</h4>
+            <hr />
+            @if (forumPosts.Count > 0)
+            {
+                <div class="row">
+                    <div class="col-md-12">
+                        @foreach (ForumPost forumPost in forumPosts)
+                        {
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h5>@forumPost.TopicName </h5>
+                                </div>
+                                <div class="col-md-4">
+                                    <a href="#" class="btn btn-sm btn-outline-secondary pull-right">@forumPost.TopicCategory</a>
+                                </div>
+                            </div>
+                            <label class="col-form-label">By <b class="text-info">@forumPost.UserName</b> |</label> <i> @forumPost.PostDate</i>
+                            if (forumPost.Description != "")
+                            {
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @forumPost.Description
+                                    </div>
+                                </div>
+                            }
+                            if (string.IsNullOrEmpty(forumPost.ImagePath))
+                            {
+                                <div></div>
+                            }
+                            else
+                            {
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <img src="@Url.Content(forumPost.ImagePath)" width="450px" height="500px" class="img-thumbnail" alt="user photo" />
+                                    </div>
+                                </div>
+                            }
+                            <br />
+                            <div id="@forumPost.ForumPostId" class="collapse" data-parent="#accordion">
+                                <div class="row" style="margin-bottom: 5px">
+                                    <div class="col-md-8">
+                                        <div class="row" style="margin-left: 5px">
+                                            <div class="col-md-12">
+                                                @foreach (Comments comments in forumPost.Comments)
+                                                {
+                                                    <div style="border-bottom: 1px solid darkcyan">
+                                                        <label><b>@comments.UserName</b></label>
+                                                        <p class="text-dark" style="font-size: 15px">@comments.Comment</p>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @if (User.IsInRole("Medical"))
+                                {
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            @using (Html.BeginForm("ForumTopicPost", "Medical", FormMethod.Post))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <textarea class="form-control col-md-12" name="comment" rows="2" style="margin-bottom: 5px"></textarea>
+                                                <input type="hidden" name="postId" value="@forumPost.ForumPostId" />
+                                                <input type="hidden" name="categoryId" value="@forumPost.TopicCategoryId" />
+                                                <button type="submit" class="btn btn-sm btn-primary pull-right">Comment</button>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <a href="#@forumPost.ForumPostId" class="collapsed text-primary" data-toggle="collapse"><i class="fa fa-comment"></i> @forumPost.Comments.Count comments <i class="fa fa-arrow-down" style="font-size: 12px"></i><i class="fa fa-arrow-up" style="font-size: 12px"></i></a>
+                            <br />
+                            <hr />
+                        }
+                    </div>
+                </div>
+
+            }
+            else
+            {
+                <i class="text-center">No post available now.</i>
+            }
+        </div>
+    </div>
+</div>
+

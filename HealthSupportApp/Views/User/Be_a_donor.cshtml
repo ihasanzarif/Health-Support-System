@@ -1,0 +1,140 @@
+﻿
+@{
+    ViewBag.Title = "Be a Donor";
+    ViewBag.GetUserName = ViewBag.GetName;
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="container">
+    <header>
+        <h1 class="h3 display">Be a Donor</h1>
+    </header>
+    <div class="row justify-content-center align-content-center" style="margin-bottom: 20px">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="@Url.Action("Be_a_donor", "User")" class="btn btn-primary text-white active" style="margin: 5px">Be a Donor</a>
+                        <a href="@Url.Action("Blood_fact", "User")" class="btn btn-primary text-white" style="margin: 5px">Blood facts</a>
+                        <a href="@Url.Action("Eligibility", "User")" class="btn btn-primary text-white" style="margin: 5px">Eligibility</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>How to Prepare for a Blood Donation</h2>
+                        <hr/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">Did you know? Preparing for your blood donation starts before you walk in.</p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            1. A healthy meal within two hours of your donation is important to a successful donation.
+                            It is also recommended that regular donors make a habit of eating foods that are rich in Iron. A few examples include red meat, chicken, beans, potato, and also many iron fortified cereals.
+                        </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            2. Always drink plenty of non-caffeinated, non-alcoholic beverages such as water, juice, etc. one hour before donating.
+                            Drinks and snacks will be provided during and after the medical screening and before the donation.
+                        </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            3. Most importantly, make sure to get a good night’s sleep before the day of your donation.
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <img src="~/Image/bloodBank1.jpg" class="img-thumbnail" width="580px" height="500px"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>The Blood Donation Process</h2>
+                        <hr/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            -The entire blood donation process takes about one hour.
+                        </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            -All steps must follow procedure exactly to ensure the safety of the donor and the blood supply.
+                        </p>
+                        <br />
+                        <h4>Step 1: Registration</h4>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            • Present proper photo identification.
+                        </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            • Provide general information for records.
+                        </p>
+                        <br />
+                        <h4>Step 2: Screening Process</h4>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            • A trained staff member will check your temperature, pulse, and blood pressure.
+                        </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            • Hemoglobin levels are also checked by testing a drop of blood.
+                        </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            • A trained staff member will guide you through the "Donor Registration Form" (Information is discussed privately and kept strictly confidential).
+                        </p>
+                        <br />
+                        <h4>Step 3: Pre-Donation Refreshments</h4>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            • A trained staff member will guide you through the "Donor Registration Form" (Information is discussed privately and kept strictly confidential).
+                        </p>
+                        <br />
+                        <h4>Step 4: Donation</h4>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            •	Lie down in a comfortable bed in the donation area.
+                        </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            •	A trained phlebotomist will sterilize the area of the arm before drawing the blood.
+                        </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            •	Squeeze ball to help the blood flow.
+                        </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            •	The actual donation takes about 10 to 15 minutes.
+                        </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            •	All materials used during the donation are pre-packaged, sterile, and disposable.
+                        </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            •	All materials used during the donation are pre-packaged, sterile, and disposable.
+                        </p>
+                        <br />
+                        <h4>Step 5: Refreshments and Relaxation</h4>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            •	Enjoy the snacks and drinks provided for you.
+                        </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            •	After 15 minutes, donors can continue on with their day knowing they have made a difference.
+                        </p>
+                        <br />
+                        <h4>Step 6: Post-Donation</h4>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            •	Donors should avoid strenuous activity or heavy lifting for a few hours following donation.
+                        </p>
+                        <p style="font-size: 16px; margin-bottom: 12px; color: #000000">
+                            •	If donors feel light-headed, lie down until it passes.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

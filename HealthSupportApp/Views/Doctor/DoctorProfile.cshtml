@@ -1,0 +1,196 @@
+﻿@using System.Web.UI.WebControls
+@using HealthSupportApp.Models.MedicalModel
+@model Doctors
+@{
+    ViewBag.Title = "Doctor Profile";
+    ViewBag.GetDoctorName = ViewBag.GetName;
+    Layout = "~/Views/Shared/_DoctorLayout.cshtml";
+    Doctors doctor = ViewBag.GetDoctorInfo;
+    List<DoctorsSpecialities> doctorsSpecialities = ViewBag.GetSpecialities;
+}
+@if (ViewBag.Message != null)
+{
+    <div class="container">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-success alert-dismissible" style="margin-top: 20px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Success!</strong> @ViewBag.Message
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="container">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-danger alert-dismissible" style="margin-top: 20px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Error!</strong> @ViewBag.ErrorMessage
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="container">
+    <header>
+        <h1 class="h3 display">Doctor Info</h1>
+    </header>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="target-1" class="card">
+                <div class="card-header">
+                    <h3>Edit Profile</h3>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-4 col-centered">
+                        <div class="form-group row">
+                            <h5 class="col-md-4">Your Photo</h5>
+                            <div class="col-md-8">
+                                @if (doctor.ImagePath == null || doctor.ImagePath == "")
+                                {
+                                    if (doctor.Gender == "Male")
+                                    {
+                                        <img class="img-thumbnail" src="~/Image/maleDoctor.png" height="150px" width="130px"/>
+                                    }
+                                    else
+                                    {
+                                        <img class="img-thumbnail" src="~/Image/femaleDoctor.png" height="150px" width="130px"/>
+                                    }
+                                }
+                                else
+                                {
+                                    <img class="img-thumbnail" src="@Url.Content(doctor.ImagePath)" height="150px" width="130px"/>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @using (Html.BeginForm("DoctorProfile", "Doctor", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    <div class="row">
+                        <div class="col-md-10 col-centered">
+                            <table class="table table-responsive-md table-borderless">
+                                <tr>
+                                    <th>* Name :</th>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control", placeholder = "Enter your full name", Value = doctor.Name })
+                                        @Html.ValidationMessageFor(model => model.Name)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>* BMDC Reg. :</th>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.BmdcReg, new { @class = "form-control", placeholder = "Enter BMDC Registration No.", Value = doctor.BmdcReg, @readonly = "readonly" })
+                                        @Html.ValidationMessageFor(model => model.BmdcReg)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>* Gender :</th>
+                                    <td>
+                                        @if (doctor.Gender == "Male")
+                                        {
+                                            @Html.RadioButtonFor(model => model.Gender, "Male", new { @class = "form-control-custom radio-custom", id = "Gender1", @checked = "checked" })
+                                            <label for="Gender1">Male </label>
+                                            @Html.RadioButtonFor(model => model.Gender, "Female", new { @class = "form-control-custom radio-custom", id = "Gender2" })<label for="Gender2">Female</label>
+                                        }
+                                        @if (doctor.Gender == "Female")
+                                        {
+                                            @Html.RadioButtonFor(model => model.Gender, "Male", new { @class = "form-control-custom radio-custom", id = "Gender3" })
+                                            <label for="Gender3">Male </label>
+                                            @Html.RadioButtonFor(model => model.Gender, "Female", new { @class = "form-control-custom radio-custom", id = "Gender4", @checked = "checked" })<label for="Gender4">Female</label>
+                                        }
+                                        @Html.ValidationMessageFor(model => model.Gender)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>* Title/Designation :</th>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Title, new { @class = "form-control", placeholder = "e.g. Professor/ Consultant with medical name", Value = doctor.Title })
+                                        @Html.ValidationMessageFor(model => model.Title)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>* Speciality :</th>
+                                    <td>
+                                        <select class="form-control" name="Speciality">
+                                            @if (doctor.Speciality != null)
+                                            {
+                                                <option>@doctor.Speciality</option>
+                                            }
+                                            <option disabled>- Choose option -</option>
+                                            @foreach (DoctorsSpecialities aDoctorSpeciality in doctorsSpecialities)
+                                            {
+                                                <option value="@aDoctorSpeciality.Speciality">@aDoctorSpeciality.Speciality</option>
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>* Email :</th>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Enter Doctor's work email", Value = doctor.Email })
+                                        @Html.ValidationMessageFor(model => model.Email)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>* Mobile No :</th>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.MobileNo, new { @class = "form-control", placeholder = "Mobile number will be Doctor's login username", Value = doctor.MobileNo, @readonly = "readonly" })
+                                        @Html.ValidationMessageFor(model => model.MobileNo)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Phone No :</th>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.PhoneNo, new { @class = "form-control", placeholder = "Enter Doctor's work phone number", Value = doctor.PhoneNo })
+                                        @Html.ValidationMessageFor(model => model.PhoneNo)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>* Degree & other Specification :</th>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.OtherSpecification, new { @class = "form-control", placeholder = "Enter detail of the degree, institution and other specification", Value = doctor.OtherSpecification })
+                                        @Html.ValidationMessageFor(model => model.OtherSpecification)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Upload Profile Image</th>
+                                    <td>
+                                        <label>*Edit your profile photo by uploading another photo</label>
+                                        @Html.TextBoxFor(model => model.ImageFile, new { @class = "form-control", type = "file", id = "ImageFile", onclick = "return checkImage()", accept = "image/*" })
+                                        <input name="ImagePath" type="hidden" value="@doctor.ImagePath"/>
+                                        @Html.ValidationMessageFor(model => model.ImageFile)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="text-center"> <input type="hidden" name="Id" value="@doctor.Id" /><button class="btn btn-success" type="submit"><i class="fa fa-check-square"></i> SAVE</button></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                }
+                <br />
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        $("#ImageFile").change(function () {
+            var ImgFile = document.getElementById('ImageFile');
+            var file = ImgFile.files[0];
+            var count = file.size;
+            count = Math.round((count / (1024)));
+            if (count > 2048) {
+                document.getElementById('ImageFile').value = "";
+                alert("File size is too large (" + count + "KB). Your file size must be below 2MB.");
+            }
+        });
+    </script>
+}

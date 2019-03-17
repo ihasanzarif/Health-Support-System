@@ -1,0 +1,658 @@
+﻿@using System.Web.UI.WebControls
+@using HealthSupportApp.Models.MedicalModel
+@model HealthSupportApp.Models.MedicalModel.MedicalService
+@{
+    ViewBag.Title = "Services";
+    ViewBag.GetMedicalName = ViewBag.GetName;
+    Layout = "~/Views/Shared/_MedicalLayout.cshtml";
+    List<HospitalServices> hospitalServices = ViewBag.GetHospitalServices;
+    List<DiagnosticServices> diagnosticServices = ViewBag.GetDiagnosticServices;
+    List<OtherServices> otherServices = ViewBag.GetOtherServices;
+    List<MedicalFacilities> medicalFacilities = ViewBag.GetMedicalFacilities;
+    List<Consultants> consultants = ViewBag.GetMedicalConsultants;
+    MedicalService aMedicalService = ViewBag.GetEmergencyDetails;
+    List<DoctorsSpecialities> doctorsSpecialities = ViewBag.GetSpecialities;
+    var haveService = new List<ListItem>
+{
+        new ListItem {Text = "Available", Value = "Available"},
+        new ListItem {Text = "Not Available", Value = "Not Available"}
+};
+}
+
+<div class="container">
+    @if (ViewBag.Message != null)
+    {
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-success alert-dismissible" style="margin-top: 20px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Success!</strong> @ViewBag.Message
+                </div>
+            </div>
+        </div>
+    }
+    @if (ViewBag.Error != null)
+    {
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-danger alert-dismissible" style="margin-top: 20px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Error!</strong> @ViewBag.Error
+                </div>
+            </div>
+        </div>
+    }
+    <header>
+        <h1 class="h3 display">Medical's Services</h1>
+    </header>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Medical Services</h3>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("Services", "Medical", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        <div class="form-group row">
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(model => model.HospitalService.ServiceName, new { placeholder = "Enter Service name", @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.HospitalService.ServiceName)
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> ADD</button>
+                            </div>
+                        </div>
+                    }
+                    @if (hospitalServices.Count > 0)
+                    {
+                        <label class="col-form-label">List of Medical Services</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="table-responsive-lg">
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th>Service Name</th>
+                                        </tr>
+                                        @for (int i = 0; i < hospitalServices.Count; i++)
+                                        {
+                                            if (i % 2 == 0)
+                                            {
+                                                <tr>
+                                                    <td>@hospitalServices[i].ServiceName @Html.ActionLink("Delete", "DeleteHospitalService", "Medical", new { id = hospitalServices[i].Id }, new { @class = "text-danger pull-right" })</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="table-responsive-lg">
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th>Service Name</th>
+                                        </tr>
+                                        @for (int i = 0; i < hospitalServices.Count; i++)
+                                        {
+                                            if (i % 2 == 1)
+                                            {
+                                                <tr>
+                                                    <td>@hospitalServices[i].ServiceName @Html.ActionLink("Delete", "DeleteHospitalService", "Medical", new { id = hospitalServices[i].Id }, new { @class = "text-danger pull-right" })</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <i>Add your Medical Services</i>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Diagnostic Services </h3>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("Services", "Medical", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        <div class="form-group row">
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(model => model.DiagnosticService.ServiceName, new { placeholder = "Enter Service name", @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.DiagnosticService.ServiceName)
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> ADD</button>
+                            </div>
+                        </div>
+                    }
+                    @if (diagnosticServices.Count > 0)
+                    {
+                        <label class="col-form-label">List of Diagnostic Services</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="table-responsive-lg">
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th>Service Name</th>
+                                        </tr>
+                                        @for (int i = 0; i < diagnosticServices.Count; i++)
+                                        {
+                                            if (i % 2 == 0)
+                                            {
+                                                <tr>
+                                                    <td>@diagnosticServices[i].ServiceName @Html.ActionLink("Delete", "DeleteDiagnosticService", "Medical", new { id = diagnosticServices[i].Id }, new { @class = "text-danger  pull-right" })</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="table-responsive-lg">
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th>Service Name</th>
+                                        </tr>
+                                        @for (int i = 0; i < diagnosticServices.Count; i++)
+                                        {
+                                            if (i % 2 == 1)
+                                            {
+                                                <tr>
+                                                    <td>@diagnosticServices[i].ServiceName @Html.ActionLink("Delete", "DeleteDiagnosticService", "Medical", new { id = diagnosticServices[i].Id }, new { @class = "text-danger  pull-right" })</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <i>Add your Diagnostic Services</i>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Emergency & Seat Capacity (Required for Medicals/Hospitals) <button class="btn btn-sm btn-info pull-right" id="emergencyEditBtn"><i class="fa fa-edit"></i> EDIT</button> <button class="btn btn-sm btn-danger pull-right" id="emergencyCloseBtn"><i class="fa fa-close"></i> CLOSE</button></h3>
+                </div>
+                <div class="card-body">
+                    <div id="editEmergency">
+                        @if (aMedicalService != null)
+                        {
+                            using (Html.BeginForm("Services", "Medical", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true)
+                                <div class="form-group row">
+                                    <label class="col-sm-2">Emergency Service</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-control" name="EmergencyService">
+                                            @if (aMedicalService.EmergencyService != null)
+                                            {
+                                                <option selected>@aMedicalService.EmergencyService</option>
+                                            }
+                                            <option disabled>Change option</option>
+                                            @foreach (var item in haveService)
+                                            {
+                                                <option value="@item">@item</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        @Html.TextBoxFor(model => model.EmergencyPhoneNo, new { type = "number", placeholder = "Enter emergency phone number 1", @class = "form-control form-control-success", Value = aMedicalService.EmergencyPhoneNo })
+                                        @Html.ValidationMessageFor(model => model.EmergencyPhoneNo)
+                                    </div>
+                                    <div class="col-sm-3">
+                                        @Html.TextBoxFor(model => model.EmergencyPhoneNo2, new { type = "number", placeholder = "Enter emergency phone number 2", @class = "form-control form-control-success", Value = aMedicalService.EmergencyPhoneNo2 })
+                                        @Html.ValidationMessageFor(model => model.EmergencyPhoneNo2)
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2">Ambulance Service</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-control" name="AmbulanceService">
+                                            @if (aMedicalService.AmbulanceService != null)
+                                            {
+                                                <option selected>@aMedicalService.AmbulanceService</option>
+                                            }
+                                            <option disabled>Change option</option>
+                                            @foreach (var item in haveService)
+                                            {
+                                                <option value="@item">@item</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        @Html.TextBoxFor(model => model.AmbulancePhoneNo, new { type = "number", placeholder = "Enter ambulance phone number 1", @class = "form-control form-control-success", Value = aMedicalService.AmbulancePhoneNo })
+                                        @Html.ValidationMessageFor(model => model.AmbulancePhoneNo)
+                                    </div>
+                                    <div class="col-sm-3">
+                                        @Html.TextBoxFor(model => model.AmbulancePhoneNo2, new { type = "number", placeholder = "Enter ambulance phone number 2", @class = "form-control form-control-success", Value = aMedicalService.AmbulancePhoneNo2 })
+                                        @Html.ValidationMessageFor(model => model.AmbulancePhoneNo2)
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2">24 Hours Service</label>
+                                    <div class="col-sm-4">
+                                        <select class="form-control" name="TwentyFourService">
+                                            @if (aMedicalService.TwentyFourService != null)
+                                            {
+                                                <option selected>@aMedicalService.TwentyFourService</option>
+                                            }
+                                            <option disabled>Change option</option>
+                                            @foreach (var item in haveService)
+                                            {
+                                                <option value="@item">@item</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2" style="font-size: 16px; color: darkslategrey">Seat Capacity</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.SeatCapacity, new { type = "number", placeholder = "Enter seat capacity", @class = "form-control form-control-success", Value = aMedicalService.SeatCapacity })
+                                        @Html.ValidationMessageFor(model => model.SeatCapacity)
+                                    </div>
+                                </div>
+                                <div class="form-group row justify-content-center align-items-center">
+                                    <div class="col-sm-1">
+                                        <button class="btn btn-sm btn-primary" type="submit"><i class="fa fa-check-square"></i> SAVE</button>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <i class="card-text">You have no data to edit.</i>
+                        }
+                    </div>
+                    <div id="showEmergency">
+                        @if (aMedicalService != null)
+                        {
+                        <div class="table-responsive-lg">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th>Emergency Service</th>
+                                        <td>@aMedicalService.EmergencyService</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Emergency Phone No 1</th>
+                                        <td>@aMedicalService.EmergencyPhoneNo</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Emergency Phone No 2</th>
+                                        <td>@aMedicalService.EmergencyPhoneNo2</td>
+                                    </tr>
+                                    <tr>
+                                        <th>24 Hours Service</th>
+                                        <td>@aMedicalService.TwentyFourService</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Ambulance Service</th>
+                                        <td>@aMedicalService.AmbulanceService</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Ambulance Phone No 1</th>
+                                        <td>@aMedicalService.AmbulancePhoneNo</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Ambulance Phone No 2</th>
+                                        <td>@aMedicalService.AmbulancePhoneNo2</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Seat Capacity</th>
+                                        <td>@aMedicalService.SeatCapacity</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        }
+                        else
+                        {
+                            using (Html.BeginForm("Services", "Medical", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true)
+                                <div class="form-group row">
+                                    <label class="col-sm-2">Emergency Service</label>
+                                    <div class="col-sm-4">
+                                        @Html.DropDownListFor(model => model.EmergencyService, new SelectList(haveService), "Please select Yes/No", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.EmergencyService)
+                                    </div>
+                                    <div class="col-sm-3">
+                                        @Html.TextBoxFor(model => model.EmergencyPhoneNo, new { type = "number", placeholder = "Enter emergency phone number 1", @class = "form-control form-control-success" })
+                                        @Html.ValidationMessageFor(model => model.EmergencyPhoneNo)
+                                    </div>
+                                    <div class="col-sm-3">
+                                        @Html.TextBoxFor(model => model.EmergencyPhoneNo2, new { type = "number", placeholder = "Enter emergency phone number 2", @class = "form-control form-control-success" })
+                                        @Html.ValidationMessageFor(model => model.EmergencyPhoneNo2)
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2">Ambulance Service</label>
+                                    <div class="col-sm-4">
+                                        @Html.DropDownListFor(model => model.AmbulanceService, new SelectList(haveService), "Please select Yes/No", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.AmbulanceService)
+                                    </div>
+                                    <div class="col-sm-3">
+                                        @Html.TextBoxFor(model => model.AmbulancePhoneNo, new { type = "number", placeholder = "Enter ambulance phone number 1", @class = "form-control form-control-success" })
+                                        @Html.ValidationMessageFor(model => model.AmbulancePhoneNo)
+                                    </div>
+                                    <div class="col-sm-3">
+                                        @Html.TextBoxFor(model => model.AmbulancePhoneNo2, new { type = "number", placeholder = "Enter ambulance phone number 2", @class = "form-control form-control-success" })
+                                        @Html.ValidationMessageFor(model => model.AmbulancePhoneNo2)
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2">24 Hours Service</label>
+                                    <div class="col-sm-4">
+                                        @Html.DropDownListFor(model => model.TwentyFourService, new SelectList(haveService), "Please select Yes/No", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.TwentyFourService)
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2" style="font-size: 16px; color: darkslategrey">Seat Capacity</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextBoxFor(model => model.SeatCapacity, new { type = "number", placeholder = "Enter seat capacity", @class = "form-control form-control-success" })
+                                        @Html.ValidationMessageFor(model => model.SeatCapacity)
+                                    </div>
+                                </div>
+                                <div class="form-group row justify-content-center align-items-center">
+                                    <div class="col-sm-1">
+                                        <button class="btn btn-sm btn-primary" type="submit"><i class="fa fa-check-square"></i> SAVE</button>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3>Specialists </h3>
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm("Services", "Medical", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    <div class="form-group row">
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(model => model.Consultant.ConsultantName, new SelectList(doctorsSpecialities, "Speciality", "Speciality"), "- Select speciality -",new {@class = "form-control" })
+                            @Html.ValidationMessageFor(model => Model.Consultant.ConsultantName)
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> ADD</button>
+                        </div>
+                    </div>
+                }
+                @if (consultants.Count > 0)
+                {
+                    <label class="col-form-label">List of Specialists added</label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="table-responsive-lg">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th>Consultant Name</th>
+                                    </tr>
+                                    @for (int i = 0; i < consultants.Count; i++)
+                                    {
+
+                                        if (i % 2 == 0)
+                                        {
+                                            <tr>
+                                                <td>@consultants[i].ConsultantName @Html.ActionLink("Delete", "DeleteConsultant", "Medical", new { id = consultants[i].Id }, new { @class = "text-danger pull-right" })</td>
+                                            </tr>
+                                        }
+
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="table-responsive-lg">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <th>Consultant Name</th>
+                                    </tr>
+                                    @for (int i = 0; i < consultants.Count; i++)
+                                    {
+
+                                        if (i % 2 == 1)
+                                        {
+                                            <tr>
+                                                <td>@consultants[i].ConsultantName @Html.ActionLink("Delete", "DeleteConsultant", "Medical", new { id = consultants[i].Id }, new { @class = "text-danger pull-right" })</td>
+                                            </tr>
+                                        }
+
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <i>Add your Specialists</i>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Facilities</h3>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("Services", "Medical", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        <div class="form-group row">
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(model => model.MedicalFacility.FacilityName, new { placeholder = "Enter Facility name", @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.MedicalFacility.FacilityName)
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> ADD</button>
+                            </div>
+                        </div>
+                    }
+                    @if (medicalFacilities.Count > 0)
+                    {
+                        <label class="col-form-label">List of Facilities added</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="table-responsive-lg">
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th>Facility Name</th>
+                                        </tr>
+                                        @for (int i = 0; i < medicalFacilities.Count; i++)
+                                        {
+
+                                            if (i % 2 == 0)
+                                            {
+                                                <tr>
+                                                    <td>@medicalFacilities[i].FacilityName @Html.ActionLink("Delete", "DeleteFacility", "Medical", new { id = medicalFacilities[i].Id }, new { @class = "text-danger pull-right" })</td>
+                                                </tr>
+                                            }
+
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="table-responsive-lg">
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th>Facility Name</th>
+                                        </tr>
+                                        @for (int i = 0; i < medicalFacilities.Count; i++)
+                                        {
+
+                                            if (i % 2 == 1)
+                                            {
+                                                <tr>
+                                                    <td>@medicalFacilities[i].FacilityName @Html.ActionLink("Delete", "DeleteFacility", "Medical", new { id = medicalFacilities[i].Id }, new { @class = "text-danger pull-right" })</td>
+                                                </tr>
+                                            }
+
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <i>Add your Medical Facilities</i>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Other Services </h3>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("Services", "Medical", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        <div class="form-group row">
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(model => model.OtherService.ServiceName, new { placeholder = "Enter Service name", @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.OtherService.ServiceName)
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> ADD</button>
+                            </div>
+                        </div>
+                    }
+                    @if (otherServices.Count > 0)
+                    {
+                        <label class="col-form-label">List of Other Services added</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="table-responsive-lg">
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th>Service Name</th>
+                                        </tr>
+                                        @for (int i = 0; i < otherServices.Count; i++)
+                                        {
+                                            if (i % 2 == 0)
+                                            {
+                                                <tr>
+                                                    <td>@otherServices[i].ServiceName @Html.ActionLink("Delete", "DeleteOtherService", "Medical", new { id = otherServices[i].Id }, new { @class = "text-danger pull-right" })</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="table-responsive-lg">
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th>Service Name</th>
+                                        </tr>
+                                        @for (int i = 0; i < otherServices.Count; i++)
+                                        {
+                                            if (i % 2 == 1)
+                                            {
+                                                <tr>
+                                                    <td>@otherServices[i].ServiceName @Html.ActionLink("Delete", "DeleteOtherService", "Medical", new { id = otherServices[i].Id }, new { @class = "text-danger pull-right" })</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <i>Add your Other Services</i>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $("#editEmergency").hide();
+        $("#emergencyCloseBtn").hide();
+        $("#showEmergency").show();
+        $("#emergencyEditBtn").show();
+        $("#emergencyEditBtn").click(function () {
+            $("#editEmergency").show();
+            $("#emergencyCloseBtn").show();
+            $("#showEmergency").hide();
+            $("#emergencyEditBtn").hide();
+        });
+        $("#emergencyCloseBtn").click(function () {
+            $("#editEmergency").hide();
+            $("#emergencyCloseBtn").hide();
+            $("#showEmergency").show();
+            $("#emergencyEditBtn").show();
+        });
+    </script>
+}

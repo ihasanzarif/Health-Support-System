@@ -1,0 +1,91 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
+
+<link href="css/font-awesome.css" rel="stylesheet">
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet">
+<br />
+<br />
+<div class="container">
+    <div class="row">
+        <div class="span12">
+            <div class="error-container">
+                <h1>404</h1>
+
+                <h1>Error!</h1>
+                @if (User.IsInRole("User"))
+                {
+                    <div class="error-details">
+                        Sorry, an error has occured! Why not try going back to the <a href="@Url.Action("Index", "User")">home page</a> or perhaps try following!
+                    </div> <!-- /error-details -->
+                    <br />
+                    <div class="error-actions">
+                        <a href="@Url.Action("Index", "User")" class="btn btn-large btn-primary">
+                            <i class="icon-chevron-left"></i>
+                            &nbsp;
+                            Back to Home
+                        </a>
+
+                    </div> <!-- /error-actions -->
+
+                }
+                @if (User.IsInRole("Medical"))
+                {
+                    <div class="error-details">
+                        Sorry, an error has occured! Why not try going back to the <a href="@Url.Action("Index", "Medical")">home page</a> or perhaps try following!
+                    </div> <!-- /error-details -->
+                    <br />
+                    <div class="error-actions">
+                        <a href="@Url.Action("Index", "Medical")" class="btn btn-large btn-primary">
+                            <i class="icon-chevron-left"></i>
+                            &nbsp;
+                            Back to Home
+                        </a>
+
+                    </div> <!-- /error-actions -->
+
+                }
+                @if (User.Identity.IsAuthenticated == false)
+                {
+                    <div class="error-details">
+                        Sorry, an error has occured! Why not try going back to the <a href="@Url.Action("Index", "Home")">home page</a> or perhaps try following!
+                    </div> <!-- /error-details -->
+                    <br />
+                    <div class="error-actions">
+                        <a href="@Url.Action("Index", "Home")" class="btn btn-large btn-primary">
+                            <i class="icon-chevron-left"></i>
+                            &nbsp;
+                            Back to Home
+                        </a>
+
+                    </div> <!-- /error-actions -->
+
+                }
+                @if (User.IsInRole("Doctors"))
+                {
+                    <div class="error-details">
+                        Sorry, an error has occured! Why not try going back to the <a href="@Url.Action("Index", "Doctor")">home page</a> or perhaps try following!
+                    </div> <!-- /error-details -->
+                    <br />
+                    <div class="error-actions">
+                        <a href="@Url.Action("Index", "Doctor")" class="btn btn-large btn-primary">
+                            <i class="icon-chevron-left"></i>
+                            &nbsp;
+                            Back to Home
+                        </a>
+
+                    </div> <!-- /error-actions -->
+
+                }
+          
+            </div> <!-- /error-container -->
+
+        </div> <!-- /span12 -->
+
+    </div> <!-- /row -->
+
+</div> <!-- /container -->

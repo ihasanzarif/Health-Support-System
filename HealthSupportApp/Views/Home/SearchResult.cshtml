@@ -1,0 +1,758 @@
+﻿@using System.Web.UI.WebControls
+@using HealthSupportApp.Models.DoctorModel
+@using HealthSupportApp.Models.MedicalModel
+@model HealthSupportApp.Models.HomeModel.SearchModel
+@{
+    ViewBag.Title = "Search Result";
+    List<MedicalAccount> medicalAccounts = ViewBag.SearchResult;
+    List<Doctors> doctors = ViewBag.DoctorSearchResult;
+    HealthSupportApp.Models.HomeModel.SearchModel aSearchModel = ViewBag.SearchKeywords;
+    var areaList = new List<ListItem>
+    {
+        new ListItem{Value="Agrabad"},
+        new ListItem{Value="A K Khan"},
+        new ListItem{Value="Anawara"},
+        new ListItem{Value="Andarkilla"},
+        new ListItem{Value="Bahaddarhat"},
+        new ListItem{Value="Bakolia"},
+        new ListItem{Value="Bhatiari"},
+        new ListItem{Value="Chawkbazar"},
+        new ListItem{Value="Fatikchari"},
+        new ListItem{Value="Halishahar"},
+        new ListItem{Value="Hathazari"},
+        new ListItem{Value="Jamal Khan"},
+        new ListItem{Value="Khulshi"},
+        new ListItem{Value="Lalkhan Bazar"},
+        new ListItem{Value="Mehedi Bag"},
+        new ListItem{Value="Muradpur"},
+        new ListItem{Value="Nasirabad"},
+        new ListItem{Value="New Market"},
+        new ListItem{Value="O R Nizam Road"},
+        new ListItem{Value="Pahartali"},
+        new ListItem{Value="Panchlaish"},
+        new ListItem{Value="Sholoshahar"},
+        new ListItem{Value="Sitakunda"},
+    };
+}
+<style>
+    .field-validation-error {
+        content: "*";
+        color: orangered;
+        text-align: left;
+    }
+
+    .input-validation-error {
+        border-color: red;
+    }
+</style>
+<link href="~/Content/Layout/vendor/ion-rangeSlider/css/ion.rangeSlider.css" rel="stylesheet" />
+<link href="~/Content/Layout/vendor/ion-rangeSlider/css/ion.rangeSlider.skinFlat.css" rel="stylesheet" />
+<div class="container" style="margin-top: 40px">
+    <div class="row justify-content-center">
+        <div class="col-md-12 text-center">
+            <ul class="nav nav-pills justify-content-center" role="tablist">
+                <li class="nav-item" style="margin-right: 4px">
+                    <a class="btn btn-outline-primary active" data-toggle="pill" href="#doctorSearch">Doctors</a>
+                </li>
+                <li class="nav-item" style="margin-right: 4px">
+                    <a class="btn btn-outline-primary" data-toggle="pill" href="#hospitalSearch">Hospitals</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-primary" href="@Url.Action("BloodBank", "Home")">Blood Donors</a>
+                </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div id="doctorSearch" class="container tab-pane active">
+                    <br>
+                    @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        <div class="form-inline justify-content-center">
+                            <div class="input-group mb-6">
+                                @Html.TextBoxFor(model => model.Location, new { @class = "form-control", @size = "50", @name = "Location", @placeholder = "Location", @aria_label = "Loaction", @aria_describedby = "basic-addon2" })
+                                @Html.TextBoxFor(model => model.SearchString, new { @class = "form-control", @size = "50", @name = "SearchString", @placeholder = "Search Doctor", @aria_label = "Search Doctor", @aria_describedby = "basic-addon2" })
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Location, null, new { style = "font-size: 16px" })
+                        <br />
+                        @Html.ValidationMessageFor(model => model.SearchString, null, new { style = "font-size: 16px" })
+                        <input type="hidden" name="SearchDoctor" value="true" />
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i> Search</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div id="hospitalSearch" class="container tab-pane fade">
+                    <br>
+                    @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        <div class="form-inline justify-content-center">
+                            <div class="input-group mb-6">
+                                @Html.TextBoxFor(model => model.Location, new { @class = "form-control", @size = "50", @name = "Location", @placeholder = "Location", @aria_label = "Loaction", @aria_describedby = "basic-addon2" })
+                                @Html.TextBoxFor(model => model.SearchString, new { @class = "form-control", @size = "50", @name = "SearchString", @placeholder = "Search Hospital", @aria_label = "Search Hospital", @aria_describedby = "basic-addon2" })
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Location, null, new { style = "font-size: 16px" })
+                        <br />
+                        @Html.ValidationMessageFor(model => model.SearchString, null, new { style = "font-size: 16px" })
+                        <input type="hidden" name="SearchHospital" value="true" />
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i> Search</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div id="bloodSearch" class="container tab-pane fade">
+                    <br>
+                    @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+
+                        <div class="form-inline justify-content-center">
+                            <div class="input-group mb-6">
+                                @Html.TextBoxFor(model => model.Location, new { @class = "form-control", @size = "50", @name = "Location", @placeholder = "Location", @aria_label = "Loaction", @aria_describedby = "basic-addon2" })
+                                @Html.TextBoxFor(model => model.SearchString, new { @class = "form-control", @size = "50", @name = "SearchString", @placeholder = "Search Blood Donors", @aria_label = "Search Blood Donors", @aria_describedby = "basic-addon2" })
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Location, null, new { style = "font-size: 16px" })
+                        <br />
+                        @Html.ValidationMessageFor(model => model.SearchString, null, new { style = "font-size: 16px" })
+                        <input type="hidden" name="SearchBloodDonor" value="true" />
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <button class="btn btn-secondary" type="submit"><i class="fa fa-search"></i> Search</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (aSearchModel == null)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Search with Location and Keywords</h5>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row" style="margin-bottom: 10px">
+            <div class="col-md-10">
+                <h5>
+                    Search results for ' @aSearchModel.SearchString ' in @aSearchModel.Location
+                </h5>
+            </div>
+            <div class="col-md-2">
+                <a class="collapsed card-link btn btn-default pull-right" data-toggle="collapse" href="#collapseOne">
+                    <i class="fa fa-filter"></i> Filter
+                </a>
+            </div>
+        </div>
+        if (medicalAccounts.Count > 0)
+        {
+            <div id="collapseOne" class="collapse" data-parent="#accordion" style="margin-bottom: 10px">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <label class="col-md-2">Location</label>
+                            <div class="col-md-2">
+                                <select class="form-control">
+                                    <option value="">General Hospital</option>
+                                    <option value="">Dignostic Center</option>
+                                    <option value="">Eye Hospital</option>
+                                    <option value="">Dental Clinic</option>
+                                </select>
+                            </div>
+                            <label class="col-md-2">Institution Type</label>
+                            <div class="col-md-2">
+                                <select class="form-control">
+                                    <option value="">General Hospital</option>
+                                    <option value="">Dignostic Center</option>
+                                    <option value="">Eye Hospital</option>
+                                    <option value="">Dental Clinic</option>
+                                </select>
+                            </div>
+                            <label class="col-md-2">Specialty</label>
+                            <div class="col-md-2">
+                                <select class="form-control">
+                                    <option value="">Alergy</option>
+                                    <option value="">Cardiology</option>
+                                    <option value="">Eye</option>
+                                    <option value="">Medicine</option>
+                                </select>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+        }
+        if (doctors.Count > 0)
+        {
+            <div id="collapseOne" class="collapse" data-parent="#accordion" style="margin-bottom: 10px">
+                <div class="card">
+                    <div class="card-body">
+                        @using (Ajax.BeginForm("DoctorFilterSearch", "Home", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, OnSuccess = "success", UpdateTargetId = "searchData" }))
+                        {
+                            <div class="row" style="margin-bottom: 10px">
+                                <label class="col-md-3">Location</label>
+                                <div class="col-md-3">
+                                    <select class="form-control" id="doctorLocation" name="DoctorLocation">
+                                        <option value="">Chittagong</option>
+                                        <option value="">Dignostic Center</option>
+                                        <option value="">Eye Hospital</option>
+                                        <option value="">Dental Clinic</option>
+                                    </select>
+                                </div>
+                                <label class="col-md-3">Specialty</label>
+                                <div class="col-md-3">
+                                    <select class="form-control" id="doctorSpecialty" name="DoctorSpecialty">
+                                        <option value="">Alergy</option>
+                                        <option value="">Cardiology</option>
+                                        <option value="">Eye</option>
+                                        <option value="">Medicine</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Consultant Fee</label>
+                                    <input type="text" id="doctorFee" name="DoctorFee" value="">
+                                </div>
+                                <label class="col-md-3">Gender</label>
+                                <div class="col-md-3">
+                                    <select class="form-control" id="doctorGender" name="DoctorGender">
+                                        <option value="">Male</option>
+                                        <option value="">Female</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <button type="submit" id="btn" style="display: none" class="btn btn-sm">Search</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        if (medicalAccounts.Count > 0)
+        {
+            for (int i = 0; i < medicalAccounts.Count; i++)
+            {
+                <div class="card" style="margin-bottom: 5px">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a href="@Url.Action("ViewDetails", "Home", new {id = medicalAccounts[i].MedicalId})" class="card-title" style="text-decoration: none"><h5>@medicalAccounts[i].MedicalName</h5></a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p style="margin-bottom: 5px">@medicalAccounts[i].Address, @medicalAccounts[i].Area, @medicalAccounts[i].City</p>
+                            </div>
+                            <div class="col-md-4">
+                                <p style="margin-bottom: 5px"><b>Contact No 1 :</b> @medicalAccounts[i].MedicalContactNo1</p>
+                                <p style="margin-bottom: 5px"><b>Contact No 2:</b> @medicalAccounts[i].MedicalContactNo2</p>
+                                <p style="margin-bottom: 5px"><b>Email :</b> @medicalAccounts[i].MedicalEmail </p>
+                            </div>
+                            <div class="col-md-4">
+                                <p style="margin-bottom: 5px"><b>Ambulance Service :</b> @medicalAccounts[i].AmbulanceService</p>
+                                <p style="margin-bottom: 5px"><b>Ambulance Contact :</b> @medicalAccounts[i].AmbulanceContact</p>
+                            </div>
+                        </div>
+                        @*<a class="collapsed card-link" data-toggle="collapse" href="#@medicalAccounts[i].MedicalContactNo1">
+                                <i class="fa fa-arrow-down"></i> <i class="fa fa-arrow-up"></i>
+                            </a>
+                            <br/>
+                            <div id="@medicalAccounts[i].MedicalContactNo1" class="collapse" data-parent="#accordion">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                    </div>
+                                    <div class="col-md-3">
+                                    </div>
+                                </div>
+                            </div>*@
+                    </div>
+                </div>
+            }
+
+        }
+        else if (doctors.Count > 0)
+        {
+            if (aSearchModel.SearchString == null)
+            {
+                @*<div class="card">
+                        <div class="row">
+                            <div class="col-md-12 table">
+                                <table class="table-responsive-lg table-bordered">
+                                    <tr>
+                                        <th>Doctor Name</th>
+                                        <th>Degree</th>
+                                        <th>Speciality</th>
+                                        <th>Chambers</th>
+                                        <th>Appointment</th>
+                                    </tr>
+                                    @foreach (Doctors doctor in doctors)
+                                    {
+                                        <tr>
+                                            <td>@doctor.Name</td>
+                                            <td>@doctor.OtherSpecification</td>
+                                            <td>@doctor.Speciality</td>
+                                            <td>
+                                                @foreach (ViewDoctors viewDoctor in doctor.ViewDoctors)
+                                                {
+                                                    <h5>@viewDoctor.MedicalName</h5>
+                                                    <p>@viewDoctor.MedicalAddress</p>
+                                                }
+                                            </td>
+                                            <td><a class="btn btn-sm btn-primary" href="@Url.Action("DoctorDetails","Home")">Appointment</a></td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>*@
+
+                foreach (Doctors doctor in doctors)
+                {
+                    <div class="card" style="margin-bottom: 5px">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    @if (doctor.ImagePath != "")
+                                    {
+                                        <img class="img-thumbnail" src="@Url.Content(doctor.ImagePath)" width="80px" height="110px" />
+                                    }
+                                    else
+                                    {
+                                        if (doctor.Gender == "Male")
+                                        {
+                                            <img class="img-thumbnail" src="~/Image/maleDoctor.png" width="80px" height="110px" />
+                                        }
+                                        else
+                                        {
+                                            <img class="img-thumbnail" src="~/Image/femaleDoctor.png" width="80px" height="110px" />
+                                        }
+                                    }
+                                    <h5>@doctor.Name</h5>
+                                    <p>@doctor.OtherSpecification</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p>@doctor.Speciality</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <h6>Chambers</h6>
+                                    <hr />
+                                    @if (doctor.ViewDoctors.Count > 0)
+                                    {
+                                        foreach (ViewDoctors viewDoctor in doctor.ViewDoctors)
+                                        {
+                                            <h6>@viewDoctor.MedicalName</h6>
+                                            <p>@viewDoctor.MedicalAddress, @viewDoctor.MedicalArea, @viewDoctor.MedicalCity</p>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        foreach (DoctorChamber viewDoctorChamber in doctor.ViewDoctorChambers)
+                                        {
+                                            <h6>@viewDoctorChamber.ChamberName</h6>
+                                            <p>@viewDoctorChamber.Address, @viewDoctorChamber.Area, @viewDoctorChamber.City</p>
+                                        }
+                                    }
+                                </div>
+                                <div class="col-md-2">
+                                    <a class="btn btn-sm btn-primary" href="@Url.Action("DoctorDetails", "Home", new{id = doctor.Id})">Chamber Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                foreach (Doctors doctor in doctors)
+                {
+                    <div class="card" style="margin-bottom: 5px">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-4 col-md-2" style="padding-bottom: 5px">
+                                    @if (doctor.ImagePath != "")
+                                    {
+                                        <img class="img-thumbnail" src="@Url.Content(doctor.ImagePath)" width="100px" height="130px" />
+                                    }
+                                    else
+                                    {
+                                        if (doctor.Gender == "Male")
+                                        {
+                                            <img class="img-thumbnail" src="~/Image/maleDoctor.png" width="100px" height="130px" />
+                                        }
+                                        else
+                                        {
+                                            <img class="img-thumbnail" src="~/Image/femaleDoctor.png" width="100px" height="130px" />
+                                        }
+                                    }
+                                </div>
+                                <div class="col-8 col-md-6">
+                                    <h5>@doctor.Name</h5>
+                                    <p style="font-size: 14px; color: black">@doctor.OtherSpecification</p>
+                                    <p style="font-size: 14px; color: black">@doctor.Speciality</p>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <p style="font-size: 14px; color: black">@doctor.Title</p>
+                                    <p style="font-size: 14px; color: black">Mobile No. : @doctor.MobileNo</p>
+                                    <p style="font-size: 14px; color: black">Email : @doctor.Email</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a class="collapsed card-link pull-right" data-toggle="collapse" href="#@doctor.BmdcReg">
+                                        See Details <i class="fa fa-arrow-down"></i><i class="fa fa-arrow-up"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div id="@doctor.BmdcReg" class="collapse" data-parent="#accordion">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h5>Doctor's Chamber</h5>
+                                        <hr />
+                                        @if (doctor.ViewDoctors.Count > 0)
+                                        {
+                                            foreach (ViewDoctors viewDoctor in doctor.ViewDoctors)
+                                            {
+                                                <h5>@viewDoctor.MedicalName</h5>
+                                                <div class="row">
+                                                    <div class="col-12 col-md-6">
+                                                        <p style="font-size: 14px;">@viewDoctor.MedicalAddress, @viewDoctor.MedicalArea, @viewDoctor.MedicalCity</p>
+                                                        <p style="font-size: 14px;">New Patient Fee : @viewDoctor.Fee</p>
+                                                        <p style="font-size: 14px;">Returning Patient Fee : @viewDoctor.ReturningFee</p>
+                                                    </div>
+                                                    <div class="col-12 col-md-6">
+                                                        <table class="table-sm table-responsive-lg table-bordered">
+                                                            <tr>
+                                                                <th>Day</th>
+                                                                <th>Time</th>
+                                                            </tr>
+                                                            @if (viewDoctor.Sat)
+                                                            {
+                                                                <tr>
+                                                                    <td>Sat</td>
+                                                                    <td>@viewDoctor.SatTime</td>
+                                                                </tr>
+                                                            }
+                                                            @if (viewDoctor.Sun)
+                                                            {
+                                                                <tr>
+                                                                    <td>Sun</td>
+                                                                    <td>@viewDoctor.SunTime</td>
+                                                                </tr>
+                                                            }
+                                                            @if (viewDoctor.Mon)
+                                                            {
+                                                                <tr>
+                                                                    <td>Mon</td>
+                                                                    <td>@viewDoctor.MonTime</td>
+                                                                </tr>
+                                                            }
+                                                            @if (viewDoctor.Tue)
+                                                            {
+                                                                <tr>
+                                                                    <td>Tue</td>
+                                                                    <td>@viewDoctor.TueTime</td>
+                                                                </tr>
+                                                            }
+                                                            @if (viewDoctor.Wed)
+                                                            {
+                                                                <tr>
+                                                                    <td>Wed</td>
+                                                                    <td>@viewDoctor.WedTime</td>
+                                                                </tr>
+                                                            }
+                                                            @if (viewDoctor.Thu)
+                                                            {
+                                                                <tr>
+                                                                    <td>Thu</td>
+                                                                    <td>@viewDoctor.ThuTime</td>
+                                                                </tr>
+                                                            }
+                                                            @if (viewDoctor.Fri)
+                                                            {
+                                                                <tr>
+                                                                    <td>Fri</td>
+                                                                    <td>@viewDoctor.FriTime</td>
+                                                                </tr>
+                                                            }
+                                                            @if (viewDoctor.Sat == false && viewDoctor.Sun == false && viewDoctor.Mon == false && viewDoctor.Tue == false && viewDoctor.Wed == false && viewDoctor.Thu == false && viewDoctor.Fri == false)
+                                                            {
+                                                                <tr>
+                                                                    <td colspan="2"><i style="color: red">Schedule not given yet.</i></td>
+                                                                </tr>
+                                                            }
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <br />
+                                            }
+                                            if (doctor.ViewDoctorChambers.Count > 0)
+                                            {
+                                                foreach (DoctorChamber viewDoctorChamber in doctor.ViewDoctorChambers)
+                                                {
+                                                    <h5>@viewDoctorChamber.ChamberName</h5>
+                                                    <div class="row">
+                                                        <div class="col-12 col-md-4">
+                                                            <p style="margin: 5px; font-size: 14px;">@viewDoctorChamber.Address, @viewDoctorChamber.Area, @viewDoctorChamber.City</p>
+                                                            <p style="margin: 5px; font-size: 14px;">Contact No. : @viewDoctorChamber.ContactNo, @viewDoctorChamber.PhoneNo</p>
+                                                        </div>
+                                                        <div class="col-12 col-md-3">
+                                                            <p style="margin: 5px; font-size: 14px;">New Patient Fee : @viewDoctorChamber.Fee</p>
+                                                            <p style="margin: 5px; font-size: 14px;">Returning Patient Fee : @viewDoctorChamber.ReturningFee</p>
+                                                        </div>
+                                                        <div class="col-12 col-md-5">
+                                                            <table class="table-sm table-responsive-lg table-bordered">
+                                                                <tr>
+                                                                    <th>Day</th>
+                                                                    <th>Time</th>
+                                                                </tr>
+                                                                @if (viewDoctorChamber.Sat)
+                                                                {
+                                                                    <tr>
+                                                                        <td>Sat</td>
+                                                                        <td>@viewDoctorChamber.SatFromTime</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (viewDoctorChamber.Sun)
+                                                                {
+                                                                    <tr>
+                                                                        <td>Sun</td>
+                                                                        <td>@viewDoctorChamber.SunFromTime</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (viewDoctorChamber.Mon)
+                                                                {
+                                                                    <tr>
+                                                                        <td>Mon</td>
+                                                                        <td>@viewDoctorChamber.MonFromTime</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (viewDoctorChamber.Tue)
+                                                                {
+                                                                    <tr>
+                                                                        <td>Tue</td>
+                                                                        <td>@viewDoctorChamber.TueFromTime</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (viewDoctorChamber.Wed)
+                                                                {
+                                                                    <tr>
+                                                                        <td>Wed</td>
+                                                                        <td>@viewDoctorChamber.WedFromTime</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (viewDoctorChamber.Thu)
+                                                                {
+                                                                    <tr>
+                                                                        <td>Thu</td>
+                                                                        <td>@viewDoctorChamber.ThuFromTime</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (viewDoctorChamber.Fri)
+                                                                {
+                                                                    <tr>
+                                                                        <td>Fri</td>
+                                                                        <td>@viewDoctorChamber.FriFromTime</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (viewDoctorChamber.Sat == false && viewDoctorChamber.Sun == false && viewDoctorChamber.Mon == false && viewDoctorChamber.Tue == false && viewDoctorChamber.Wed == false && viewDoctorChamber.Thu == false && viewDoctorChamber.Fri == false)
+                                                                {
+                                                                    <tr>
+                                                                        <td colspan="2"><i style="color: red">Schedule not given yet.</i></td>
+                                                                    </tr>
+                                                                }
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <br />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <i></i>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (doctor.ViewDoctorChambers.Count > 0)
+                                            {
+                                                foreach (DoctorChamber viewDoctorChamber in doctor.ViewDoctorChambers)
+                                                {
+                                                    <h5>@viewDoctorChamber.ChamberName</h5>
+                                                    <div class="row">
+                                                        <div class="col-12 col-md-4">
+                                                            <p style="margin: 5px; font-size: 14px;">@viewDoctorChamber.Address, @viewDoctorChamber.Area, @viewDoctorChamber.City</p>
+                                                            <p style="margin: 5px; font-size: 14px;">Contact No. : @viewDoctorChamber.ContactNo, @viewDoctorChamber.PhoneNo</p>
+                                                        </div>
+                                                        <div class="col-12 col-md-3">
+                                                            <p style="margin: 5px; font-size: 14px;">New Patient Fee : @viewDoctorChamber.Fee</p>
+                                                            <p style="margin: 5px; font-size: 14px;">Returning Patient Fee : @viewDoctorChamber.ReturningFee</p>
+                                                        </div>
+                                                        <div class="col-12 col-md-5">
+                                                            <table class="table-sm table-responsive-lg table-bordered">
+                                                                <tr>
+                                                                    <th>Day</th>
+                                                                    <th>Time</th>
+                                                                </tr>
+                                                                @if (viewDoctorChamber.Sat)
+                                                                {
+                                                                    <tr>
+                                                                        <td>Sat</td>
+                                                                        <td>@viewDoctorChamber.SatFromTime</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (viewDoctorChamber.Sun)
+                                                                {
+                                                                    <tr>
+                                                                        <td>Sun</td>
+                                                                        <td>@viewDoctorChamber.SunFromTime</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (viewDoctorChamber.Mon)
+                                                                {
+                                                                    <tr>
+                                                                        <td>Mon</td>
+                                                                        <td>@viewDoctorChamber.MonFromTime</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (viewDoctorChamber.Tue)
+                                                                {
+                                                                    <tr>
+                                                                        <td>Tue</td>
+                                                                        <td>@viewDoctorChamber.TueFromTime</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (viewDoctorChamber.Wed)
+                                                                {
+                                                                    <tr>
+                                                                        <td>Wed</td>
+                                                                        <td>@viewDoctorChamber.WedFromTime</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (viewDoctorChamber.Thu)
+                                                                {
+                                                                    <tr>
+                                                                        <td>Thu</td>
+                                                                        <td>@viewDoctorChamber.ThuFromTime</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (viewDoctorChamber.Fri)
+                                                                {
+                                                                    <tr>
+                                                                        <td>Fri</td>
+                                                                        <td>@viewDoctorChamber.FriFromTime</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (viewDoctorChamber.Sat == false && viewDoctorChamber.Sun == false && viewDoctorChamber.Mon == false && viewDoctorChamber.Tue == false && viewDoctorChamber.Wed == false && viewDoctorChamber.Thu == false && viewDoctorChamber.Fri == false)
+                                                                {
+                                                                    <tr>
+                                                                        <td colspan="2"><i style="color: red">Schedule not given yet.</i></td>
+                                                                    </tr>
+                                                                }
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <br />
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <i style="color: red">This doctor not added any chamber yet.</i>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        }
+        else
+        {
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text">Sorry, no result found.</p>
+                </div>
+            </div>
+        }
+    }
+</div>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#hospitalSearch").hide(-1000);
+            $("#bloodSearch").hide(-1000);
+            $("#hospitalBtn").click(function () {
+                $("#doctorSearch").hide(-1000);
+                $("#hospitalSearch").show();
+                $("#bloodSearch").hide(-1000);
+            });
+            $("#bloodDonorBtn").click(function () {
+                $("#bloodSearch").show();
+                $("#doctorSearch").hide(-1000);
+                $("#hospitalSearch").hide(-1000);
+            });
+            $("#doctorBtn").click(function () {
+                $("#doctorSearch").show();
+                $("#bloodSearch").hide(-1000);
+                $("#hospitalSearch").hide(-1000);
+            });
+            //$('#configReset').click(function () {
+            //    location.reload();
+            //});
+        });
+    </script>
+    <script src="~/Content/Layout/vendor/ion-rangeSlider/js/ion.rangeSlider.js"></script>
+    <script>
+        $("#doctorFee").ionRangeSlider({
+            type: "double",
+            grid: true,
+            min: 0,
+            max: 3000,
+            from: 1000,
+            to: 2000,
+            step: 150
+        });
+        $(function () {
+            $("#doctorLocation").change(function () {
+                $("#btn").click();
+                $('.showAll').hide();
+                $("#searchData").show();
+                return false;
+            });
+        });
+        $(function () {
+            $("#doctorSpecialty").change(function () {
+                $("#btn").click();
+                $('.showAll').hide();
+                $("#searchData").show();
+                return false;
+            });
+        });
+        $(function () {
+            $("#doctorGender").change(function () {
+                $("#btn").click();
+                $('.showAll').hide();
+                $("#searchData").show();
+                return false;
+            });
+        });
+    </script>
+   
+}

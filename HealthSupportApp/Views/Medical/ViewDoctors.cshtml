@@ -1,0 +1,167 @@
+﻿@using HealthSupportApp.Models.MedicalModel
+@{
+    ViewBag.Title = "ViewDoctors";
+    ViewBag.GetMedicalName = ViewBag.GetName;
+    Layout = "~/Views/Shared/_MedicalLayout.cshtml";
+    List<ViewDoctors> viewDoctors = ViewBag.GetAllDoctors;
+}
+
+@if (ViewBag.Message != null)
+{
+    <div class="container">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-success alert-dismissible" style="margin-top: 20px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Success!</strong> @ViewBag.Message
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="container">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-danger alert-dismissible" style="margin-top: 20px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Error!</strong> @ViewBag.ErrorMessage
+                </div>
+            </div>
+        </div>
+    </div>
+}
+    <div class="container">
+        <header>
+            <h1 class="h3 display">View Doctors</h1>
+        </header>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="target-1" class="card">
+                    <div class="card-header">
+                        <h3>List of Doctors</h3>
+                    </div>
+                    @if (viewDoctors.Count > 0)
+                    {
+                        <div class="card-body col-md-12">
+                            @foreach (ViewDoctors doctors in viewDoctors)
+                            {
+                                <div class="row" style="margin-bottom: 10px">
+                                    <div class="col-md-12">
+                                        <div class="card" style="background: #feffe6;" >
+                                            <div class="card-header" style="background:	 #fdffcc">
+                                                <h3>@doctors.Name <a href="@Url.Action("EditDoctor", "Medical", new{id= doctors.Id})" class="btn btn-sm btn-info pull-right"><i class="fa fa-edit"></i> EDIT</a></h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        @if (doctors.ImagePath != "")
+                                                        {
+                                                            <img class="img-thumbnail" src="@Url.Content(doctors.ImagePath)" width="120px" height="140px" />
+                                                        }
+                                                        else
+                                                        {
+                                                            if (doctors.Gender == "Male")
+                                                            {
+                                                                <img class="img-thumbnail" src="~/Image/maleDoctor.png" width="120px" height="140px" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <img class="img-thumbnail" src="~/Image/femaleDoctor.png" width="120px" height="140px" />
+                                                            }
+                                                        }
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <p style="font-size: 14px; color: black">Designation : @doctors.Title</p>
+                                                        <p style="font-size: 14px; color: black">Speciality : @doctors.Speciality</p>
+                                                        <p style="font-size: 14px; color: black">Mobile No. : @doctors.MobileNo</p>
+                                                        <p style="font-size: 14px; color: black">BMDC Reg. No.: @doctors.BmdcReg</p>
+                                                        <p style="font-size: 14px; color: black">Degree : @doctors.OtherSpecification</p>
+                                                        <p style="font-size: 14px; color: black">Email : @doctors.Email</p>
+                                                        <p style="font-size: 14px; color: black">New Patient Fee : @doctors.Fee | Returning Patient Fee : @doctors.ReturningFee</p>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <h6>Doctor's Schedule</h6>
+                                                        <table class="table table-responsive-sm table-bordered">
+                                                            <tr>
+                                                                <th>Day</th>
+                                                                <th>Time</th>
+                                                            </tr>
+                                                            @if (doctors.Sat)
+                                                            {
+                                                                <tr>
+                                                                    <td>SAT</td>
+                                                                    <td>@doctors.SatTime</td>
+                                                                </tr>
+                                                            }
+                                                            @if (doctors.Sun)
+                                                            {
+                                                                <tr>
+                                                                    <td>SUN</td>
+                                                                    <td>@doctors.SunTime</td>
+                                                                </tr>
+                                                            }
+                                                            @if (doctors.Mon)
+                                                            {
+                                                                <tr>
+                                                                    <td>MON</td>
+                                                                    <td>@doctors.MonTime</td>
+                                                                </tr>
+                                                            }
+                                                            @if (doctors.Tue)
+                                                            {
+                                                                <tr>
+                                                                    <td>TUE</td>
+                                                                    <td>@doctors.TueTime</td>
+                                                                </tr>
+                                                            }
+                                                            @if (doctors.Wed)
+                                                            {
+                                                                <tr>
+                                                                    <td>WED</td>
+                                                                    <td>@doctors.WedTime</td>
+                                                                </tr>
+                                                            }
+                                                            @if (doctors.Thu)
+                                                            {
+                                                                <tr>
+                                                                    <td>THU</td>
+                                                                    <td>@doctors.ThuTime</td>
+                                                                </tr>
+                                                            }
+                                                            @if (doctors.Fri)
+                                                            {
+                                                                <tr>
+                                                                    <td>FRI</td>
+                                                                    <td>@doctors.FriTime</td>
+                                                                </tr>
+                                                            }
+                                                            @if (doctors.Sat == false && doctors.Sun == false && doctors.Mon == false && doctors.Tue == false && doctors.Wed == false && doctors.Thu == false && doctors.Fri == false)
+                                                            {
+                                                                <tr>
+                                                                    <td colspan="2"><i style="color: red">Give the schedule of the doctor from 'Edit' option.</i></td>
+                                                                </tr>
+                                                            }
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card-body">
+                            <p class="card-text">You have no doctor yet. Please assign doctors.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+
