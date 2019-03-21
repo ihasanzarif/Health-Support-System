@@ -50,8 +50,8 @@
                 @Html.ValidationSummary(true)
                 <div class="form-inline justify-content-center">
                     <div class="input-group mb-6">
-                        @Html.TextBoxFor(model => model.Location, new { @class = "form-control", @size = "50", @name = "Location", @placeholder = "Location", @aria_label = "Loaction", @aria_describedby = "basic-addon2" })
-                        @Html.TextBoxFor(model => model.SearchString, new { @class = "form-control", @size = "50", @name = "SearchString", @placeholder = "Search Doctor", @aria_label = "Search Doctor", @aria_describedby = "basic-addon2" })
+                        @Html.TextBoxFor(model => model.Location, new { @class = "form-control", @size = "50", @name = "Location", @placeholder = "Location e.g. Chawkbazar", @aria_label = "Loaction", @aria_describedby = "basic-addon2" })
+                        @Html.TextBoxFor(model => model.SearchString, new { @class = "form-control", @size = "50", @name = "SearchString", @placeholder = "Search Doctor/Specialty", @aria_label = "Search Doctor", @aria_describedby = "basic-addon2" })
                     </div>
                 </div>
                 @Html.ValidationMessageFor(model => model.Location, null, new { style = "font-size: 16px" })
@@ -73,7 +73,7 @@
                 @Html.ValidationSummary(true)
                 <div class="form-inline justify-content-center">
                     <div class="input-group mb-6">
-                        @Html.TextBoxFor(model => model.Location, new { @class = "form-control", @size = "50", @name = "Location", @placeholder = "Location", @aria_label = "Loaction", @aria_describedby = "basic-addon2" })
+                        @Html.TextBoxFor(model => model.Location, new { @class = "form-control", @size = "50", @name = "Location", @placeholder = "Location e.g. Chawkbazar", @aria_label = "Loaction", @aria_describedby = "basic-addon2" })
                         @Html.TextBoxFor(model => model.SearchString, new { @class = "form-control", @size = "50", @name = "SearchString", @placeholder = "Search Hospital", @aria_label = "Search Hospital", @aria_describedby = "basic-addon2" })
                     </div>
                 </div>
