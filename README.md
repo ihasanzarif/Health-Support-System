@@ -23,17 +23,17 @@ See Demo <a href="http://hssmi.somee.com/">here</a>
   <img src="HealthSupportApp/Image/Doctor_Dashboard.jpg" width="750px" height="400px"/>
   <br>
   <br>
-  <b>User Dashboard</b>
+  <b>User Dashboard:</b>
    <br>
   <img src="HealthSupportApp/Image/User_Dashboard.jpg" width="750px" height="400px"/>
   <br>
   <br>
-  <b>Search Results for User</b>
+  <b>Search Results for User:</b>
   <br>
     <img src="HealthSupportApp/Image/Search_ResultPage.jpg" width="750px" height="450px"/>
   <br>
   <br>
-  <b>Medical Dashboard</b>
+  <b>Medical Dashboard:</b>
   <br>
     <img src="HealthSupportApp/Image/Medical_Dashboard.jpg" width="750px" height="400px"/>
   <br>
