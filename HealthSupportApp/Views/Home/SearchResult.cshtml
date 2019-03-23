@@ -148,9 +148,18 @@
     {
         <div class="row" style="margin-bottom: 10px">
             <div class="col-md-10">
+                @if (medicalAccounts.Count > 0)
+                {
                 <h5>
-                    Search results for ' @aSearchModel.SearchString ' in @aSearchModel.Location
+                    Found @medicalAccounts.Count search results for ' @aSearchModel.SearchString ' in '@aSearchModel.Location'
                 </h5>
+                }
+                else if (doctors.Count > 0)
+                {
+                <h5>
+                    Found @doctors.Count search results for ' @aSearchModel.SearchString ' in '@aSearchModel.Location'
+                </h5>
+                }
             </div>
             <div class="col-md-2">
                 <a class="collapsed card-link btn btn-default pull-right" data-toggle="collapse" href="#collapseOne">

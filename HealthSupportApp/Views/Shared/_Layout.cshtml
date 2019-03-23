@@ -25,6 +25,9 @@
             margin: 0 auto;
             float: none;
         }
+        .field-validation-error {
+            color: red
+        }
     </style>
 </head>
 <body class="bg-light">
@@ -68,7 +71,7 @@
                 <p>&copy; @DateTime.Now.Year - <a href="@Url.Action("Index", "Home", new {@style = "text-decoration: none"})">HSSMI</a> Application </p>
             </div>
             <div class="col-md-6">
-                <p class="text-right">Developed By <b>Amimul Ihasan</b></p>
+                <p class="text-right">Developed By <a href="https://github.com/ihasanzarif">Ihasan Zarif</a></p>
             </div>
         </div>
     </footer>
