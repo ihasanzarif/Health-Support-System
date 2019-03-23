@@ -63,7 +63,14 @@
 <hr />
 <div class="container-fluid">
     <footer>
-        <p>&copy; @DateTime.Now.Year - <a href="@Url.Action("Index", "Home", new { @style = "text-decoration: none" })">HSSMI</a> Application</p>
+        <div class="row">
+            <div class="col-md-6">
+                <p>&copy; @DateTime.Now.Year - <a href="@Url.Action("Index", "Home", new {@style = "text-decoration: none"})">HSSMI</a> Application </p>
+            </div>
+            <div class="col-md-6">
+                <p class="text-right">Developed By <b>Amimul Ihasan</b></p>
+            </div>
+        </div>
     </footer>
 </div>
 

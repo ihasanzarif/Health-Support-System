@@ -22,9 +22,10 @@ See Demo here http://hssmi.somee.com/
 
 *SQL Query with demo data:
 
+
 USE [HealthSupportDB]
 GO
-/****** Object:  Table [dbo].[TopicCategories]    Script Date: 03-Mar-19 2:02:55 PM ******/
+/****** Object:  Table [dbo].[TopicCategories]    Script Date: 23-Mar-19 7:59:42 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -39,7 +40,7 @@ CREATE TABLE [dbo].[TopicCategories](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Doctors]    Script Date: 03-Mar-19 2:02:56 PM ******/
+/****** Object:  Table [dbo].[Doctors]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -67,7 +68,7 @@ CREATE TABLE [dbo].[Doctors](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[MedicalAccounts]    Script Date: 03-Mar-19 2:02:57 PM ******/
+/****** Object:  Table [dbo].[MedicalAccounts]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -99,7 +100,7 @@ CREATE TABLE [dbo].[MedicalAccounts](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[UserAccounts]    Script Date: 03-Mar-19 2:02:57 PM ******/
+/****** Object:  Table [dbo].[UserAccounts]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -122,7 +123,7 @@ CREATE TABLE [dbo].[UserAccounts](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ForumPosts]    Script Date: 03-Mar-19 2:02:57 PM ******/
+/****** Object:  Table [dbo].[ForumPosts]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -144,7 +145,7 @@ CREATE TABLE [dbo].[ForumPosts](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [dbo].[ForumPostsVM]    Script Date: 03-Mar-19 2:02:57 PM ******/
+/****** Object:  View [dbo].[ForumPostsVM]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -155,7 +156,7 @@ CREATE VIEW [dbo].[ForumPostsVM]
 AS
 SELECT fp.ForumPostId, fp.TopicName, fp.Description, fp.ImagePath, fp.Views, fp.PostDate, tc.TopicCategoryId, tc.TopicCategoryName, fp.UserId, ua.UserName, fp.DoctorId, d.Name, fp.MedicalId, ma.ContactPersonName FROM ((((ForumPosts AS fp JOIN TopicCategories AS tc ON fp.TopicCategoryId = tc.TopicCategoryId ) LEFT JOIN UserAccounts AS ua ON fp.UserId = ua.UserId) LEFT JOIN Doctors AS d ON fp.DoctorId = d.Id) LEFT JOIN MedicalAccounts AS ma ON fp.MedicalId = ma.MedicalId)
 GO
-/****** Object:  Table [dbo].[ForumComments]    Script Date: 03-Mar-19 2:02:57 PM ******/
+/****** Object:  Table [dbo].[ForumComments]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -173,7 +174,7 @@ CREATE TABLE [dbo].[ForumComments](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [dbo].[CommentsVM]    Script Date: 03-Mar-19 2:02:57 PM ******/
+/****** Object:  View [dbo].[CommentsVM]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -184,7 +185,7 @@ CREATE VIEW [dbo].[CommentsVM]
 AS
 SELECT fc.CommentId, fc.Comment, fc.ForumPostId, fc.UserId, ua.UserName, fc.DoctorId,d.Name, fc.MedicalId, ma.ContactPersonName FROM (((ForumComments AS fc LEFT JOIN UserAccounts AS ua ON fc.UserId = ua.UserId) LEFT JOIN Doctors AS d ON fc.DoctorId = d.Id) LEFT JOIN MedicalAccounts AS ma ON fc.MedicalId = ma.MedicalId)
 GO
-/****** Object:  Table [dbo].[ManageAppointment]    Script Date: 03-Mar-19 2:02:57 PM ******/
+/****** Object:  Table [dbo].[ManageAppointment]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -217,7 +218,7 @@ CREATE TABLE [dbo].[ManageAppointment](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DoctorsChambers]    Script Date: 03-Mar-19 2:02:58 PM ******/
+/****** Object:  Table [dbo].[DoctorsChambers]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -253,7 +254,7 @@ CREATE TABLE [dbo].[DoctorsChambers](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DoctorAppointOrder]    Script Date: 03-Mar-19 2:02:58 PM ******/
+/****** Object:  Table [dbo].[DoctorAppointOrder]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -277,7 +278,7 @@ CREATE TABLE [dbo].[DoctorAppointOrder](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [dbo].[DoctorChamberOrder]    Script Date: 03-Mar-19 2:02:58 PM ******/
+/****** Object:  View [dbo].[DoctorChamberOrder]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -286,7 +287,7 @@ GO
 CREATE VIEW [dbo].[DoctorChamberOrder] AS
 SELECT da.OrderId, ma.Id,ma.DoctorId, ma.MedicalId, ma.DoctorChamberId, d.Name, maccnt.MedicalName, dc.ChamberName, da.AppointAmount, da.TotalPrice, da.PaymentMethod, da.TrxId, da. OrderDate, da.ExpireDate, da.Expired, da.Status FROM (((DoctorAppointOrder AS da JOIN ManageAppointment AS ma ON da.ManageAppointId = ma.Id AND Expired ='False') LEFT JOIN MedicalAccounts AS maccnt ON ma.MedicalId=maccnt.MedicalId) LEFT JOIN DoctorsChambers AS dc ON dc.Id = ma.DoctorChamberId) JOIN Doctors AS d ON d.Id = ma.DoctorId;
 GO
-/****** Object:  View [dbo].[ManageAppointVM]    Script Date: 03-Mar-19 2:02:58 PM ******/
+/****** Object:  View [dbo].[ManageAppointVM]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -300,7 +301,7 @@ CREATE VIEW [dbo].[ManageAppointVM]
 AS
 SELECT ma.Id, ma.SatCapacity, ma.SunCapacity, ma.MonCapacity, ma.TueCapacity, ma.WedCapacity, ma.ThuCapacity, ma.FriCapacity, ma.SatAvailableAppoint,ma.SunAvailableAppoint, ma.MonAvailableAppoint, ma.TueAvailableAppoint, ma.WedAvailableAppoint, ma.ThuAvailableAppoint, ma.FriAvailableAppoint, ma.OnlineAppoint, ma.UsedAppoint, ma.TotalAvailableAppoint, ma.DoctorId, ma.MedicalId, ma.DoctorChamberId, da.OrderId, da.AppointAmount, da.RemainingAppoint, da.TotalAppoint, da.ExpireDate, da.Expired, da.Status FROM ManageAppointment AS ma JOIN DoctorAppointOrder AS da ON ma.Id = da.ManageAppointId
 GO
-/****** Object:  View [dbo].[ViewDoctorChamber]    Script Date: 03-Mar-19 2:02:58 PM ******/
+/****** Object:  View [dbo].[ViewDoctorChamber]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -312,7 +313,7 @@ GO
 CREATE VIEW [dbo].[ViewDoctorChamber] AS
 SELECT dc.DoctorId, d.Name, d.Speciality, d.OtherSpecification, dc.Id, dc.ChamberName, dc.Address, dc.Area, dc.City, dc.ContactNo, dc.PhoneNo, dc.Fee, dc.ReturningFee, dc.Sat, dc.Sun, dc.Mon, dc.Tue, dc.Wed, dc.Thu, dc.Fri, dc.SatTime, dc.SunTime, dc.MonTime, dc.TueTime, dc.WedTime, dc.ThuTime, dc.FriTime FROM Doctors AS d JOIN DoctorsChambers AS dc ON d.Id = dc.DoctorId;
 GO
-/****** Object:  View [dbo].[ChambersAppointOrder]    Script Date: 03-Mar-19 2:02:58 PM ******/
+/****** Object:  View [dbo].[ChambersAppointOrder]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -322,7 +323,7 @@ CREATE VIEW [dbo].[ChambersAppointOrder]
 AS
 SELECT mappoint.Id, mappoint.DoctorId, maccount.MedicalName FROM ManageAppointment AS mappoint JOIN MedicalAccounts AS maccount ON mappoint.MedicalId = maccount.MedicalId
 GO
-/****** Object:  View [dbo].[DoctorChambersAppointOrder]    Script Date: 03-Mar-19 2:02:58 PM ******/
+/****** Object:  View [dbo].[DoctorChambersAppointOrder]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -331,7 +332,7 @@ CREATE VIEW [dbo].[DoctorChambersAppointOrder]
 AS
 SELECT mappoint.Id, mappoint.DoctorId, dc.ChamberName FROM ManageAppointment AS mappoint JOIN DoctorsChambers AS dc ON mappoint.DoctorChamberId = dc.Id
 GO
-/****** Object:  Table [dbo].[AssignedDoctors]    Script Date: 03-Mar-19 2:02:58 PM ******/
+/****** Object:  Table [dbo].[AssignedDoctors]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -362,7 +363,7 @@ CREATE TABLE [dbo].[AssignedDoctors](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [dbo].[ViewDoctors]    Script Date: 03-Mar-19 2:02:58 PM ******/
+/****** Object:  View [dbo].[ViewDoctors]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -379,7 +380,7 @@ GO
 CREATE VIEW [dbo].[ViewDoctors] AS
 SELECT d.Id, d.ImagePath, d.Name,d.Gender, d.Title, d.Speciality, d.Email, d.MobileNo, d.PhoneNo, d.BmdcReg, d.OtherSpecification, ad.MedicalId, ma.MedicalName, ma.Address, ma.Area, ma.City, ad.DoctorFee, ad.DoctorReturningFee, ad.Sat, ad.Sun, ad.Mon, ad.Tue, ad.Wed, ad.Thu, ad.Fri, ad.SatTime, ad.SunTime, ad.MonTime, ad.TueTime, ad.WedTime, ad.ThuTime, ad.FriTime FROM (Doctors AS d JOIN AssignedDoctors AS ad ON d.Id = ad.DoctorId) JOIN MedicalAccounts AS ma ON ad.MedicalId = ma.MedicalId;
 GO
-/****** Object:  Table [dbo].[BookAppointment]    Script Date: 03-Mar-19 2:02:58 PM ******/
+/****** Object:  Table [dbo].[BookAppointment]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -406,7 +407,7 @@ CREATE TABLE [dbo].[BookAppointment](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DiagnosticServices]    Script Date: 03-Mar-19 2:02:58 PM ******/
+/****** Object:  Table [dbo].[DiagnosticServices]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -421,7 +422,7 @@ CREATE TABLE [dbo].[DiagnosticServices](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DoctorsSpecialities]    Script Date: 03-Mar-19 2:02:58 PM ******/
+/****** Object:  Table [dbo].[DoctorsSpecialities]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -435,7 +436,7 @@ CREATE TABLE [dbo].[DoctorsSpecialities](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ForgetPasswordVerification]    Script Date: 03-Mar-19 2:02:58 PM ******/
+/****** Object:  Table [dbo].[ForgetPasswordVerification]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -451,7 +452,7 @@ CREATE TABLE [dbo].[ForgetPasswordVerification](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[HospitalServices]    Script Date: 03-Mar-19 2:02:58 PM ******/
+/****** Object:  Table [dbo].[HospitalServices]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -466,7 +467,7 @@ CREATE TABLE [dbo].[HospitalServices](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[MainAdmin]    Script Date: 03-Mar-19 2:02:58 PM ******/
+/****** Object:  Table [dbo].[MainAdmin]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -484,7 +485,7 @@ CREATE TABLE [dbo].[MainAdmin](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[MedicalConsultants]    Script Date: 03-Mar-19 2:02:58 PM ******/
+/****** Object:  Table [dbo].[MedicalConsultants]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -499,7 +500,7 @@ CREATE TABLE [dbo].[MedicalConsultants](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[MedicalEmergency]    Script Date: 03-Mar-19 2:02:58 PM ******/
+/****** Object:  Table [dbo].[MedicalEmergency]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -521,7 +522,7 @@ CREATE TABLE [dbo].[MedicalEmergency](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[MedicalFacilities]    Script Date: 03-Mar-19 2:02:58 PM ******/
+/****** Object:  Table [dbo].[MedicalFacilities]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -536,7 +537,7 @@ CREATE TABLE [dbo].[MedicalFacilities](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[OtherMedicalServices]    Script Date: 03-Mar-19 2:02:59 PM ******/
+/****** Object:  Table [dbo].[OtherMedicalServices]    Script Date: 23-Mar-19 7:59:43 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
